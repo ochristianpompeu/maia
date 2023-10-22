@@ -10,9 +10,14 @@ import {
   SimpleGrid,
   Text,
   VStack,
+  useBreakpointValue,
 } from "@chakra-ui/react";
 
 export default function Details() {
+  const colSpan = useBreakpointValue({
+    base: 2,
+    md: 1,
+  });
   return (
     <VStack w={"full"} h={"full"} p={10} spacing={10} alignItems={"flex-start"}>
       <VStack spacing={3} alignItems={"flex-start"}>
@@ -20,13 +25,13 @@ export default function Details() {
         <Text>Texto par ser apresentado abaixo do cabeçalho da seção</Text>
       </VStack>
       <SimpleGrid columns={2} columnGap={3} rowGap={6} w={"full"}>
-        <GridItem colSpan={{ base: 2, md: 1 }}>
+        <GridItem colSpan={colSpan}>
           <FormControl>
             <FormLabel>First Name</FormLabel>
             <Input placeholder="Primeiro nome" />
           </FormControl>
         </GridItem>
-        <GridItem colSpan={{ base: 2, md: 1 }}>
+        <GridItem colSpan={colSpan}>
           <FormControl>
             <FormLabel>Last Name</FormLabel>
             <Input placeholder="Último nome" />
@@ -38,13 +43,13 @@ export default function Details() {
             <Input placeholder="Rua do bobos, 0" />
           </FormControl>
         </GridItem>
-        <GridItem colSpan={{ base: 2, md: 1 }}>
+        <GridItem colSpan={colSpan}>
           <FormControl>
             <FormLabel>City</FormLabel>
             <Input placeholder="Caucaia" />
           </FormControl>
         </GridItem>
-        <GridItem colSpan={{ base: 2, md: 1 }}>
+        <GridItem colSpan={colSpan}>
           <FormControl>
             <FormLabel>Country</FormLabel>
             <Select defaultValue={"nr"}>
@@ -60,11 +65,7 @@ export default function Details() {
           <Checkbox defaultChecked>Ship to billing address</Checkbox>
         </GridItem>
         <GridItem colSpan={{ base: 2 }}>
-          <Button
-            size={"lg"}
-            w={"full"}
-            colorScheme="purple"
-          >
+          <Button size={"lg"} w={"full"} colorScheme="purple">
             Place Order
           </Button>
         </GridItem>

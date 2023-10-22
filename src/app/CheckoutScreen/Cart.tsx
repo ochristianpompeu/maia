@@ -1,7 +1,20 @@
-import { Divider, HStack, Heading, Text, VStack } from "@chakra-ui/react";
+import {
+  Button,
+  Divider,
+  HStack,
+  Heading,
+  Icon,
+  Text,
+  VStack,
+  useColorMode,
+  useColorModeValue,
+} from "@chakra-ui/react";
+import { Moon, Sun } from "@phosphor-icons/react";
 import { Image } from "@chakra-ui/react";
 
 export default function Cart() {
+  const { toggleColorMode, colorMode } = useColorMode();
+  const bgColor = useColorModeValue("gray.50", "whiteAlpha.50");
   return (
     <VStack
       w={"full"}
@@ -9,11 +22,14 @@ export default function Cart() {
       p={10}
       spacing={10}
       alignItems={"flex-start"}
-      bg={"gray.50"}
+      bg={bgColor}
     >
       <VStack spacing={3} alignItems={"flex-start"}>
         <Heading size={"2xl"}>Your Cart</Heading>
-        <Text>If this price is too hard on yout eyes</Text>
+        <Text>If this price is too hard on your eyes</Text>
+        <Button colorScheme="purple" onClick={toggleColorMode}>
+          <Icon as={colorMode === "light" ? Moon : Sun} />
+        </Button>
       </VStack>
       <HStack w={"full"} p={0}>
         <Image
@@ -43,11 +59,11 @@ export default function Cart() {
           <Heading size="sm">R$ 23,80</Heading>
         </HStack>
       </VStack>
-      <Divider/>
+      <Divider />
       <HStack justifyContent="space-between" w="full">
-          <Text>Taxes</Text>
-          <Heading size="lg">R$ 23,80</Heading>
-        </HStack>
+        <Text>Taxes</Text>
+        <Heading size="lg">R$ 23,80</Heading>
+      </HStack>
     </VStack>
   );
 }
