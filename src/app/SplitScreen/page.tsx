@@ -3,7 +3,7 @@
 import { Container, Stack } from "@chakra-ui/react";
 import LoginSide from "./LoginSide";
 import ImageSide from "./ImageSide";
-import NavBar from "../NavBar/page";
+import NavBar from "../NavBar/NavBar";
 
 export default function SplitScreen() {
   return (
