@@ -1,4 +1,4 @@
-import { VStack } from "@chakra-ui/react";
+import { Heading, Text, VStack } from "@chakra-ui/react";
 
 export default function Cart() {
   return (
@@ -9,6 +9,13 @@ export default function Cart() {
       spacing={10}
       alignItems={"flex-start"}
       bg={"gray.50"}
-    ></VStack>
+    >
+      <VStack spacing={3} alignItems={"flex-start"}>
+        <Heading size={"2xl"}>Your Cart</Heading>
+        <Text>
+          If this price is too hard on yout eyes 
+        </Text>
+      </VStack>
+    </VStack>
   );
 }
