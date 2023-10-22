@@ -1,8 +1,12 @@
 'use client'
-import SignInSide from '@/components/SignInSide'
+
+import CheckoutScreen from "./CheckoutScreen/page"
+import SplitScreen from "./SplitScreen/page"
+
 
 export default function Home() {
   return (
-    <SignInSide />
+    // <SplitScreen />
+    <CheckoutScreen />
   )
 }
