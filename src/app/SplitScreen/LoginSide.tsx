@@ -22,33 +22,31 @@ export default function LoginSide() {
               position: "absolute",
               bottom: 1,
               left: 0,
-              bg: "blue.400",
+              bg: "purple.400",
               zIndex: -1,
             }}
           >
-            Freelance
+            Maia
           </Text>
           <br />{" "}
-          <Text color={"blue.400"} as={"span"}>
-            Design Projects
+          <Text color={"purple.400"} as={"span"}>
+            Agendador
           </Text>{" "}
         </Heading>
         <Text fontSize={{ base: "md", lg: "lg" }} color={"gray.500"}>
-          The project board is an exclusive resource for contract work.
-          It&apos;s perfect for freelancers, agencies, and moonlighters.
+          Projeto de aplicação web para realizar agendamento de serviços
         </Text>
         <Stack direction={{ base: "column", md: "row" }} spacing={4}>
           <Button
             rounded={"full"}
-            bg={"blue.400"}
-            color={"white"}
+            colorScheme="purple"
             _hover={{
               bg: "blue.500",
             }}
           >
-            Create Project
+            Empresa
           </Button>
-          <Button rounded={"full"}>How It Works</Button>
+          <Button rounded={"full"}>Cliente</Button>
         </Stack>
       </Stack>
     </Flex>
