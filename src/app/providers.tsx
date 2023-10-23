@@ -6,12 +6,14 @@ import { SessionProvider } from "next-auth/react";
 
 interface Props {
   children: React.ReactNode;
-  session?: any;
+  // session?: any;
 }
 
-export function Providers({ children, session }: Props) {
+// export function Providers({ children, session }: Props) {
+export function Providers({ children }: Props) {
   return (
-    <SessionProvider session={session}>
+    // <SessionProvider session={session}>
+    <SessionProvider>
       <CacheProvider>
         <ChakraProvider>{children}</ChakraProvider>
       </CacheProvider>

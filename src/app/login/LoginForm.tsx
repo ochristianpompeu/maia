@@ -19,20 +19,22 @@ import {
   InputRightElement,
   InputGroup,
   Divider,
+  Spinner,
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import { GithubLogo, GoogleLogo } from "@phosphor-icons/react";
 
 export default function SimpleCard() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [formValues, setFormValues] = useState({
     email: "",
-    password: "",
+    senha: "",
   });
 
   const [error, setError] = useState("");
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || "/profile";
+  const callbackUrl = searchParams.get("callbackUrl") || "/perfil";
   const [showPassword, setShowPassword] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
@@ -42,13 +44,13 @@ export default function SimpleCard() {
 
       setFormValues({
         email: "",
-        password: "",
+        senha: "",
       });
 
       const res = await signIn("credentials", {
         redirect: false,
         email: formValues.email,
-        password: formValues.password,
+        password: formValues.senha,
         callbackUrl,
       });
 
@@ -67,10 +69,7 @@ export default function SimpleCard() {
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
     const { name, value } = event.target;
-    setFormValues({
-      ...formValues,
-      [name]: value,
-    });
+    setFormValues({ ...formValues, [name]: value });
   }
 
   return (
@@ -91,10 +90,17 @@ export default function SimpleCard() {
           boxShadow={"lg"}
           p={8}
         >
-          <Stack spacing={4}>
+          <Stack spacing={4} onSubmit={handleSubmit}>
             <FormControl id="email">
               <FormLabel>Email</FormLabel>
-              <Input type="email" placeholder="durin@valfenda.com" />
+              <Input
+                type="email"
+                name="email"
+                placeholder="durin@valfenda.com"
+                value={formValues.email}
+                onChange={handleChange}
+                disabled
+              />
             </FormControl>
             <FormControl id="password">
               <FormLabel>Senha</FormLabel>
@@ -102,6 +108,10 @@ export default function SimpleCard() {
                 <Input
                   type={showPassword ? "text" : "password"}
                   placeholder="senha"
+                  name="senha"
+                  value={formValues.senha}
+                  onChange={handleChange}
+                  disabled
                 />
                 <InputRightElement h="full">
                   <Button
@@ -124,9 +134,35 @@ export default function SimpleCard() {
                 <Checkbox>Remember me</Checkbox>
                 <Text color={"blue.400"}>Forgot password?</Text>
               </Stack>
-              <Button colorScheme="purple">Sign in</Button>
+              <Button type="submit" disabled={loading} colorScheme="purple">
+                {loading ? <Spinner /> : "Sign in"}
+              </Button>
             </Stack>
             <Divider />
+            <Button
+              variant="outline"
+              onClick={() =>
+                signIn("google", {
+                  callbackUrl: "/perfil",
+                })
+              }
+              leftIcon={<GoogleLogo size={20} weight="bold" />}
+              colorScheme="red"
+            >
+              Login com Google
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() =>
+                signIn("github", {
+                  callbackUrl: "/perfil",
+                })
+              }
+              leftIcon={<GithubLogo size={20} weight="bold" />}
+              colorScheme="purple"
+            >
+              Login com Github
+            </Button>
           </Stack>
         </Box>
       </Stack>
