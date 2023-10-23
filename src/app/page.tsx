@@ -1,7 +1,7 @@
 "use client";
 
-import CheckoutScreen from "./CheckoutScreen/page";
-import SplitScreen from "./SplitScreen/page";
+import CheckoutScreen from "./checkout/page";
+import SplitScreen from "./SplitScreen/SplitScreen";
 
 export default function Home() {
   return (

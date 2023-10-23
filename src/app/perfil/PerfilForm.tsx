@@ -73,15 +73,15 @@ export default function PerfilForm() {
             </Stack>
           </Stack>
 
-          {/* <Button
+          <Button
             w={"full"}
             mt={8}
             colorScheme="red"
             rounded={"md"}
-            onClick={()=>signOut}
+            onClick={() => signOut({ callbackUrl: "/login" })}
           >
             SignOut
-          </Button> */}
+          </Button>
         </Box>
       </Box>
     </Center>
