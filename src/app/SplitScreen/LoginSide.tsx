@@ -9,7 +9,7 @@ import {
 
 export default function LoginSide() {
   return (
-    <Flex p={8} flex={1} align={"center"} justify={"center"}>
+    <Flex p={4} flex={1} align={"center"} justify={"flex-start"}>
       <Stack spacing={6} w={"full"} maxW={"lg"}>
         <Heading fontSize={{ base: "3xl", md: "4xl", lg: "5xl" }}>
           <Text
@@ -44,9 +44,8 @@ export default function LoginSide() {
               bg: "blue.500",
             }}
           >
-            Empresa
+            Consultar Serviços
           </Button>
-          <Button rounded={"full"}>Cliente</Button>
         </Stack>
       </Stack>
     </Flex>

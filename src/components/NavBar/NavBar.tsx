@@ -13,7 +13,9 @@ import {
 } from "@chakra-ui/react";
 import AvatarComMenu from "./AvatarComMenu/AvatarComMenu";
 import NavLink from "./NavLink";
-const Links = ["Dashboard", "Projects", "Team"];
+// const Links = ["Serviços", "Dashboard", "Blog"];
+
+import { Links } from "../../lib/Links";
 
 export default function NavBar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -37,7 +39,9 @@ export default function NavBar() {
               display={{ base: "none", md: "flex" }}
             >
               {Links.map((link) => (
-                <NavLink key={link}>{link}</NavLink>
+                <NavLink href={link.link} key={link.text}>
+                  {link.text}
+                </NavLink>
               ))}
             </HStack>
           </HStack>
@@ -48,7 +52,9 @@ export default function NavBar() {
           <Box pb={4} display={{ md: "none" }}>
             <Stack as={"nav"} spacing={4}>
               {Links.map((link) => (
-                <NavLink key={link}>{link}</NavLink>
+                <NavLink href={link.link} key={link.text}>
+                  {link.text}
+                </NavLink>
               ))}
             </Stack>
           </Box>

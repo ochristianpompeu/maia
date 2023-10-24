@@ -2,8 +2,9 @@ import { Box, useColorModeValue } from "@chakra-ui/react";
 
 interface Props {
   children: React.ReactNode;
+  href: string;
 }
-export default function NavLink({ children }: Props) {
+export default function NavLink({ children, href }: Props) {
   return (
     <Box
       as="a"
@@ -14,7 +15,7 @@ export default function NavLink({ children }: Props) {
         textDecoration: "none",
         bg: useColorModeValue("gray.200", "gray.700"),
       }}
-      href={"#"}
+      href={href}
     >
       {children}
     </Box>
