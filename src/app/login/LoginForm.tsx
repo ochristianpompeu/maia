@@ -1,28 +1,29 @@
 "use client";
 
 import { signIn } from "next-auth/react";
-import { useSearchParams, useRouter } from "next/navigation";
-import { useState, ChangeEvent } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { ChangeEvent, useState } from "react";
 
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import {
-  Flex,
   Box,
+  Button,
+  Checkbox,
+  Divider,
+  Flex,
   FormControl,
   FormLabel,
-  Input,
-  Checkbox,
-  Stack,
-  Button,
   Heading,
+  Input,
+  InputGroup,
+  InputRightElement,
+  Spinner,
+  Stack,
   Text,
   useColorModeValue,
-  InputRightElement,
-  InputGroup,
-  Divider,
-  Spinner,
 } from "@chakra-ui/react";
-import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
-import { GithubLogo, GoogleLogo } from "@phosphor-icons/react";
+import { FaGithub } from "react-icons/fa";
+import { FcGoogle } from "react-icons/fc";
 
 export default function SimpleCard() {
   const router = useRouter();
@@ -146,7 +147,7 @@ export default function SimpleCard() {
                   callbackUrl: "/perfil",
                 })
               }
-              leftIcon={<GoogleLogo size={20} weight="bold" />}
+              leftIcon={<FcGoogle />}
               colorScheme="red"
             >
               Login com Google
@@ -158,7 +159,7 @@ export default function SimpleCard() {
                   callbackUrl: "/perfil",
                 })
               }
-              leftIcon={<GithubLogo size={20} weight="bold" />}
+              leftIcon={<FaGithub />}
               colorScheme="purple"
             >
               Login com Github
