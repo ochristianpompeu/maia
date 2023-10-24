@@ -9,7 +9,7 @@ export default function SplitScreen() {
   return (
     <Container maxW="full" p={0}>
       <NavBar />
-      <Container p={0} maxW="container.xl">
+      <Container p={0} maxW="full">
         <Stack
           m={0}
           p={0}

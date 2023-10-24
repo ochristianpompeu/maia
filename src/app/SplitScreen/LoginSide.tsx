@@ -9,11 +9,12 @@ import {
 
 export default function LoginSide() {
   return (
-    <Flex p={4} flex={1} align={"center"} justify={"flex-start"}>
+    <Flex p={4} flex={1} align={"center"} justify={"center"}>
       <Stack spacing={6} w={"full"} maxW={"lg"}>
         <Heading fontSize={{ base: "3xl", md: "4xl", lg: "5xl" }}>
-          <Text
+          <Heading
             as={"span"}
+            fontSize={{ base: "3xl", md: "4xl", lg: "5xl" }}
             position={"relative"}
             _after={{
               content: "''",
@@ -27,11 +28,15 @@ export default function LoginSide() {
             }}
           >
             Maia
-          </Text>
+          </Heading>
           <br />{" "}
-          <Text color={"purple.400"} as={"span"}>
+          <Heading
+            color={"purple.400"}
+            as={"span"}
+            fontSize={{ base: "3xl", md: "4xl", lg: "5xl" }}
+          >
             Agendador
-          </Text>{" "}
+          </Heading>{" "}
         </Heading>
         <Text fontSize={{ base: "md", lg: "lg" }} color={"gray.500"}>
           Projeto de aplicação web para realizar agendamento de serviços

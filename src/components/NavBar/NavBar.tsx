@@ -7,15 +7,14 @@ import {
   Flex,
   HStack,
   IconButton,
-  Stack,
   useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
 import AvatarComMenu from "./AvatarComMenu/AvatarComMenu";
-import NavLink from "./NavLink";
-// const Links = ["Serviços", "Dashboard", "Blog"];
 
-import { Links } from "../../lib/Links";
+import Logo from "../Logo/MaiaLogo";
+import NavMenu from "./NavMenu";
+import NavMenuMobile from "./NavMenuMobile";
 
 export default function NavBar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -32,33 +31,12 @@ export default function NavBar() {
             onClick={isOpen ? onClose : onOpen}
           />
           <HStack spacing={8} alignItems={"center"}>
-            <Box>Logo</Box>
-            <HStack
-              as={"nav"}
-              spacing={4}
-              display={{ base: "none", md: "flex" }}
-            >
-              {Links.map((link) => (
-                <NavLink href={link.link} key={link.text}>
-                  {link.text}
-                </NavLink>
-              ))}
-            </HStack>
+            <Logo />
+            <NavMenu />
           </HStack>
           <AvatarComMenu />
         </Flex>
-
-        {isOpen ? (
-          <Box pb={4} display={{ md: "none" }}>
-            <Stack as={"nav"} spacing={4}>
-              {Links.map((link) => (
-                <NavLink href={link.link} key={link.text}>
-                  {link.text}
-                </NavLink>
-              ))}
-            </Stack>
-          </Box>
-        ) : null}
+        {isOpen ? <NavMenuMobile /> : null}
       </Container>
     </Box>
   );
