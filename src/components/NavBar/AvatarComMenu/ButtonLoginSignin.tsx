@@ -1,19 +1,19 @@
 import { Button, ButtonGroup, Icon, useColorMode } from "@chakra-ui/react";
-import { Moon, Sun, User } from "@phosphor-icons/react";
+import { TiUser, TiWeatherNight, TiWeatherSunny } from "react-icons/ti";
 
 export default function ButtonLoginSignin() {
   const { toggleColorMode, colorMode } = useColorMode();
   return (
     <ButtonGroup>
       <Button colorScheme="pink" size="sm" onClick={toggleColorMode}>
-        <Icon as={colorMode === "light" ? Moon : Sun} />
+        <Icon as={colorMode === "light" ? TiWeatherNight : TiWeatherSunny} />
       </Button>
       <Button
         variant={"solid"}
         colorScheme={"purple"}
         size={"sm"}
         mr={4}
-        leftIcon={<User />}
+        leftIcon={<TiUser />}
       >
         Login
       </Button>

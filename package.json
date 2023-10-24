@@ -17,7 +17,6 @@
     "@fontsource/roboto": "^5.0.8",
     "@mui/icons-material": "^5.14.11",
     "@mui/material": "^5.14.11",
-    "@phosphor-icons/react": "^2.0.13",
     "framer-motion": "^10.16.4",
     "mongodb": "^6.1.0",
     "mongoose": "^7.6.3",
