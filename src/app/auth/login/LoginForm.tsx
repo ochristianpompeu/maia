@@ -90,6 +90,7 @@ export default function SimpleCard() {
           bg={useColorModeValue("white", "gray.700")}
           boxShadow={"lg"}
           p={8}
+          // w="sm"
         >
           <Stack spacing={4} onSubmit={handleSubmit}>
             <FormControl id="email">
@@ -100,7 +101,8 @@ export default function SimpleCard() {
                 placeholder="durin@valfenda.com"
                 value={formValues.email}
                 onChange={handleChange}
-                disabled
+                w={"full"}
+                // disabled
               />
             </FormControl>
             <FormControl id="password">
@@ -112,7 +114,7 @@ export default function SimpleCard() {
                   name="senha"
                   value={formValues.senha}
                   onChange={handleChange}
-                  disabled
+                  // disabled
                 />
                 <InputRightElement h="full">
                   <Button

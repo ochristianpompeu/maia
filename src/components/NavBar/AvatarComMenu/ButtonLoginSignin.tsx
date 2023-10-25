@@ -16,7 +16,7 @@ export default function ButtonLoginSignin() {
         size={"sm"}
         mr={4}
         leftIcon={<TiUser />}
-        href="/login"
+        href="/auth/login"
       >
         SignIn
       </Button>

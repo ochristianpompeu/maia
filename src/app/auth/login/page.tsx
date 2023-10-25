@@ -1,5 +1,5 @@
 import { Container } from "@chakra-ui/react";
-import NavBar from "../../components/NavBar/NavBar";
+import NavBar from "../../../components/NavBar/NavBar";
 import LoginForm from "./LoginForm";
 
 export default function Login() {
