@@ -3,9 +3,10 @@
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ChangeEvent, useState } from "react";
-
+import NextLink from "next/link";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import {
+  AbsoluteCenter,
   Box,
   Button,
   Checkbox,
@@ -17,6 +18,7 @@ import {
   Input,
   InputGroup,
   InputRightElement,
+  Link,
   Spinner,
   Stack,
   Text,
@@ -25,7 +27,7 @@ import {
 import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 
-export default function SimpleCard() {
+export default function LoginForm() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [formValues, setFormValues] = useState({
@@ -138,10 +140,19 @@ export default function SimpleCard() {
                 <Text color={"blue.400"}>Forgot password?</Text>
               </Stack>
               <Button type="submit" disabled={loading} colorScheme="purple">
-                {loading ? <Spinner /> : "Sign in"}
+                {loading ? <Spinner /> : "Entrar"}
               </Button>
             </Stack>
             <Divider />
+            <Text textAlign="right">
+              Não possui cadastro? <Link color={"blue.400"} as={NextLink} href="/auth/signin">Clique aqui</Link>
+            </Text>
+            <Box position="relative" paddingY="4">
+              <Divider />
+              <AbsoluteCenter bg={useColorModeValue("white", "gray.700")} px="4">
+                Ou
+              </AbsoluteCenter>
+            </Box>
             <Button
               variant="outline"
               onClick={() =>
