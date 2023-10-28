@@ -1,6 +1,6 @@
 import mongoose, { Schema, models } from "mongoose";
 
-const usuarioSchem = new Schema(
+const usuarioSchema = new Schema(
   {
     email: {
       type: String,
@@ -14,9 +14,13 @@ const usuarioSchem = new Schema(
       type: String,
       required: true,
     },
+    senha:{
+      type: String,
+      require: false
+    }
   },
   { timestamps: true }
 );
 
-const Usuario = models.Usuario || mongoose.model("Usuario", usuarioSchem);
+const Usuario = models.Usuario || mongoose.model("Usuario", usuarioSchema);
 export default Usuario;

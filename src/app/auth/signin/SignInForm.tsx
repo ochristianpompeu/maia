@@ -1,16 +1,8 @@
 "use client";
 
-import { signIn } from "next-auth/react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { ChangeEvent, useState } from "react";
-import NextLink from "next/link";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import {
   AbsoluteCenter,
-  Alert,
-  AlertDescription,
-  AlertIcon,
-  AlertTitle,
   Box,
   Button,
   Checkbox,
@@ -27,7 +19,12 @@ import {
   Stack,
   Text,
   useColorModeValue,
+  useToast,
 } from "@chakra-ui/react";
+import { signIn } from "next-auth/react";
+import NextLink from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+import { ChangeEvent, useState } from "react";
 import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 
@@ -44,41 +41,103 @@ export default function SignInForm() {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") || "/perfil";
   const [showPassword, setShowPassword] = useState(false);
+  const toast = useToast();
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault;
 
     if (!formValues.nome || !formValues.email || !formValues.senha) {
       setError("Todos os campos são obrigatórios");
+      toast({
+        title: "Ocorreu um erro",
+        description: error,
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+        position: "top",
+      });
       return;
     }
 
     try {
       setLoading(true);
-
-      setFormValues({
-        nome: "",
-        email: "",
-        senha: "",
+      const responseUsuarioExiste = await fetch("/api/usuarioExiste", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formValues),
       });
 
-      const res = await signIn("credentials", {
-        redirect: false,
-        email: formValues.email,
-        password: formValues.senha,
-        callbackUrl,
-      });
+      const { usuario } = await responseUsuarioExiste.json();
 
-      setLoading(false);
-      console.log(res);
-      if (!res?.error) {
-        router.push(callbackUrl);
-      } else {
-        setError("Email ou senha inválidos");
+      if (usuario) {
+        setError("Usuário já existe");
+        setLoading(false)
+        toast({
+          title: "Ocorreu um erro",
+          description: error,
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+          position: "top",
+        });
+        return;
       }
-    } catch (error: any) {
+
+      const signInResponse = await fetch("/api/signin", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formValues),
+      });
+
       setLoading(false);
-      setError(error);
+      if (signInResponse.ok) {
+        setFormValues({
+          nome: "",
+          email: "",
+          senha: "",
+        });
+      } else {
+        const errorResponse = await signInResponse.json();
+        setError(errorResponse);
+        // toast({
+        //   title: "Ocorreu um erro",
+        //   description: res.text,
+        //   status: "error",
+        //   duration: 9000,
+        //   isClosable: true,
+        //   position: "top",
+        // });
+      }
+
+      // const res = await signIn("credentials", {
+      //   redirect: false,
+      //   email: formValues.email,
+      //   password: formValues.senha,
+      //   callbackUrl,
+      // });
+
+      // setLoading(false);
+      // console.log(res);
+      // if (!res?.error) {
+      //   router.push(callbackUrl);
+      // } else {
+      //   setError("Email ou senha inválidos");
+      // }
+    } catch (erro: any) {
+      setLoading(false);
+      setError(erro);
+      toast({
+        title: "Ocorreu um erro",
+        description: error,
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+        position: "top",
+      });
     }
   }
 
@@ -106,7 +165,7 @@ export default function SignInForm() {
           p={8}
           w={["sm", "md"]}
         >
-          <Stack spacing={4} onSubmit={()=>handleSubmit}>
+          <Stack spacing={4} onSubmit={handleSubmit}>
             <FormControl id="nome">
               <FormLabel>Nome</FormLabel>
               <Input
@@ -166,20 +225,18 @@ export default function SignInForm() {
                 <Checkbox>Remember me</Checkbox>
                 <Text color={"blue.400"}>Forgot password?</Text>
               </Stack>
-              <Button type="submit" disabled={loading} colorScheme="purple">
+              <Button
+                onClick={handleSubmit}
+                type="submit"
+                disabled={loading}
+                colorScheme="purple"
+              >
                 {loading ? <Spinner /> : "Sign in"}
               </Button>
-              {error && (
-                <Alert status="error">
-                  <AlertIcon />
-                  <AlertTitle>Ocorreu um erro!</AlertTitle>
-                  <AlertDescription>{error}</AlertDescription>
-                </Alert>
-              )}
             </Stack>
           </Stack>
           <Divider my={6} />
-          <Stack spacing={4} >
+          <Stack spacing={4}>
             <Text textAlign={"right"}>
               Já possui cadastro?{" "}
               <Link color={"blue.400"} as={NextLink} href="/auth/login">
