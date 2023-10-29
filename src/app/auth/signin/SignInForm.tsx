@@ -73,7 +73,7 @@ export default function SignInForm() {
 
       if (usuario) {
         setError("Usuário já existe");
-        setLoading(false)
+        setLoading(false);
         toast({
           title: "Ocorreu um erro",
           description: error,
@@ -100,6 +100,7 @@ export default function SignInForm() {
           email: "",
           senha: "",
         });
+        router.push("/dashboard")
       } else {
         const errorResponse = await signInResponse.json();
         setError(errorResponse);
