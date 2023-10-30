@@ -1,15 +1,10 @@
 "use client";
 
-import { signIn } from "next-auth/react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { ChangeEvent, useState } from "react";
-import NextLink from "next/link";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import {
   AbsoluteCenter,
   Box,
   Button,
-  Checkbox,
   Divider,
   Flex,
   FormControl,
@@ -23,8 +18,12 @@ import {
   Stack,
   Text,
   useColorModeValue,
+  useToast,
 } from "@chakra-ui/react";
-import { FaGithub } from "react-icons/fa";
+import { signIn } from "next-auth/react";
+import NextLink from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+import { ChangeEvent, useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 
 export default function LoginForm() {
@@ -32,41 +31,54 @@ export default function LoginForm() {
   const [loading, setLoading] = useState(false);
   const [formValues, setFormValues] = useState({
     email: "",
-    senha: "",
+    password: "",
   });
 
   const [error, setError] = useState("");
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") || "/perfil";
   const [showPassword, setShowPassword] = useState(false);
+  const toast = useToast();
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault;
     try {
       setLoading(true);
 
-      setFormValues({
-        email: "",
-        senha: "",
-      });
-
       const res = await signIn("credentials", {
         redirect: false,
         email: formValues.email,
-        password: formValues.senha,
-        callbackUrl,
+        senha: formValues.password,
+        // callbackUrl,
       });
 
       setLoading(false);
-      console.log(res);
-      if (!res?.error) {
-        router.push(callbackUrl);
-      } else {
-        setError("Email ou senha inválidos");
+      if(res?.error){
+        setError("Dados informados inválidos")
+        toast({
+          title: "Ocorreu um erro",
+          description: error,
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+          position: "top",
+        });
+        return  
       }
+
+      router.push("/dashboard")
+
     } catch (error: any) {
       setLoading(false);
       setError(error);
+      toast({
+        title: "Ocorreu um erro",
+        description: error,
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+        position: "top",
+      });
     }
   }
 
@@ -84,8 +96,13 @@ export default function LoginForm() {
     >
       <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
         <Stack align={"center"}>
-          <Heading fontSize={"4xl"}>Acesse sua</Heading>
-          <Heading fontSize={"4xl"}>conta ✌️</Heading>
+          {/* <Heading fontSize={"4xl"}>Acesse sua</Heading> */}
+          <Heading
+            textColor={useColorModeValue("gray.800", "gray.500")}
+            fontSize={"4xl"}
+          >
+            Login ✌️
+          </Heading>
         </Stack>
         <Box
           rounded={"lg"}
@@ -113,8 +130,8 @@ export default function LoginForm() {
                 <Input
                   type={showPassword ? "text" : "password"}
                   placeholder="senha"
-                  name="senha"
-                  value={formValues.senha}
+                  name="password"
+                  value={formValues.password}
                   onChange={handleChange}
                   // disabled
                 />
@@ -136,20 +153,26 @@ export default function LoginForm() {
                 align={"start"}
                 justify={"space-between"}
               >
-                <Checkbox>Remember me</Checkbox>
-                <Text color={"blue.400"}>Forgot password?</Text>
+                {/* <Checkbox>Remember me</Checkbox> */}
+                <Text color={"blue.400"}>Esqueceu a senha?</Text>
               </Stack>
-              <Button type="submit" disabled={loading} colorScheme="purple">
+              <Button type="submit" disabled={loading} colorScheme="purple" onClick={handleSubmit}>
                 {loading ? <Spinner /> : "Entrar"}
               </Button>
             </Stack>
             <Divider />
             <Text textAlign="right">
-              Não possui cadastro? <Link color={"blue.400"} as={NextLink} href="/auth/signin">Clique aqui</Link>
+              Não possui cadastro?{" "}
+              <Link color={"blue.400"} as={NextLink} href="/auth/signin">
+                Clique aqui
+              </Link>
             </Text>
             <Box position="relative" paddingY="4">
               <Divider />
-              <AbsoluteCenter bg={useColorModeValue("white", "gray.700")} px="4">
+              <AbsoluteCenter
+                bg={useColorModeValue("white", "gray.700")}
+                px="4"
+              >
                 Ou
               </AbsoluteCenter>
             </Box>
@@ -165,7 +188,7 @@ export default function LoginForm() {
             >
               Login com Google
             </Button>
-            <Button
+            {/* <Button
               variant="outline"
               onClick={() =>
                 signIn("github", {
@@ -176,7 +199,7 @@ export default function LoginForm() {
               colorScheme="purple"
             >
               Login com Github
-            </Button>
+            </Button> */}
           </Stack>
         </Box>
       </Stack>

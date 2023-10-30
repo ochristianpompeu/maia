@@ -1,20 +1,17 @@
 "use client";
 
-import { authOptions } from "@/lib/auth";
 import {
-  Heading,
   Avatar,
   Box,
-  Center,
-  Image,
-  Flex,
-  Text,
-  Stack,
   Button,
-  useColorModeValue,
+  Center,
+  Flex,
+  Heading,
+  Image,
+  Stack,
+  Text
 } from "@chakra-ui/react";
-import { getServerSession } from "next-auth";
-import { useSession, signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 
 export default function PerfilForm() {
   // const session = await getServerSession(authOptions);
@@ -78,7 +75,7 @@ export default function PerfilForm() {
             mt={8}
             colorScheme="red"
             rounded={"md"}
-            onClick={() => signOut({ callbackUrl: "/login" })}
+            onClick={() => signOut({ callbackUrl: "/auth/login" })}
           >
             SignOut
           </Button>

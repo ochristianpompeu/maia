@@ -32,9 +32,9 @@ export default function SignInForm() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [formValues, setFormValues] = useState({
-    nome: "",
+    name: "",
     email: "",
-    senha: "",
+    password: "",
   });
 
   const [error, setError] = useState("");
@@ -46,7 +46,7 @@ export default function SignInForm() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault;
 
-    if (!formValues.nome || !formValues.email || !formValues.senha) {
+    if (!formValues.name || !formValues.email || !formValues.password) {
       setError("Todos os campos são obrigatórios");
       toast({
         title: "Ocorreu um erro",
@@ -61,7 +61,7 @@ export default function SignInForm() {
 
     try {
       setLoading(true);
-      const responseUsuarioExiste = await fetch("/api/usuarioExiste", {
+      const responseUsuarioExiste = await fetch("/api/userExists", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -69,9 +69,9 @@ export default function SignInForm() {
         body: JSON.stringify(formValues),
       });
 
-      const { usuario } = await responseUsuarioExiste.json();
+      const { user } = await responseUsuarioExiste.json();
 
-      if (usuario) {
+      if (user) {
         setError("Usuário já existe");
         setLoading(false);
         toast({
@@ -96,11 +96,11 @@ export default function SignInForm() {
       setLoading(false);
       if (signInResponse.ok) {
         setFormValues({
-          nome: "",
+          name: "",
           email: "",
-          senha: "",
+          password: "",
         });
-        router.push("/dashboard")
+        router.push("/dashboard");
       } else {
         const errorResponse = await signInResponse.json();
         setError(errorResponse);
@@ -156,8 +156,7 @@ export default function SignInForm() {
     >
       <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
         <Stack align={"center"}>
-          <Heading fontSize={"4xl"}>Faça o</Heading>
-          <Heading fontSize={"4xl"}>seu cadastro ✌️</Heading>
+          <Heading fontSize={"4xl"}>Cadastro ✌️</Heading>
         </Stack>
         <Box
           rounded={"lg"}
@@ -167,13 +166,13 @@ export default function SignInForm() {
           w={["sm", "md"]}
         >
           <Stack spacing={4} onSubmit={handleSubmit}>
-            <FormControl id="nome">
+            <FormControl id="name">
               <FormLabel>Nome</FormLabel>
               <Input
                 type="text"
-                name="nome"
+                name="name"
                 placeholder="Elrond de Valfenda"
-                value={formValues.nome}
+                value={formValues.name}
                 onChange={handleChange}
                 w={"full"}
                 required
@@ -185,7 +184,7 @@ export default function SignInForm() {
               <Input
                 type="email"
                 name="email"
-                placeholder="durin@valfenda.com"
+                placeholder="durin@moria.com"
                 value={formValues.email}
                 onChange={handleChange}
                 w={"full"}
@@ -199,8 +198,8 @@ export default function SignInForm() {
                 <Input
                   type={showPassword ? "text" : "password"}
                   placeholder="senha"
-                  name="senha"
-                  value={formValues.senha}
+                  name="password"
+                  value={formValues.password}
                   onChange={handleChange}
                   required
                   // disabled

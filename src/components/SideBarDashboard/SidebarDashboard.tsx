@@ -1,40 +1,41 @@
 "use client";
 
 import {
-  IconButton,
   Avatar,
   Box,
+  BoxProps,
   CloseButton,
-  Flex,
-  HStack,
-  VStack,
-  Icon,
-  useColorModeValue,
-  Text,
   Drawer,
   DrawerContent,
-  useDisclosure,
-  BoxProps,
+  Flex,
   FlexProps,
+  HStack,
+  Icon,
+  IconButton,
   Menu,
   MenuButton,
   MenuDivider,
   MenuItem,
   MenuList,
+  Text,
+  VStack,
+  useColorModeValue,
+  useDisclosure,
 } from "@chakra-ui/react";
 import {
-  FiHome,
-  FiTrendingUp,
-  FiCompass,
-  FiStar,
-  FiSettings,
-  FiMenu,
   FiBell,
   FiChevronDown,
+  FiCompass,
+  FiHome,
+  FiMenu,
+  FiSettings,
+  FiStar,
+  FiTrendingUp,
 } from "react-icons/fi";
 
-import { GoOrganization } from "react-icons/go";
+import { signOut, useSession } from "next-auth/react";
 import { IconType } from "react-icons";
+import { GoOrganization } from "react-icons/go";
 
 interface LinkItemProps {
   name: string;
@@ -128,6 +129,8 @@ const NavItem = ({ icon, children, ...rest }: NavItemProps) => {
 };
 
 const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
+  const { data: session } = useSession();
+  console.log("Session", session);
   return (
     <Flex
       ml={{ base: 0, md: 60 }}
@@ -184,7 +187,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
                   spacing="1px"
                   ml="2"
                 >
-                  <Text fontSize="sm">Justina Clark</Text>
+                  <Text fontSize="sm">{session?.user?.name}</Text>
                   <Text fontSize="xs" color="gray.600">
                     Admin
                   </Text>
@@ -202,7 +205,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
               <MenuItem>Settings</MenuItem>
               <MenuItem>Billing</MenuItem>
               <MenuDivider />
-              <MenuItem>Sign out</MenuItem>
+              <MenuItem onClick={() => signOut()}>Sign out</MenuItem>
             </MenuList>
           </Menu>
         </Flex>
