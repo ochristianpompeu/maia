@@ -36,6 +36,7 @@ import {
 import { signOut, useSession } from "next-auth/react";
 import { IconType } from "react-icons";
 import { GoOrganization } from "react-icons/go";
+import { TiUser } from "react-icons/ti";
 
 interface LinkItemProps {
   name: string;
@@ -168,7 +169,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
           icon={<FiBell />}
         />
         <Flex alignItems={"center"}>
-          <Menu>
+          <Menu >
             <MenuButton
               py={2}
               transition="all 0.3s"
@@ -177,9 +178,9 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
               <HStack>
                 <Avatar
                   size={"sm"}
-                  src={
-                    "https://images.unsplash.com/photo-1619946794135-5bc917a27793?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9"
-                  }
+                  src={session?.user?.image as string | undefined}
+                  bg="purple.500"
+                  icon={<TiUser fontSize="1.5rem" />}
                 />
                 <VStack
                   display={{ base: "none", md: "flex" }}
