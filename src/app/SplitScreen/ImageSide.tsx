@@ -1,15 +1,18 @@
-import { Flex, Image } from "@chakra-ui/react";
+import { Flex, Image, VStack } from "@chakra-ui/react";
 
 export default function ImageSide() {
   return (
-    <Flex flex={1}>
+    <VStack flex={1}w={"full"}
+    h={"full"}>
       <Image
-        alt={"Login Image"}
-        objectFit={"cover"}
+        alt="Login Image"
+        boxSize="md"
+        objectFit="cover"
+        borderRadius="md"
         src={
-          "https://images.unsplash.com/photo-1621605815971-fbc98d665033?auto=format&fit=crop&q=80&w=2070&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+          "https://images.unsplash.com/photo-1529651737248-dad5e287768e?auto=format&fit=crop&q=80&w=1965&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
         }
       />
-    </Flex>
+    </VStack>
   );
 }

@@ -20,7 +20,8 @@ export default function NavBar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
-    <Box bg={useColorModeValue("gray.100", "gray.900")} px={4}>
+    // <Box bg={useColorModeValue("gray.100", "gray.900")} px={4}>
+    <Box  px={4}>
       <Container maxW="container.xl" p={0}>
         <Flex h={12} alignItems={"center"} justifyContent={"space-between"}>
           <IconButton
