@@ -1,16 +1,14 @@
+import ButtonToggleColorMode from "@/components/ButtonToggleColorMode/ButtonToggleColorMode";
 import {
-  Button,
   Divider,
   HStack,
   Heading,
-  Icon,
+  Image,
   Text,
   VStack,
   useColorMode,
-  useColorModeValue,
+  useColorModeValue
 } from "@chakra-ui/react";
-import { Moon, Sun } from "@phosphor-icons/react";
-import { Image } from "@chakra-ui/react";
 
 export default function Cart() {
   const { toggleColorMode, colorMode } = useColorMode();
@@ -27,9 +25,7 @@ export default function Cart() {
       <VStack spacing={3} alignItems={"flex-start"}>
         <Heading size={"2xl"}>Your Cart</Heading>
         <Text>If this price is too hard on your eyes</Text>
-        <Button colorScheme="purple" onClick={toggleColorMode}>
-          <Icon as={colorMode === "light" ? Moon : Sun} />
-        </Button>
+        <ButtonToggleColorMode />
       </VStack>
       <HStack w={"full"} p={0}>
         <Image
