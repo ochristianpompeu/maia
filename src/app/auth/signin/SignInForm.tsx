@@ -61,7 +61,7 @@ export default function SignInForm() {
 
     try {
       setLoading(true);
-      const responseUsuarioExiste = await fetch("/api/userExists", {
+      const responseUserExists = await fetch("/api/userExists", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -69,7 +69,7 @@ export default function SignInForm() {
         body: JSON.stringify(formValues),
       });
 
-      const { user } = await responseUsuarioExiste.json();
+      const { user } = await responseUserExists.json();
 
       if (user) {
         setError("Usuário já existe");
@@ -104,30 +104,8 @@ export default function SignInForm() {
       } else {
         const errorResponse = await signInResponse.json();
         setError(errorResponse);
-        // toast({
-        //   title: "Ocorreu um erro",
-        //   description: res.text,
-        //   status: "error",
-        //   duration: 9000,
-        //   isClosable: true,
-        //   position: "top",
-        // });
       }
 
-      // const res = await signIn("credentials", {
-      //   redirect: false,
-      //   email: formValues.email,
-      //   password: formValues.senha,
-      //   callbackUrl,
-      // });
-
-      // setLoading(false);
-      // console.log(res);
-      // if (!res?.error) {
-      //   router.push(callbackUrl);
-      // } else {
-      //   setError("Email ou senha inválidos");
-      // }
     } catch (erro: any) {
       setLoading(false);
       setError(erro);

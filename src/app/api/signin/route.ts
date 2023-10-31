@@ -6,13 +6,13 @@ import { NextResponse } from "next/server";
 export async function POST(request: Request) {
   try {
     const { name, email, password } = await request.json();
-    const senhaEncriptada = await bcrypt.hash(password, 10);
+    const encryptedPassword = await bcrypt.hash(password, 10);
     await connectMongoDB();
     await User.create({
       name: name,
       email: email,
       user: email,
-      password: senhaEncriptada,
+      password: encryptedPassword,
     });
 
     return NextResponse.json(
