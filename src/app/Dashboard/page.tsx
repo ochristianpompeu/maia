@@ -1,3 +1,4 @@
+'use client'
 import SidebarDashboard from "@/components/SideBarDashboard/SidebarDashboard";
 import { Container } from "@chakra-ui/react";
 
