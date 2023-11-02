@@ -15,9 +15,9 @@ export default function ButtonLoginSignin() {
         size={"sm"}
         mr={4}
         leftIcon={<TiUser />}
-        href="/auth/signin" //quando completar a construção da autenticação deve tratar o nome e destino do botão com base na sessão
+        href="/auth/login" //quando completar a construção da autenticação deve tratar o nome e destino do botão com base na sessão
       >
-        SignIn
+        Entrar
       </Button>
     </ButtonGroup>
   );
