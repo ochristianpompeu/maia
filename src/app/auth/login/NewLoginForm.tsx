@@ -1,33 +1,35 @@
 "use client";
 
+import MaiaLogo from "@/components/Logo/MaiaLogo";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import { Link } from "@chakra-ui/next-js";
 import {
-  AbsoluteCenter,
-  Box,
-  Button,
-  Checkbox,
-  Divider,
-  Flex,
-  FormControl,
-  FormLabel,
-  Heading,
-  Input,
-  InputGroup,
-  InputRightElement,
-  Link,
-  Spinner,
-  Stack,
-  Text,
-  useColorModeValue,
-  useToast,
+    AbsoluteCenter,
+    Box,
+    Button,
+    Checkbox,
+    Divider,
+    Flex,
+    FormControl,
+    FormLabel,
+    Heading,
+    Input,
+    InputGroup,
+    InputRightElement,
+    Spinner,
+    Stack,
+    Text,
+    useColorModeValue,
+    useToast,
 } from "@chakra-ui/react";
 import { signIn } from "next-auth/react";
 import NextLink from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ChangeEvent, useState } from "react";
+import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 
-export default function LoginForm() {
+export default function NewLoginForm() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [formValues, setFormValues] = useState({
@@ -89,24 +91,26 @@ export default function LoginForm() {
 
   return (
     <Flex
-      minH={"100vh"}
       align={"center"}
       justify={"center"}
-      bg={useColorModeValue("gray.50", "gray.800")}
+      //   bg={useColorModeValue("gray.50", "gray.800")}
+      flex={1}
     >
-      <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
+      <Stack spacing={2} mx={"auto"} maxW={"lg"} py={12} px={6}>
         <Stack align={"center"}>
-          {/* <Heading fontSize={"4xl"}>Acesse sua</Heading> */}
-          <Heading
-            textColor={useColorModeValue("gray.800", "gray.500")}
-            fontSize={"4xl"}
-          >
-            Login ✌️
-          </Heading>
+          <MaiaLogo mb={10} boxSize={[12, 16, 20]} rounded="full" />
+          <Stack align={"center"}>
+            <Heading
+              fontSize={"4xl"}
+              textColor={useColorModeValue("purple.600", "purple.100")}
+            >
+              Entrar ✌️
+            </Heading>
+          </Stack>
         </Stack>
         <Box
           rounded={"lg"}
-          bg={useColorModeValue("white", "gray.700")}
+          bg={useColorModeValue("purple.50", "gray.700")}
           boxShadow={"lg"}
           p={8}
           // w="sm"
@@ -145,7 +149,7 @@ export default function LoginForm() {
                 </InputRightElement>
               </InputGroup>
             </FormControl>
-            <Stack spacing={10}>
+            <Stack >
               <Stack
                 direction={{ base: "column", md: "row" }}
                 justifyContent={"space-between"}
@@ -153,7 +157,7 @@ export default function LoginForm() {
                 p={0}
               >
                 <Checkbox colorScheme="purple">Remember me</Checkbox>
-                <Text color={"blue.600"}>Forgot password?</Text>
+                <Text color={"blue.600"}>Esqueceu sua senha?</Text>
               </Stack>
               <Button
                 type="submit"
@@ -165,16 +169,16 @@ export default function LoginForm() {
               </Button>
             </Stack>
             <Divider />
-            <Text textAlign="right">
+            <Text textAlign="right" w="full">
               Não possui cadastro?{" "}
-              <Link color={"blue.400"} as={NextLink} href="/auth/signin">
+              <Link color={"blue.600"} as={NextLink} href="/">
                 Clique aqui
               </Link>
             </Text>
             <Box position="relative" paddingY="4">
               <Divider />
               <AbsoluteCenter
-                bg={useColorModeValue("white", "gray.700")}
+                bg={useColorModeValue("purple.50", "gray.700")}
                 px="4"
               >
                 Ou
@@ -192,7 +196,7 @@ export default function LoginForm() {
             >
               Login com Google
             </Button>
-            {/* <Button
+            <Button
               variant="outline"
               onClick={() =>
                 signIn("github", {
@@ -200,10 +204,10 @@ export default function LoginForm() {
                 })
               }
               leftIcon={<FaGithub />}
-              colorScheme="purple"
+              colorScheme="blackAlpha"
             >
               Login com Github
-            </Button> */}
+            </Button>
           </Stack>
         </Box>
       </Stack>

@@ -3,7 +3,6 @@ import {
   AbsoluteCenter,
   Box,
   Button,
-  Checkbox,
   Divider,
   FormControl,
   FormLabel,
@@ -18,7 +17,7 @@ import {
   VStack,
   useColorMode,
   useColorModeValue,
-  useToast,
+  useToast
 } from "@chakra-ui/react";
 import { signIn } from "next-auth/react";
 import NextLink from "next/link";
@@ -109,7 +108,7 @@ export default function HomeSignInForm() {
           name: "",
           password: "",
         });
-        router.push("/dashboard");
+        router.push("/auth/login");
       } else {
         const responseError = await responseSignIn.json();
         setError(responseError);
@@ -127,7 +126,7 @@ export default function HomeSignInForm() {
       });
     }
   }
-  
+
   return (
     <VStack
       w={"full"}
@@ -139,7 +138,14 @@ export default function HomeSignInForm() {
       justifyContent="center"
       flex={1}
     >
-      <Stack spacing={4} mx={"auto"} maxW={"full"} alignItems="center" px={6}>
+      <Stack
+        spacing={4}
+        mx={"auto"}
+        maxW={"full"}
+        alignItems="center"
+        px={6}
+        onSubmit={handleSubmit}
+      >
         <MaiaLogo mb={10} boxSize={{ base: "20", md: "28" }} rounded="full" />
         <Stack align={"center"}>
           <Heading fontSize={"4xl"}>Faça seu Cadastro ✌️</Heading>
@@ -197,17 +203,8 @@ export default function HomeSignInForm() {
           </InputGroup>
         </FormControl>
         <Stack spacing={10} w="full">
-          <Stack
-            direction={{ base: "column", md: "row" }}
-            justifyContent={"space-between"}
-            w="full"
-            p={0}
-          >
-            <Checkbox colorScheme="purple">Remember me</Checkbox>
-            <Text color={"blue.600"}>Forgot password?</Text>
-          </Stack>
           <Button
-            // onClick={handleSubmit}
+            onClick={handleSubmit}
             type="submit"
             colorScheme="purple"
             variant="outline"
@@ -232,20 +229,20 @@ export default function HomeSignInForm() {
           variant="outline"
           onClick={() =>
             signIn("google", {
-              callbackUrl: "/perfil",
+              callbackUrl: "/login",
             })
           }
           leftIcon={<FcGoogle />}
           colorScheme="red"
           w="full"
         >
-          Login com Google
+          Registre-se com Google
         </Button>
         <Button
           variant="outline"
           onClick={() =>
             signIn("github", {
-              callbackUrl: "/perfil",
+              callbackUrl: "/login",
             })
           }
           leftIcon={<FaGithub />}
@@ -253,7 +250,7 @@ export default function HomeSignInForm() {
           disabled={true}
           w="full"
         >
-          Login com Github
+          Registre-se com Github
         </Button>
       </Stack>
     </VStack>
