@@ -21,6 +21,7 @@ interface SignInProps {
 export const authOptions: NextAuthOptions = {
   pages: {
     signIn: "/auth/login", // Redirect users to "/login" when signing in
+    signOut: "/"
   },
   session: {
     strategy: "jwt", // Use JSON Web Tokens (JWT) for session management
@@ -71,13 +72,14 @@ export const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async signIn({ user, email, account, profile }: SignInProps | any) {
+      const baseUrl = process.env.BASE_URL as string;
       if (account.provider === "google") {
         await connectMongoDB();
         const userExists = await UserModel.findOne({ email: user.email });
 
         try {
           if (!userExists) {
-            const response = await fetch("http://localhost:3000/api/user", {
+            const response = await fetch(baseUrl+"/api/user", {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
