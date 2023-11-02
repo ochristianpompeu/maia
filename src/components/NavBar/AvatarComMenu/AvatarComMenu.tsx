@@ -1,3 +1,4 @@
+import { Routes } from "@/lib/Links";
 import {
   Avatar,
   Button,
@@ -8,9 +9,12 @@ import {
   MenuItem,
   MenuList,
 } from "@chakra-ui/react";
+import { useSession } from "next-auth/react";
+import { SlUser } from "react-icons/sl";
 import ButtonLoginSignin from "./ButtonLoginSignin";
 
 export default function AvatarComMenu() {
+  const { data: session } = useSession();
   return (
     <Flex alignItems={"center"}>
       <ButtonLoginSignin />
@@ -22,13 +26,19 @@ export default function AvatarComMenu() {
           cursor={"pointer"}
           minW={0}
         >
-          <Avatar size={"sm"} src="https://i.pravatar.cc/300" />
+          <Avatar
+            size={"sm"} colorScheme="purple" bg="purple.500"
+            src={session?.user?.image as string | undefined}
+            name={session?.user?.name as string | undefined}
+            icon={<SlUser fontSize="1.rem"/>}
+            // src="https://i.pravatar.cc/300"
+          />
         </MenuButton>
         <MenuList>
-          <MenuItem>Link 1</MenuItem>
-          <MenuItem>Link 2</MenuItem>
+          <MenuItem>{Routes.blog.text}</MenuItem>
+          <MenuItem>{Routes.servicos.text}</MenuItem>
           <MenuDivider />
-          <MenuItem>Link 3</MenuItem>
+          <MenuItem>Configurações</MenuItem>
         </MenuList>
       </Menu>
     </Flex>

@@ -1,6 +1,6 @@
 import Footer from "@/components/Footer/Footer";
 import { Container, Flex } from "@chakra-ui/react";
-import NavBar from "../../../components/NavBar/NavBar";
+import NavBar from "../../components/NavBar/NavBar";
 import NewLoginForm from "./NewLoginForm";
 
 export default function Login() {

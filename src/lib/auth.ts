@@ -1,3 +1,4 @@
+import { Routes } from "@/lib/Links";
 import { User as UserModel } from "@/models/user";
 import bcrypt from "bcryptjs";
 import type {
@@ -20,7 +21,7 @@ interface SignInProps {
 
 export const authOptions: NextAuthOptions = {
   pages: {
-    signIn: "/auth/login", // Redirect users to "/login" when signing in
+    signIn: Routes.login.link, // Redirect users to "/login" when signing in
     // signOut: "/"
   },
   session: {
@@ -57,9 +58,9 @@ export const authOptions: NextAuthOptions = {
             return null;
           }
 
-          const senhaConfere = await bcrypt.compare(password, user.password);
+          const passwordMatches = await bcrypt.compare(password, user.password);
 
-          if (!senhaConfere) {
+          if (!passwordMatches) {
             return null;
           }
 

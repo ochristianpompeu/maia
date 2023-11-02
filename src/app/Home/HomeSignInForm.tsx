@@ -17,7 +17,7 @@ import {
   VStack,
   useColorMode,
   useColorModeValue,
-  useToast
+  useToast,
 } from "@chakra-ui/react";
 import { signIn } from "next-auth/react";
 import NextLink from "next/link";
@@ -26,6 +26,7 @@ import React, { ChangeEvent, useState } from "react";
 import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import MaiaLogo from "../../components/Logo/MaiaLogo";
+import { Routes } from "../../lib/Links";
 
 export default function HomeSignInForm() {
   const { toggleColorMode, colorMode } = useColorMode();
@@ -215,7 +216,7 @@ export default function HomeSignInForm() {
         <Divider />
         <Text textAlign="end" w="full">
           Já possui cadastro?{" "}
-          <Link color={"blue.600"} as={NextLink} href="/auth/login">
+          <Link color={"blue.600"} as={NextLink} href={Routes.login.link}>
             Clique aqui
           </Link>
         </Text>
@@ -229,7 +230,7 @@ export default function HomeSignInForm() {
           variant="outline"
           onClick={() =>
             signIn("google", {
-              callbackUrl: "/login",
+              callbackUrl: Routes.login.link,
             })
           }
           leftIcon={<FcGoogle />}

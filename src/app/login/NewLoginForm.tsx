@@ -1,26 +1,27 @@
 "use client";
 
 import MaiaLogo from "@/components/Logo/MaiaLogo";
+import { Routes } from "@/lib/Links";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { Link } from "@chakra-ui/next-js";
 import {
-    AbsoluteCenter,
-    Box,
-    Button,
-    Checkbox,
-    Divider,
-    Flex,
-    FormControl,
-    FormLabel,
-    Heading,
-    Input,
-    InputGroup,
-    InputRightElement,
-    Spinner,
-    Stack,
-    Text,
-    useColorModeValue,
-    useToast,
+  AbsoluteCenter,
+  Box,
+  Button,
+  Checkbox,
+  Divider,
+  Flex,
+  FormControl,
+  FormLabel,
+  Heading,
+  Input,
+  InputGroup,
+  InputRightElement,
+  Spinner,
+  Stack,
+  Text,
+  useColorModeValue,
+  useToast,
 } from "@chakra-ui/react";
 import { signIn } from "next-auth/react";
 import NextLink from "next/link";
@@ -39,7 +40,7 @@ export default function NewLoginForm() {
 
   const [error, setError] = useState("");
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || "/perfil";
+  const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
   const [showPassword, setShowPassword] = useState(false);
   const toast = useToast();
 
@@ -52,7 +53,6 @@ export default function NewLoginForm() {
         redirect: false,
         email: formValues.email,
         password: formValues.password,
-        // callbackUrl,
       });
 
       setLoading(false);
@@ -69,7 +69,7 @@ export default function NewLoginForm() {
         return;
       }
 
-      router.push("/dashboard");
+      router.replace("dashboard");
     } catch (error: any) {
       setLoading(false);
       setError(error);
@@ -188,7 +188,7 @@ export default function NewLoginForm() {
               variant="outline"
               onClick={() =>
                 signIn("google", {
-                  callbackUrl: "/perfil",
+                  callbackUrl: Routes.dashboard.link,
                 })
               }
               leftIcon={<FcGoogle />}
@@ -200,7 +200,7 @@ export default function NewLoginForm() {
               variant="outline"
               onClick={() =>
                 signIn("github", {
-                  callbackUrl: "/perfil",
+                  callbackUrl: Routes.dashboard.link,
                 })
               }
               leftIcon={<FaGithub />}

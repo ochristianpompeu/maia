@@ -1,23 +1,29 @@
 import ButtonToggleColorMode from "@/components/ButtonToggleColorMode/ButtonToggleColorMode";
-import { Button, ButtonGroup, useColorMode } from "@chakra-ui/react";
-import NextLink from "next/link";
-import { TiUser } from "react-icons/ti";
+import { Routes } from "@/lib/Links";
+import { Button, ButtonGroup } from "@chakra-ui/react";
+import { signOut, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { SlLogin, SlLogout } from "react-icons/sl";
 
 export default function ButtonLoginSignin() {
-  const { toggleColorMode, colorMode } = useColorMode();
+  const { data: session } = useSession();
+  const route = useRouter();
+
+  function handleClick() {
+    session ? signOut() : route.replace(Routes.login.link);
+  }
   return (
     <ButtonGroup>
       <ButtonToggleColorMode />
       <Button
-        as={NextLink}
-        variant={"solid"}
+        variant={"outline"}
         colorScheme={"purple"}
         size={"sm"}
         mr={4}
-        leftIcon={<TiUser />}
-        href="/auth/login" //quando completar a construção da autenticação deve tratar o nome e destino do botão com base na sessão
+        leftIcon={session ? <SlLogout /> : <SlLogin />}
+        onClick={handleClick}
       >
-        Entrar
+        {session ? "Sair" : "Entrar"}
       </Button>
     </ButtonGroup>
   );

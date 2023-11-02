@@ -7,13 +7,10 @@ import theme from "./theme";
 
 interface Props {
   children: React.ReactNode;
-  // session?: any;
 }
 
-// export function Providers({ children, session }: Props) {
 export function Providers({ children }: Props) {
   return (
-    // <SessionProvider session={session}>
     <SessionProvider>
       <CacheProvider>
         <ChakraProvider theme={theme}>{children}</ChakraProvider>

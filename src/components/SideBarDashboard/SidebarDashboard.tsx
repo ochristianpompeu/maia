@@ -131,7 +131,6 @@ const NavItem = ({ icon, children, ...rest }: NavItemProps) => {
 
 const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
   const { data: session } = useSession();
-  console.log("Session", session);
   return (
     <Flex
       ml={{ base: 0, md: 60 }}
@@ -169,7 +168,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
           icon={<FiBell />}
         />
         <Flex alignItems={"center"}>
-          <Menu >
+          <Menu>
             <MenuButton
               py={2}
               transition="all 0.3s"
@@ -188,9 +187,11 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
                   spacing="1px"
                   ml="2"
                 >
-                  <Text fontSize="sm">{session?.user?.name}</Text>
+                  <Text fontWeight="bold" fontSize="sm">
+                    {session?.user?.name}
+                  </Text>
                   <Text fontSize="xs" color="gray.600">
-                    Admin
+                    {session?.user?.email}
                   </Text>
                 </VStack>
                 <Box display={{ base: "none", md: "flex" }}>
