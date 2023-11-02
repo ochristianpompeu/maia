@@ -1,9 +1,18 @@
 import Footer from "@/components/Footer/Footer";
+import { Routes } from "@/lib/Links";
+import { authOptions } from "@/lib/auth";
 import { Container, Flex } from "@chakra-ui/react";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 import NavBar from "../../components/NavBar/NavBar";
 import NewLoginForm from "./NewLoginForm";
+export default async function Login() {
+  const session = await getServerSession(authOptions);
 
-export default function Login() {
+  if (session) {
+    redirect(Routes.dashboard.link);
+  }
+
   return (
     <Container
       maxW={"full"}

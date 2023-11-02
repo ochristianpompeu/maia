@@ -6,8 +6,15 @@ export const Links = [
 ];
 
 export const Routes = {
+  home: { text: "Home", link: "/" },
   servicos: { text: "Serviços", link: "/servicos" },
   dashboard: { text: "Dashboard", link: "/dashboard" },
   blog: { text: "Blog", link: "/blog" },
   login: { text: "Login", link: "/login" as string },
+  user: {
+    create: {
+      text: "create",
+      link: "/api/user",
+    },
+  },
 };
