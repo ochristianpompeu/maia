@@ -12,7 +12,7 @@ import {
 } from "@chakra-ui/react";
 import AvatarComMenu from "./AvatarComMenu/AvatarComMenu";
 
-import Logo from "../Logo/MaiaLogo";
+import MaiaLogo from "../Logo/MaiaLogo";
 import NavMenu from "./NavMenu";
 import NavMenuMobile from "./NavMenuMobile";
 
@@ -36,7 +36,7 @@ export default function NavBar() {
             onClick={isOpen ? onClose : onOpen}
           />
           <HStack spacing={8} alignItems={"center"}>
-            <Logo />
+            <MaiaLogo boxSize="10" rounded="md" mb={0} />
             <NavMenu />
           </HStack>
           <AvatarComMenu />
