@@ -21,7 +21,7 @@ interface SignInProps {
 export const authOptions: NextAuthOptions = {
   pages: {
     signIn: "/auth/login", // Redirect users to "/login" when signing in
-    signOut: "/"
+    // signOut: "/"
   },
   session: {
     strategy: "jwt", // Use JSON Web Tokens (JWT) for session management
@@ -45,7 +45,7 @@ export const authOptions: NextAuthOptions = {
           email: string;
           password: string;
         };
-        console.log("Credentials: ",email, password)
+        console.log("Credentials: ", email, password);
 
         try {
           await connectMongoDB();
@@ -70,37 +70,37 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   ],
-  callbacks: {
-    async signIn({ user, email, account, profile }: SignInProps | any) {
-      const baseUrl = process.env.BASE_URL as string;
-      if (account.provider === "google") {
-        await connectMongoDB();
-        const userExists = await UserModel.findOne({ email: user.email });
+  // callbacks: {
+  //   async signIn({ user, email, account, profile }: SignInProps | any) {
+  //     const baseUrl = process.env.BASE_URL as string;
+  //     if (account.provider === "google") {
+  //       await connectMongoDB();
+  //       const userExists = await UserModel.findOne({ email: user.email });
 
-        try {
-          if (!userExists) {
-            const response = await fetch(baseUrl+"/api/user", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                email: user.email,
-                name: user.name,
-                user: user.email,
-              }),
-            });
+  //       try {
+  //         if (!userExists) {
+  //           const response = await fetch(baseUrl + "/api/user", {
+  //             method: "POST",
+  //             headers: {
+  //               "Content-Type": "application/json",
+  //             },
+  //             body: JSON.stringify({
+  //               email: user.email,
+  //               name: user.name,
+  //               user: user.email,
+  //             }),
+  //           });
 
-            if (response.ok) {
-              return user;
-            }
-          }
-        } catch (error) {
-          console.log("Erro ao persistir os dados:", error);
-        }
-      }
+  //           if (response.ok) {
+  //             return user;
+  //           }
+  //         }
+  //       } catch (error) {
+  //         console.log("Erro ao persistir os dados:", error);
+  //       }
+  //     }
 
-      return user;
-    },
-  },
+  //     return user;
+  //   },
+  // },
 };
