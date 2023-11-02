@@ -1,4 +1,4 @@
-import { Flex, Image, VStack } from "@chakra-ui/react";
+import { Image, VStack } from "@chakra-ui/react";
 
 export default function ImageSide() {
   return (

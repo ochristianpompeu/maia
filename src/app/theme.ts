@@ -1,10 +1,13 @@
-import { extendTheme } from '@chakra-ui/react'
+import { extendTheme } from "@chakra-ui/react";
 
-const theme = extendTheme({
+const config = {
   fonts: {
     heading: `'Bayon', sans-serif`,
     body: `'Poppins', sans-serif`,
   },
-})
+};
+const theme = extendTheme({
+  config,
+});
 
-export default theme
+export default theme;

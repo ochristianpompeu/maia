@@ -21,7 +21,11 @@ export default function NavBar() {
 
   return (
     // <Box bg={useColorModeValue("gray.100", "gray.900")} px={4}>
-    <Box  px={4}>
+    <Box
+      px={4}
+      bg={useColorModeValue("gray.50", "gray.900")}
+      color={useColorModeValue("gray.700", "gray.200")}
+    >
       <Container maxW="container.xl" p={0}>
         <Flex h={12} alignItems={"center"} justifyContent={"space-between"}>
           <IconButton

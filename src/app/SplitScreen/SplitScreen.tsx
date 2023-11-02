@@ -8,7 +8,7 @@ import Footer from "@/components/Footer/Footer";
 
 export default function SplitScreen() {
   return (
-    <Container minH="100vh" maxW="full" p={0} h={{base:"auto", md:"100vh"}}>
+    <Container minH="100vh" maxW="full" p={0} h={{ base: "auto", md: "100vh" }}>
       <NavBar />
       <Container p={0} maxW="full">
         <Stack
