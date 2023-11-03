@@ -1,22 +1,23 @@
 import {
-    Avatar,
-    Box,
-    Flex,
-    FlexProps,
-    HStack,
-    IconButton,
-    Menu,
-    MenuButton,
-    MenuDivider,
-    MenuItem,
-    MenuList,
-    Text,
-    VStack,
-    useColorModeValue,
+  Avatar,
+  Box,
+  Flex,
+  FlexProps,
+  HStack,
+  IconButton,
+  Menu,
+  MenuButton,
+  MenuDivider,
+  MenuItem,
+  MenuList,
+  Text,
+  VStack,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { signOut, useSession } from "next-auth/react";
 import { FiChevronDown, FiMenu } from "react-icons/fi";
 import { TiUser } from "react-icons/ti";
+import ButtonToggleColorMode from "../ButtonToggleColorMode/ButtonToggleColorMode";
 import MaiaLogo from "../Logo/MaiaLogo";
 
 interface MobileProps extends FlexProps {
@@ -35,7 +36,7 @@ export default function MobileNav({ onOpen, ...rest }: MobileProps) {
       px={{ base: 4, md: 4 }}
       height="12"
       alignItems="center"
-      bg={useColorModeValue("white", "gray.900")}
+      bg={useColorModeValue("white", "gray.800")}
       borderBottomWidth="1px"
       borderBottomColor={useColorModeValue("gray.200", "gray.700")}
       justifyContent={{ base: "space-between", md: "flex-end" }}
@@ -56,14 +57,9 @@ export default function MobileNav({ onOpen, ...rest }: MobileProps) {
       />
 
       <HStack spacing={{ base: "0", md: "6" }}>
-        {/* <IconButton
-          size="lg"
-          variant="ghost"
-          aria-label="open menu"
-          icon={<FiBell />}
-        /> */}
         <Flex alignItems={"center"}>
           <Menu>
+            <ButtonToggleColorMode mr="4" />
             <MenuButton
               py={0}
               transition="all 0.3s"

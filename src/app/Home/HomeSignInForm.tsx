@@ -25,7 +25,6 @@ import { useRouter } from "next/navigation";
 import React, { ChangeEvent, useState } from "react";
 import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
-import MaiaLogo from "../../components/Logo/MaiaLogo";
 import { Routes } from "../../lib/Links";
 
 export default function HomeSignInForm() {
@@ -132,22 +131,23 @@ export default function HomeSignInForm() {
     <VStack
       w={"full"}
       h={"full"}
-      py={2}
+      py={[2, 0]}
       m={0}
       spacing={0}
-      //   bg={bgColor}
       justifyContent="center"
       flex={1}
     >
       <Stack
+        h="full"
         spacing={4}
         mx={"auto"}
-        maxW={"full"}
+        // maxW={"full"}
         alignItems="center"
+        justifyContent="center"
         px={6}
+        // py={20}
         onSubmit={handleSubmit}
       >
-        <MaiaLogo mb={10} boxSize={{ base: "20", md: "28" }} rounded="full" />
         <Stack align={"center"}>
           <Heading fontSize={"4xl"}>Faça seu Cadastro ✌️</Heading>
         </Stack>

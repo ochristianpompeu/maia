@@ -1,4 +1,4 @@
-import { Links } from "@/lib/Links";
+import { PanelLinks } from "@/lib/Links";
 import {
   Box,
   BoxProps,
@@ -17,9 +17,9 @@ export default function SidebarContent({ onClose, ...rest }: SidebarProps) {
   return (
     <Box
       transition="3s ease"
-      bg={useColorModeValue("white", "gray.900")}
+      bg={useColorModeValue("white", "gray.800")}
       borderRight="1px"
-      borderRightColor={useColorModeValue("purple.200", "purple.700")}
+      borderRightColor={useColorModeValue("purple.200", "purple.800")}
       w={{ base: "full", md: 60 }}
       pos="fixed"
       h="full"
@@ -27,15 +27,15 @@ export default function SidebarContent({ onClose, ...rest }: SidebarProps) {
     >
       <Flex h="12" alignItems="center" mx="8" justifyContent="space-between">
         <MaiaLogo
-          display={{ base: "flex", md: "none" }}
+          // display={{ base: "flex", md: "none" }}
           boxSize="10"
           rounded="md"
           mb={0}
         />
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
-      {Links.map((link) => (
-        <NavItem key={link.text} icon={link.icon}>
+      {PanelLinks.map((link) => (
+        <NavItem key={link.text} icon={link.icon} href={link.link}>
           {link.text}
         </NavItem>
       ))}

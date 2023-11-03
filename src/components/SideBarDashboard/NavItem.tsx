@@ -2,14 +2,20 @@ import { Box, Flex, FlexProps, Icon } from "@chakra-ui/react";
 import { IconType } from "react-icons";
 
 interface NavItemProps extends FlexProps {
+  href?: string;
   icon: IconType | undefined;
   children: React.ReactNode;
 }
-export default function NavItem({ icon, children, ...rest }: NavItemProps) {
+export default function NavItem({
+  href = "#",
+  icon,
+  children,
+  ...rest
+}: NavItemProps) {
   return (
     <Box
       as="a"
-      href="#"
+      href={href}
       style={{ textDecoration: "none" }}
       _focus={{ boxShadow: "none" }}
     >
@@ -21,7 +27,7 @@ export default function NavItem({ icon, children, ...rest }: NavItemProps) {
         role="group"
         cursor="pointer"
         _hover={{
-          bg: "cyan.400",
+          bg: "orange.400",
           color: "white",
         }}
         {...rest}

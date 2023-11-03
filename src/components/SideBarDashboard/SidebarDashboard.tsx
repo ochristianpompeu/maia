@@ -5,7 +5,6 @@ import {
   Drawer,
   DrawerContent,
   DrawerOverlay,
-  Heading,
   useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
@@ -13,11 +12,15 @@ import {
 import MobileNav from "./MobileNav";
 import SidebarContent from "./SidebarContent";
 
-export default function SidebarDashboard() {
+interface SidebarDashboarProps {
+  children: React.ReactNode;
+}
+
+export default function SidebarDashboard({ children }: SidebarDashboarProps) {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
-    <Box minH="100vh" bg={useColorModeValue("gray.100", "gray.900")}>
+    <Box minH="100vh" bg={useColorModeValue("gray.50", "gray.900")}>
       <SidebarContent
         onClose={() => onClose}
         display={{ base: "none", md: "block" }}
@@ -35,10 +38,15 @@ export default function SidebarDashboard() {
           <SidebarContent onClose={onClose} />
         </DrawerContent>
       </Drawer>
-      {/* mobilenav */}
       <MobileNav onOpen={onOpen} />
-      <Box flex={1} justifyContent="space-between"  ml={{ base: 0, md: 60 }} p="4" h="full">
-        <Heading>O Conteúdo vai aqui. Vamos dividir em duas colunas?</Heading>
+      <Box
+        flex={1}
+        justifyContent="space-between"
+        ml={{ base: 0, md: 60 }}
+        p="4"
+        h="full"
+      >
+        {children}
       </Box>
     </Box>
   );

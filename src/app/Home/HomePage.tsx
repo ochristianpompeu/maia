@@ -16,7 +16,8 @@ export default function HomePage() {
         md: "100vh",
       }}
     >
-      <Flex direction="column"
+      <Flex 
+        direction="column"
         w={"full"}
         h={"full"}
         justifyContent="space-between"
@@ -25,7 +26,7 @@ export default function HomePage() {
         <Flex
           h={{
             base: "auto",
-            md: "100vh",
+            md: "full",
           }}
           // py={[0, 10, 20]}
           direction={{
