@@ -4,9 +4,10 @@ import {
   Box,
   Drawer,
   DrawerContent,
+  DrawerOverlay,
   Heading,
   useColorModeValue,
-  useDisclosure
+  useDisclosure,
 } from "@chakra-ui/react";
 
 import MobileNav from "./MobileNav";
@@ -29,13 +30,14 @@ export default function SidebarDashboard() {
         onOverlayClick={onClose}
         // size="sm"
       >
+        <DrawerOverlay />
         <DrawerContent>
           <SidebarContent onClose={onClose} />
         </DrawerContent>
       </Drawer>
       {/* mobilenav */}
       <MobileNav onOpen={onOpen} />
-      <Box ml={{ base: 0, md: 60 }} p="4">
+      <Box flex={1} justifyContent="space-between"  ml={{ base: 0, md: 60 }} p="4" h="full">
         <Heading>O Conteúdo vai aqui. Vamos dividir em duas colunas?</Heading>
       </Box>
     </Box>

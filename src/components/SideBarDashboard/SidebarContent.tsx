@@ -4,7 +4,7 @@ import {
   BoxProps,
   CloseButton,
   Flex,
-  useColorModeValue
+  useColorModeValue,
 } from "@chakra-ui/react";
 import MaiaLogo from "../Logo/MaiaLogo";
 import NavItem from "./NavItem";
@@ -19,14 +19,19 @@ export default function SidebarContent({ onClose, ...rest }: SidebarProps) {
       transition="3s ease"
       bg={useColorModeValue("white", "gray.900")}
       borderRight="1px"
-      borderRightColor={useColorModeValue("gray.200", "gray.700")}
+      borderRightColor={useColorModeValue("purple.200", "purple.700")}
       w={{ base: "full", md: 60 }}
       pos="fixed"
       h="full"
       {...rest}
     >
-      <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
-        <MaiaLogo boxSize="12" rounded="md" mb={0} />
+      <Flex h="12" alignItems="center" mx="8" justifyContent="space-between">
+        <MaiaLogo
+          display={{ base: "flex", md: "none" }}
+          boxSize="10"
+          rounded="md"
+          mb={0}
+        />
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
       {Links.map((link) => (

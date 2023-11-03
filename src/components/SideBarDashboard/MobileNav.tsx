@@ -15,7 +15,7 @@ import {
     useColorModeValue,
 } from "@chakra-ui/react";
 import { signOut, useSession } from "next-auth/react";
-import { FiBell, FiChevronDown, FiMenu } from "react-icons/fi";
+import { FiChevronDown, FiMenu } from "react-icons/fi";
 import { TiUser } from "react-icons/ti";
 import MaiaLogo from "../Logo/MaiaLogo";
 
@@ -28,12 +28,12 @@ export default function MobileNav({ onOpen, ...rest }: MobileProps) {
   function handleSignOut() {
     signOut();
   }
-  
+
   return (
     <Flex
       ml={{ base: 0, md: 60 }}
       px={{ base: 4, md: 4 }}
-      height="20"
+      height="12"
       alignItems="center"
       bg={useColorModeValue("white", "gray.900")}
       borderBottomWidth="1px"
@@ -48,23 +48,28 @@ export default function MobileNav({ onOpen, ...rest }: MobileProps) {
         aria-label="open menu"
         icon={<FiMenu />}
       />
-      <MaiaLogo display={{ base: "flex", md: "none" }} boxSize="10" rounded="md" mb={0} />
+      <MaiaLogo
+        display={{ base: "flex", md: "none" }}
+        boxSize="10"
+        rounded="md"
+        mb={0}
+      />
 
       <HStack spacing={{ base: "0", md: "6" }}>
-        <IconButton
+        {/* <IconButton
           size="lg"
           variant="ghost"
           aria-label="open menu"
           icon={<FiBell />}
-        />
+        /> */}
         <Flex alignItems={"center"}>
           <Menu>
             <MenuButton
-              py={2}
+              py={0}
               transition="all 0.3s"
               _focus={{ boxShadow: "none" }}
             >
-              <HStack>
+              <HStack p={0}>
                 <Avatar
                   size={"sm"}
                   src={session?.user?.image as string | undefined}
@@ -93,9 +98,8 @@ export default function MobileNav({ onOpen, ...rest }: MobileProps) {
               bg={useColorModeValue("white", "gray.900")}
               borderColor={useColorModeValue("gray.200", "gray.700")}
             >
-              <MenuItem>Profile</MenuItem>
-              <MenuItem>Settings</MenuItem>
-              <MenuItem>Billing</MenuItem>
+              <MenuItem>Perfil</MenuItem>
+              <MenuItem>Configurações</MenuItem>
               <MenuDivider />
               <MenuItem onClick={handleSignOut}>Sign out</MenuItem>
             </MenuList>
