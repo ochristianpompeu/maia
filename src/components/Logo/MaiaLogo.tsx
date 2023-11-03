@@ -3,13 +3,14 @@ import NextLink from "next/link";
 
 interface MaiaLogoProps extends ImageProps {}
 
-export default function MaiaLogo({ ...props }: MaiaLogoProps) {
+export default function MaiaLogo({ mb, display, ...rest }: MaiaLogoProps) {
   return (
-    <Link href="/" as={NextLink}>
+    <Link href="/" as={NextLink} display={display}>
       <Button
         variant="ghost"
         p={0}
-        m={props.mb}
+        mb={mb}
+        // {...rest}
       >
         <Image
           p={0}
@@ -18,11 +19,12 @@ export default function MaiaLogo({ ...props }: MaiaLogoProps) {
           // src="https://firebasestorage.googleapis.com/v0/b/maia-1286a.appspot.com/o/logos%2Fmustache_eyglasses.png?alt=media&token=947a4ef2-a5f6-41f2-bfb1-8881f8d2435f"
           // src="https://firebasestorage.googleapis.com/v0/b/maia-1286a.appspot.com/o/logos%2Fmustache_eyglasses_white_2.png?alt=media&token=bb1603bc-25d4-4c7b-9193-1ecfb9a6c75e"
           alt="Maia Logo"
-          boxSize={props.boxSize}
+          // boxSize={props.boxSize}
           fallbackSrc="https://via.placeholder.com/100"
           fit="cover"
-          rounded={props.rounded}
+          // rounded={props.rounded}
           objectFit="fill"
+          {...rest}
         />
       </Button>
     </Link>
