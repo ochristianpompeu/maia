@@ -1,14 +1,14 @@
 "use client";
 
 import {
-    Box,
-    Container,
-    Drawer,
-    DrawerContent,
-    DrawerOverlay,
-    Flex,
-    useColorModeValue,
-    useDisclosure,
+  Box,
+  Container,
+  Drawer,
+  DrawerContent,
+  DrawerOverlay,
+  Flex,
+  useColorModeValue,
+  useDisclosure,
 } from "@chakra-ui/react";
 
 import Footer from "../Footer/Footer";
@@ -19,7 +19,9 @@ interface SidebarDashboarProps {
   children: React.ReactNode;
 }
 
-export default function SidebarDashboard({ children }: SidebarDashboarProps) {
+export default function SidebarDashboardTest({
+  children,
+}: SidebarDashboarProps) {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (

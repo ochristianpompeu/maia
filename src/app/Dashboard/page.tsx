@@ -4,7 +4,9 @@ import { Container } from "@chakra-ui/react";
 export default function Panel() {
   return (
     <Container margin={0} p={0} maxW="full">
-      <SidebarDashboard />
+      <SidebarDashboard>
+        Conteúdo
+      </SidebarDashboard>
     </Container>
   );
 }
