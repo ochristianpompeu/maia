@@ -18,6 +18,7 @@ import {
   IconButton,
   Input,
   Stack,
+  useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
 import React from "react";
@@ -27,9 +28,9 @@ import { OrganizationTable } from "./OrganizationTable";
 export default function Organization() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const firstField = React.useRef() as any;
-
+  const bgBoxColor = useColorModeValue("white", "gray.800");
+  
   function handleClick() {
-    // console.log("pathname:", router.pathname);
     return;
   }
 
@@ -45,9 +46,10 @@ export default function Organization() {
           <Stack
             direction="column"
             padding={4}
-            border="1px"
+            // border="1px"
             borderRadius="lg"
             mx={{ base: "auto", md: "0.5" }}
+            bgColor={bgBoxColor}
           >
             <HStack justifyContent="space-between" w="full">
               <Heading fontSize={{ base: "2xl" }} w="full">

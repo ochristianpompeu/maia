@@ -25,12 +25,13 @@ export function OrganizationTable() {
       bgColor={bgColor}
       borderRadius="lg"
       border="1px"
+      borderColor="purple.200"
     >
       <Table
         variant="simple"
         // w="full"
         overflowY="scroll"
-        width="xs"
+        // width="xs"
         maxW="full"
         colorScheme="purple"
       >
