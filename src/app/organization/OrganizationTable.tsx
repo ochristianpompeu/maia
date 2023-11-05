@@ -1,4 +1,7 @@
 import {
+  ButtonGroup,
+  Hide,
+  IconButton,
   Table,
   TableCaption,
   TableContainer,
@@ -10,54 +13,79 @@ import {
   Tr,
   useColorModeValue,
 } from "@chakra-ui/react";
+import { TbEdit, TbTrash } from "react-icons/tb";
 
 export function OrganizationTable() {
   const bgColor = useColorModeValue("white", "gray.800");
   const tableBorderColoor = useColorModeValue("gray.100", "black");
   return (
     <TableContainer
+      p={0}
+      m={0}
       bgColor={bgColor}
       borderRadius="lg"
       border="1px"
     >
       <Table
         variant="simple"
-        w="full"
+        // w="full"
         overflowY="scroll"
-        width="xl"
+        width="xs"
         maxW="full"
         colorScheme="purple"
       >
         <TableCaption>Empresa</TableCaption>
         <Thead>
           <Tr>
-            <Th>To convert</Th>
-            <Th>into</Th>
-            <Th isNumeric>multiply by</Th>
+            <Th p={{ base: "2" }}>To convert</Th>
+            <Hide below="md">
+              <Th>into</Th>
+            </Hide>
+            <Hide below="md">
+              <Th isNumeric>multiply by</Th>
+            </Hide>
+            <Th p={{ base: "2" }}>{""}</Th>
           </Tr>
         </Thead>
         <Tbody>
           <Tr>
-            <Td>inches</Td>
-            <Td>millimetres (mm)</Td>
-            <Td isNumeric>25.4</Td>
-          </Tr>
-          <Tr>
-            <Td>feet</Td>
-            <Td>centimetres (cm)</Td>
-            <Td isNumeric>30.48</Td>
-          </Tr>
-          <Tr>
-            <Td>yards</Td>
-            <Td>metres (m)</Td>
-            <Td isNumeric>0.91444</Td>
+            <Td w="full" p={{ base: "2" }}>inches</Td>
+            <Hide below="md">
+              <Td>millimetres (mm)</Td>
+            </Hide>
+            <Hide below="md">
+              <Td isNumeric>25.4</Td>
+            </Hide>
+            <Td w="full" alignItems="end" p={{ base: "2" }}>
+              <ButtonGroup>
+                <IconButton
+                  size="sm"
+                  variant="outline"
+                  colorScheme="purple"
+                  aria-label="Edit"
+                  icon={<TbEdit />}
+                />
+                <IconButton
+                  size="sm"
+                  variant="outline"
+                  colorScheme="orange"
+                  aria-label="Delete"
+                  icon={<TbTrash />}
+                />
+              </ButtonGroup>
+            </Td>
           </Tr>
         </Tbody>
         <Tfoot>
           <Tr>
-            <Th>To convert</Th>
-            <Th>into</Th>
-            <Th isNumeric>multiply by</Th>
+            <Th p={{ base: "2" }}>To convert</Th>
+            <Hide below="md">
+              <Th>into</Th>
+            </Hide>
+            <Hide below="md">
+              <Th isNumeric>multiply by</Th>
+            </Hide>
+            <Th p={{ base: "2" }}>{""}</Th>
           </Tr>
         </Tfoot>
       </Table>

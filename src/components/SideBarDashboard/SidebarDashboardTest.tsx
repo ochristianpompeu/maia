@@ -36,7 +36,7 @@ export default function SidebarDashboardTest({
       <Flex
         direction="column"
         w={"full"}
-        h={"full"}
+        h={{ base: "100vh", md: "full" }}
         justifyContent="space-between"
         //   minH="100vh"
         bg={useColorModeValue("gray.50", "gray.900")}
