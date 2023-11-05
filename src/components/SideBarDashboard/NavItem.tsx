@@ -1,4 +1,11 @@
-import { Box, Flex, FlexProps, Icon } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  FlexProps,
+  Icon,
+  useColorModeValue
+} from "@chakra-ui/react";
+import { usePathname } from "next/navigation";
 import { IconType } from "react-icons";
 
 interface NavItemProps extends FlexProps {
@@ -12,6 +19,9 @@ export default function NavItem({
   children,
   ...rest
 }: NavItemProps) {
+  const pathName = usePathname();
+  const bgColor = useColorModeValue("white", "gray.800");
+  const activePathColor = useColorModeValue("purple.100", "purple.600");
   return (
     <Box
       as="a"
@@ -26,11 +36,13 @@ export default function NavItem({
         borderRadius="lg"
         role="group"
         cursor="pointer"
+        bgColor={href === pathName ? activePathColor : bgColor}
         _hover={{
           bg: "orange.400",
           color: "white",
         }}
         {...rest}
+        fontWeight={href === pathName ? "bold" : "normal"}
       >
         {icon && (
           <Icon
@@ -39,6 +51,7 @@ export default function NavItem({
             _groupHover={{
               color: "white",
             }}
+            fontWeight={href === pathName ? "bold" : "normal"}
             as={icon}
           />
         )}
