@@ -1,3 +1,4 @@
+"use client";
 import {
   Button,
   DrawerBody,
@@ -7,10 +8,22 @@ import {
   FormLabel,
   Input,
 } from "@chakra-ui/react";
-import React, { Fragment } from "react";
+import React, { ChangeEvent, Fragment, useState } from "react";
 
-export function OrgEditDrawerContent() {
+interface OrgEditDrawerContentProps {
+  name: string;
+  id: string;
+}
+
+export function OrgEditDrawerContent(props: OrgEditDrawerContentProps) {
   const firstField = React.useRef() as any;
+  const [name, setName] = useState(props.name);
+
+  function handleChange(event: ChangeEvent<HTMLInputElement>) {
+    const name = event.target.value;
+    setName(name);
+  }
+
   return (
     <Fragment>
       <DrawerCloseButton />
@@ -33,6 +46,8 @@ export function OrgEditDrawerContent() {
             name="name"
             placeholder="Nome da Empresa..."
             focusBorderColor="purple.400"
+            value={name}
+            onChange={handleChange}
           />
         </form>
       </DrawerBody>

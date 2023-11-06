@@ -51,7 +51,7 @@ export default async function OrgAccordionItem() {
               nisi ut aliquip ex ea commodo consequat.
             </Text>
             <Box w="full" flex="1" textAlign="right">
-              <EditAndDeleteButtons />
+              <EditAndDeleteButtons org={org} />
             </Box>
           </AccordionPanel>
         </AccordionItem>

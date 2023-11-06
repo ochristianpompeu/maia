@@ -1,3 +1,4 @@
+import { OrgProps } from "@/lib/interfaces";
 import {
     ButtonGroup,
     Drawer,
@@ -9,7 +10,11 @@ import {
 import { TbEdit, TbTrash } from "react-icons/tb";
 import { OrgEditDrawerContent } from "../OrgEditDrawer/OrgEditDrawerContent";
 
-export function EditAndDeleteButtons() {
+interface EditAndDeleteButtonsProps {
+  org: OrgProps;
+}
+
+export function EditAndDeleteButtons(props: EditAndDeleteButtonsProps) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
@@ -38,7 +43,7 @@ export function EditAndDeleteButtons() {
       >
         <DrawerOverlay />
         <DrawerContent>
-          <OrgEditDrawerContent />
+          <OrgEditDrawerContent name={props.org.name} id={props.org._id as string} />
         </DrawerContent>
       </Drawer>
     </>
