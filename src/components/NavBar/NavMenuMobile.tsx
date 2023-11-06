@@ -8,7 +8,7 @@ export default function NavMenuMobile() {
     <Box pb={4} display={{ md: "none" }}>
       <Stack as={"nav"} spacing={4}>
         {Links.map((link) => (
-          <NavLink href={link.link} key={link.text}>
+          <NavLink href={link.link as string} key={link.text}>
             {link.text}
           </NavLink>
         ))}

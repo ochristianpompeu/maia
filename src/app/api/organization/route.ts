@@ -14,7 +14,6 @@ export async function POST(request: Request) {
   return NextResponse.json(
     {
       message: "Empresa cadastrada",
-      data: JSON.stringify(name),
     },
     { status: 201 }
   );
@@ -24,7 +23,7 @@ export async function GET() {
   await connectMongoDB();
   const orgs = await Organization.find();
   return NextResponse.json({
-    orgs,
+    orgs
   });
 }
 
