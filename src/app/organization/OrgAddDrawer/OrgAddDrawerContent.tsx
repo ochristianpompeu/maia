@@ -1,5 +1,5 @@
 "use client";
-import { OrgEditDrawerContentProps } from "@/lib/interfaces";
+import { OrgAddDrawerContentProps } from "@/lib/interfaces";
 import {
   Button,
   DrawerBody,
@@ -11,14 +11,16 @@ import {
   Textarea,
   useToast,
 } from "@chakra-ui/react";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import React, { ChangeEvent, Fragment, useState } from "react";
+import { ChangeEvent, Fragment, useState } from "react";
 
-export function OrgEditDrawerContent(props: OrgEditDrawerContentProps) {
+export function OrgAddDrawerContent(props: OrgAddDrawerContentProps) {
+  const { data: session } = useSession();
   const [name, setName] = useState(props.name);
   const [description, setDescription] = useState(props.description);
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const toast = useToast();
   const router = useRouter();
 
@@ -34,8 +36,16 @@ export function OrgEditDrawerContent(props: OrgEditDrawerContentProps) {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault;
-    const newName = name;
-    const newDescription = description;
+    const responserUser = await fetch("/api/user/" + session?.user?.email, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const { user } = await responserUser.json();
+    console.log("User: ", user);
+    const userAdmin = "65443103b31c7cbd35d04ac1";
+
     if (!name) {
       setError("O campo nome não pode ficar em branco");
       toast({
@@ -51,23 +61,27 @@ export function OrgEditDrawerContent(props: OrgEditDrawerContentProps) {
 
     try {
       setLoading(true);
-      const responseUpdateOrg = await fetch("/api/organization/" + props.id, {
-        method: "PUT",
+
+      const responseCreateOrg = await fetch("/api/organization/", {
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          newName,
-          newDescription,
+          name,
+          description,
+          userAdmin,
         }),
       });
 
       setLoading(false);
 
-      if (responseUpdateOrg.ok) {
+      if (responseCreateOrg.ok) {
+        setName("");
+        setDescription("");
         toast({
           title: "Sucesso",
-          description: "Dados atualizados com sucesso",
+          description: "Empresa cadastrada com sucesso",
           status: "success",
           duration: 9000,
           isClosable: true,
@@ -76,7 +90,7 @@ export function OrgEditDrawerContent(props: OrgEditDrawerContentProps) {
 
         router.push("/organization");
       } else {
-        const responseError = await responseUpdateOrg.json();
+        const responseError = await responseCreateOrg.json();
         setError(responseError);
         toast({
           title: "Ocorreu um erro",
@@ -105,22 +119,26 @@ export function OrgEditDrawerContent(props: OrgEditDrawerContentProps) {
     <Fragment>
       <DrawerCloseButton />
       <DrawerHeader textColor="purple.500" borderBottomWidth="1px">
-        Edição do cadastro da empresa
+        Cadastre sua empresa
       </DrawerHeader>
 
       <DrawerBody>
-        <form id="alterOrgForm" onSubmit={handleSubmit}>
-          <FormLabel pt="4" htmlFor="name">Nome da Empresa</FormLabel>
+        <form id="createOrgForm" onSubmit={handleSubmit}>
+          <FormLabel textColor="purple.600" pt="4" htmlFor="name">
+            Nome da Empresa
+          </FormLabel>
           <Input
             ref={props.initialRef}
             id="name"
             name="name"
             placeholder="Nome da Empresa..."
-            focusBorderColor="purple.400"
-            value={name}
+            focusBorderColor="purple.600"
             onChange={handleChangeInput}
+            value={name}
           />
-          <FormLabel pt="4" htmlFor="description">Descrição</FormLabel>
+          <FormLabel textColor="purple.600" pt="4" htmlFor="description">
+            Descrição
+          </FormLabel>
           <Textarea
             id="description"
             name="description"
@@ -138,11 +156,11 @@ export function OrgEditDrawerContent(props: OrgEditDrawerContentProps) {
           colorScheme="purple"
           variant="outline"
           type="submit"
-          form="alterOrgForm"
+          form="createOrgForm"
           onClick={handleSubmit}
           isLoading={loading}
         >
-          Atualizar
+          Salvar
         </Button>
       </DrawerFooter>
     </Fragment>

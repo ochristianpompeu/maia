@@ -47,6 +47,7 @@ export function EditAndDeleteButtons(props: EditAndDeleteButtonsProps) {
         <DrawerContent>
           <OrgEditDrawerContent
             name={props.org.name}
+            description={props.org.description}
             id={props.org._id as string}
             initialRef={firstField}
           />

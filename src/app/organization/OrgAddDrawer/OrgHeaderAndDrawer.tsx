@@ -47,7 +47,7 @@ export function OrgHeaderAndDrawer() {
       >
         <DrawerOverlay />
         <DrawerContent>
-          <OrgAddDrawerContent />
+          <OrgAddDrawerContent initialRef={firstField} />
         </DrawerContent>
       </Drawer>
     </>

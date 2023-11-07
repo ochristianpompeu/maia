@@ -3,12 +3,14 @@ import { Organization } from "@/models/organization";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: Request) {
-  const { name } = await request.json();
+  const { name, description, userAdmin } = await request.json();
 
   await connectMongoDB();
 
   await Organization.create({
     name: name,
+    description: description,
+    userAdmin: userAdmin,
   });
 
   return NextResponse.json(
@@ -23,7 +25,7 @@ export async function GET() {
   await connectMongoDB();
   const orgs = await Organization.find();
   return NextResponse.json({
-    orgs
+    orgs,
   });
 }
 

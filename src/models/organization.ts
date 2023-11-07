@@ -1,4 +1,6 @@
+import { ObjectId } from "mongodb";
 import mongoose, { Schema, models } from "mongoose";
+import { FaBullseye } from "react-icons/fa";
 
 const organizationSchema = new Schema(
   {
@@ -6,10 +8,14 @@ const organizationSchema = new Schema(
       type: String,
       required: true,
     },
-    // userAdmin: {
-    //   type: ObjectId,
-    //   required: true,
-    // },
+    description: {
+      type: String,
+      required: false,
+    },
+    userAdmin: {
+      type: ObjectId,
+      required: FaBullseye,
+    },
   },
   { timestamps: true }
 );

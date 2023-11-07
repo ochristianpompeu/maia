@@ -6,7 +6,7 @@ import {
   useColorModeValue
 } from "@chakra-ui/react";
 import { OrgAccordion } from "./OrgAccordion/OrgAccordion";
-import { OrgHeaderAndDrawer } from "./OrgHeaderAndDrawer";
+import { OrgHeaderAndDrawer } from "./OrgAddDrawer/OrgHeaderAndDrawer";
 
 export default function Organization() {
   // const { isOpen, onOpen, onClose } = useDisclosure();
