@@ -1,4 +1,5 @@
 "use client";
+import { applicationConfig } from "@/lib/config";
 import { OrgAddDrawerContentProps } from "@/lib/interfaces";
 import {
   Button,
@@ -9,11 +10,20 @@ import {
   FormLabel,
   Input,
   Textarea,
-  useToast,
+  useToast
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { ChangeEvent, Fragment, useState } from "react";
+import { ChangeEvent, Fragment, use, useState } from "react";
+
+const fetchMap = new Map<string, Promise<any>>();
+function queryUser(name: string, query: () => Promise<any>) {
+  if (!fetchMap.has(name)) {
+    fetchMap.set(name, query());
+  }
+
+  return fetchMap.get(name)!;
+}
 
 export function OrgAddDrawerContent(props: OrgAddDrawerContentProps) {
   const { data: session } = useSession();
@@ -23,6 +33,16 @@ export function OrgAddDrawerContent(props: OrgAddDrawerContentProps) {
   const [error, setError] = useState("");
   const toast = useToast();
   const router = useRouter();
+  const { user } = use(
+    queryUser("user", () =>
+      fetch(applicationConfig.baseUrl + "/api/user/" + session?.user?.email, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).then((res) => res.json())
+    )
+  );
 
   function handleChangeInput(event: ChangeEvent<HTMLInputElement>) {
     const name = event.target.value;
@@ -36,15 +56,7 @@ export function OrgAddDrawerContent(props: OrgAddDrawerContentProps) {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault;
-    const responserUser = await fetch("/api/user/" + session?.user?.email, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const { user } = await responserUser.json();
-    console.log("User: ", user);
-    const userAdmin = "65443103b31c7cbd35d04ac1";
+    const userAdmin = user._id;
 
     if (!name) {
       setError("O campo nome não pode ficar em branco");
