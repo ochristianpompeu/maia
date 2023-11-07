@@ -7,7 +7,7 @@ import {
   HStack,
   Heading,
   IconButton,
-  useDisclosure
+  useDisclosure,
 } from "@chakra-ui/react";
 import React from "react";
 import { BsBuildingAdd } from "react-icons/bs";
@@ -16,6 +16,10 @@ import { OrgAddDrawerContent } from "./OrgAddDrawerContent";
 export function OrgHeaderAndDrawer() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const firstField = React.useRef() as any;
+
+  function handleOnAddClose() {
+    onClose;
+  }
   return (
     <>
       <HStack justifyContent="space-between" w="full">
@@ -47,7 +51,10 @@ export function OrgHeaderAndDrawer() {
       >
         <DrawerOverlay />
         <DrawerContent>
-          <OrgAddDrawerContent initialRef={firstField} />
+          <OrgAddDrawerContent
+            initialRef={firstField}
+            onClose={handleOnAddClose}
+          />
         </DrawerContent>
       </Drawer>
     </>

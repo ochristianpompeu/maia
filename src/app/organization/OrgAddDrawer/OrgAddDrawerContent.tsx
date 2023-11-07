@@ -10,7 +10,7 @@ import {
   FormLabel,
   Input,
   Textarea,
-  useToast
+  useToast,
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -100,7 +100,7 @@ export function OrgAddDrawerContent(props: OrgAddDrawerContentProps) {
           position: "top",
         });
 
-        router.push("/organization");
+        router.refresh();
       } else {
         const responseError = await responseCreateOrg.json();
         setError(responseError);
@@ -169,7 +169,7 @@ export function OrgAddDrawerContent(props: OrgAddDrawerContentProps) {
           variant="outline"
           type="submit"
           form="createOrgForm"
-          onClick={handleSubmit}
+          onClick={props.onClose}
           isLoading={loading}
         >
           Salvar
