@@ -1,13 +1,13 @@
 import { AddIcon } from "@chakra-ui/icons";
 import {
-    Button,
-    Drawer,
-    DrawerContent,
-    DrawerOverlay,
-    HStack,
-    Heading,
-    IconButton,
-    useDisclosure
+  Button,
+  Drawer,
+  DrawerContent,
+  DrawerOverlay,
+  HStack,
+  Heading,
+  IconButton,
+  useDisclosure
 } from "@chakra-ui/react";
 import React from "react";
 import { BsBuildingAdd } from "react-icons/bs";
@@ -20,7 +20,7 @@ export function OrgHeaderAndDrawer() {
     <>
       <HStack justifyContent="space-between" w="full">
         <Heading fontSize={{ base: "2xl" }} w="full">
-          Empresa
+          Empresas
         </Heading>
         <IconButton
           display={{ md: "none" }}

@@ -1,5 +1,5 @@
 import { Accordion } from "@chakra-ui/react";
-import OrgAccordionItem from "./OrgAccordionItem";
+import { OrgAccordionItem } from "./OrgAccordionItem";
 
 export function OrgAccordion() {
   return (

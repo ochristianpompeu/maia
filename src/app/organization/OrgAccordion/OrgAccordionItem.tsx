@@ -8,27 +8,28 @@ import {
   Box,
   Text,
 } from "@chakra-ui/react";
+import { use } from "react";
 import { EditAndDeleteButtons } from "./EditAndDeleteButtons";
 
-async function getOrgs() {
-  try {
-    const res = await fetch(applicationConfig.baseUrl + "/api/organization", {
-      method: "GET",
-      cache: "no-store",
-    });
+const fetchMap = new Map<string, Promise<any>>();
 
-    if (!res.ok) {
-      throw new Error("Failed to fetch organization api.");
-    }
-
-    return res.json();
-  } catch (error) {
-    console.log("Error loading orgs: ", error);
+function queryClient(name: string, query: () => Promise<any>) {
+  if (!fetchMap.has(name)) {
+    fetchMap.set(name, query());
   }
+
+  return fetchMap.get(name)!;
 }
 
-export default async function OrgAccordionItem() {
-  const { orgs } = await getOrgs();
+export function OrgAccordionItem() {
+  const { orgs } = use(
+    queryClient("orgs", () =>
+      fetch(applicationConfig.baseUrl + "/api/organization", {
+        method: "GET",
+        cache: "no-store",
+      }).then((res) => res.json())
+    )
+  );
 
   return (
     <>

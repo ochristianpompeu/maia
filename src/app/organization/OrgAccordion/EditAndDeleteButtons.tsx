@@ -1,12 +1,13 @@
 import { OrgProps } from "@/lib/interfaces";
 import {
-    ButtonGroup,
-    Drawer,
-    DrawerContent,
-    DrawerOverlay,
-    IconButton,
-    useDisclosure,
+  ButtonGroup,
+  Drawer,
+  DrawerContent,
+  DrawerOverlay,
+  IconButton,
+  useDisclosure,
 } from "@chakra-ui/react";
+import React from "react";
 import { TbEdit, TbTrash } from "react-icons/tb";
 import { OrgEditDrawerContent } from "../OrgEditDrawer/OrgEditDrawerContent";
 
@@ -16,6 +17,7 @@ interface EditAndDeleteButtonsProps {
 
 export function EditAndDeleteButtons(props: EditAndDeleteButtonsProps) {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const firstField = React.useRef() as any;
   return (
     <>
       <ButtonGroup>
@@ -39,11 +41,15 @@ export function EditAndDeleteButtons(props: EditAndDeleteButtonsProps) {
         size={{ base: "full", md: "md" }}
         isOpen={isOpen}
         onClose={onClose}
-        // initialFocusRef={firstField}
+        initialFocusRef={firstField}
       >
         <DrawerOverlay />
         <DrawerContent>
-          <OrgEditDrawerContent name={props.org.name} id={props.org._id as string} />
+          <OrgEditDrawerContent
+            name={props.org.name}
+            id={props.org._id as string}
+            initialRef={firstField}
+          />
         </DrawerContent>
       </Drawer>
     </>
