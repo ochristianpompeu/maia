@@ -17,3 +17,12 @@ export interface OrgEditDrawerContentProps {
 }
 
 export interface OrgAddDrawerContentProps extends OrgEditDrawerContentProps {}
+
+export interface ServiceProps {
+  _id?: string;
+  name?: string;
+  description?: string;
+  orgId?: string;
+  initialRef?: React.LegacyRef<HTMLInputElement> | undefined;
+  onClose?: () => void;
+}
