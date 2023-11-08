@@ -13,6 +13,7 @@ const serviceSchema = new Schema(
     },
     orgId: {
       type: ObjectId,
+      required: false,
     },
   },
   {
