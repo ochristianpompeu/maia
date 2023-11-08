@@ -15,7 +15,7 @@ import {
 } from "@chakra-ui/react";
 import React, { Fragment } from "react";
 import { TbEdit, TbEye, TbTrash } from "react-icons/tb";
-import { ServiceViewDrawerContent } from "./ServiceViewDrawer/ServiceViewDrawer";
+import { ServiceViewDrawerContent } from "./ServiceDrawers/ServiceViewDrawer";
 
 export function ServiceCard() {
   const {
