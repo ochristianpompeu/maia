@@ -1,7 +1,7 @@
 import { ObjectId } from "mongodb";
 import mongoose, { Schema, models } from "mongoose";
 
-const organizationSchema = new Schema(
+const serviceSchema = new Schema(
   {
     name: {
       type: String,
@@ -11,15 +11,15 @@ const organizationSchema = new Schema(
       type: String,
       required: false,
     },
-    userAdmin: {
+    orgId: {
       type: ObjectId,
-      required: false,
     },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
 
-const Organization =
-  models.Organization || mongoose.model("Organization", organizationSchema);
-export { Organization };
+const Service = models.Service || mongoose.model("Service", serviceSchema);
+export { Service };
 
