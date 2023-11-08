@@ -10,9 +10,9 @@ import {
   Textarea,
 } from "@chakra-ui/react";
 import { Fragment, useState } from "react";
-import { TbArrowBack } from "react-icons/tb";
+import { TbTrash } from "react-icons/tb";
 
-export function ServiceViewDrawerContent(props: ServiceProps) {
+export function ServiceDeleteDrawerContent(props: ServiceProps) {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [loading, setLoading] = useState(false);
@@ -24,27 +24,29 @@ export function ServiceViewDrawerContent(props: ServiceProps) {
     <Fragment>
       <DrawerCloseButton />
       <DrawerHeader
-        bgGradient="linear(to-b, teal.300, teal.200)"
+        bgGradient="linear(to-b, orange.300, orange.200)"
         textColor="white"
         borderBottomWidth="1px"
       >
-        Dados do Serviço
+        Deletar Serviço
       </DrawerHeader>
 
       <DrawerBody>
-        <form id="alterOrgForm">
+        <form id="deleteServiceForm" onSubmit={handleSubmit}>
           <FormLabel pt="4" htmlFor="name">
             Nome
           </FormLabel>
           <Input
+            ref={props.initialRef}
             id="name"
             name="name"
             placeholder="Nome da Empresa..."
-            focusBorderColor="purple.400"
+            focusBorderColor="orange.400"
             value={name}
             onChange={handleChangeInput}
-            disabled
             variant="filled"
+            disabled
+            borderColor="orange.600"
           />
           <FormLabel pt="4" htmlFor="description">
             Descrição
@@ -53,26 +55,27 @@ export function ServiceViewDrawerContent(props: ServiceProps) {
             id="description"
             name="description"
             placeholder="Digite uma descrição para a sua empresa..."
-            focusBorderColor="purple.400"
+            focusBorderColor="orange.400"
             value={description}
             size="md"
             onChange={handleChangeTextArea}
-            disabled
             variant="filled"
+            disabled
+            borderColor="orange.600"
           />
         </form>
       </DrawerBody>
       <DrawerFooter>
         <Button
-          colorScheme="green"
+          colorScheme="orange"
           variant="outline"
           type="submit"
-          form="alterOrgForm"
+          form="deleteServiceForm"
           onClick={props.onClose}
           isLoading={loading}
-          leftIcon={<TbArrowBack />}
+          leftIcon={<TbTrash />}
         >
-          Voltar
+          Deletar
         </Button>
       </DrawerFooter>
     </Fragment>

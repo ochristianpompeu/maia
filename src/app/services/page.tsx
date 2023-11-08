@@ -1,14 +1,8 @@
 "use client";
-import Footer from "@/components/Footer/Footer";
 import SidebarDashboardTest from "@/components/SideBarDashboard/SidebarDashboardTest";
-import {
-  Flex,
-  Heading,
-  SimpleGrid,
-  Stack,
-  useColorModeValue
-} from "@chakra-ui/react";
+import { Flex, SimpleGrid, Stack, useColorModeValue } from "@chakra-ui/react";
 import { ServiceCard } from "./ServiceCard";
+import { ServiceHeader } from "./ServiceHeader";
 
 export default function Services() {
   // const { isOpen, onOpen, onClose } = useDisclosure();
@@ -28,6 +22,10 @@ export default function Services() {
         direction={{ base: "column", md: "row" }}
         spacing={[2, 8]}
         w="full"
+        h={{
+          base: "auto",
+          md: "full",
+        }}
       >
         <Flex
           p="1.5"
@@ -35,7 +33,7 @@ export default function Services() {
           w="full"
           h={{
             base: "auto",
-            md: "100vh",
+            md: "full",
           }}
           alignItems={["center", "flex-start"]}
         >
@@ -52,23 +50,18 @@ export default function Services() {
               md: "full",
             }}
           >
-            <Heading>Serviços</Heading>
+            <ServiceHeader />
             <SimpleGrid
               spacing={4}
               templateColumns="repeat(auto-fill, minmax(250px, 1fr))"
-              h={{
-                base: "auto",
-                md: "full",
-              }}
               w="full"
             >
               <ServiceCard />
-
+              <ServiceCard />
             </SimpleGrid>
           </Stack>
         </Flex>
       </Stack>
-      <Footer ml={{ base: 0 }} px={{ base: 4, md: 4 }} />
     </SidebarDashboardTest>
   );
 }

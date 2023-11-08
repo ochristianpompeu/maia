@@ -15,6 +15,8 @@ import {
 } from "@chakra-ui/react";
 import React, { Fragment } from "react";
 import { TbEdit, TbEye, TbTrash } from "react-icons/tb";
+import { ServiceDeleteDrawerContent } from "./ServiceDrawers/ServiceDeleteDrawer";
+import { ServiceEditDrawerContent } from "./ServiceDrawers/ServiceEditDrawer";
 import { ServiceViewDrawerContent } from "./ServiceDrawers/ServiceViewDrawer";
 
 export function ServiceCard() {
@@ -22,6 +24,16 @@ export function ServiceCard() {
     isOpen: isOpenView,
     onClose: onCloseView,
     onOpen: onOpenView,
+  } = useDisclosure();
+  const {
+    isOpen: isOpenEdit,
+    onClose: onCloseEdit,
+    onOpen: onOpenEdit,
+  } = useDisclosure();
+  const {
+    isOpen: isOpenDelete,
+    onClose: onCloseDelete,
+    onOpen: onOpenDelete,
   } = useDisclosure();
 
   const firstField = React.useRef() as any;
@@ -50,12 +62,14 @@ export function ServiceCard() {
               variant="outline"
               aria-label="edit service"
               icon={<TbEdit />}
+              onClick={onOpenEdit}
             />
             <IconButton
               colorScheme="orange"
               variant="outline"
               aria-label="delete service"
               icon={<TbTrash />}
+              onClick={onOpenDelete}
             />
           </ButtonGroup>
         </CardFooter>
@@ -64,11 +78,35 @@ export function ServiceCard() {
         size={{ base: "full", md: "md" }}
         isOpen={isOpenView}
         onClose={onCloseView}
+      >
+        <DrawerOverlay />
+        <DrawerContent>
+          <ServiceViewDrawerContent onClose={onCloseView} />
+        </DrawerContent>
+      </DrawerView>
+      <DrawerView
+        size={{ base: "full", md: "md" }}
+        isOpen={isOpenEdit}
+        onClose={onCloseEdit}
         initialFocusRef={firstField}
       >
         <DrawerOverlay />
         <DrawerContent>
-          <ServiceViewDrawerContent />
+          <ServiceEditDrawerContent
+            onClose={onCloseEdit}
+            initialRef={firstField}
+          />
+        </DrawerContent>
+      </DrawerView>
+      <DrawerView
+        size={{ base: "full", md: "md" }}
+        isOpen={isOpenDelete}
+        onClose={onCloseDelete}
+        initialFocusRef={firstField}
+      >
+        <DrawerOverlay />
+        <DrawerContent>
+          <ServiceDeleteDrawerContent onClose={onCloseDelete} />
         </DrawerContent>
       </DrawerView>
     </Fragment>

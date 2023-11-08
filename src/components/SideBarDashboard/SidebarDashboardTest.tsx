@@ -11,6 +11,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 
+import Footer from "../Footer/Footer";
 import MobileNav from "./MobileNav";
 import SidebarContent from "./SidebarContent";
 
@@ -31,11 +32,13 @@ export default function SidebarDashboardTest({
         base: "auto",
         md: "100vh",
       }}
+      minHeight="100vh"
     >
       <Flex
         direction="column"
         w={"full"}
         h={{ base: "100vh", md: "full" }}
+        // h={{ base: "auto", md: "full" }}
         justifyContent="space-between"
         //   minH="100vh"
         bg={useColorModeValue("gray.50", "gray.900")}
@@ -63,11 +66,11 @@ export default function SidebarDashboardTest({
           justifyContent="space-between"
           ml={{ base: 0, md: 60 }}
           p={0}
-          h="full"
+          // h="full"
         >
           {children}
         </Box>
-        {/* <Footer ml={{ base: 0, md: 60 }} px={{ base: 4, md: 4 }} /> */}
+        <Footer my={0} ml={{ base: 0, md: 60 }} px={{ base: 4, md: 4 }} />
       </Flex>
     </Container>
   );

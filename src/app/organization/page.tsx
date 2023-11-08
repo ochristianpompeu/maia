@@ -1,10 +1,7 @@
 "use client";
 import SidebarDashboardTest from "@/components/SideBarDashboard/SidebarDashboardTest";
-import {
-  Flex,
-  Stack,
-  useColorModeValue
-} from "@chakra-ui/react";
+import { Flex, Stack, useColorModeValue } from "@chakra-ui/react";
+import { Fragment } from "react";
 import { OrgAccordion } from "./OrgAccordion/OrgAccordion";
 import { OrgHeaderAndDrawer } from "./OrgAddDrawer/OrgHeaderAndDrawer";
 
@@ -20,28 +17,35 @@ export default function Organization() {
   }
 
   return (
-    <SidebarDashboardTest>
-      <Stack
-        p={[0, 4]}
-        direction={{ base: "column", md: "row" }}
-        spacing={[2, 8]}
-        w="full"
-      >
-        <Flex flex={1} w="full" h="full" alignItems={["center", "flex-start"]}>
-          <Stack
-            direction="column"
-            padding={4}
-            borderRadius="lg"
-            mx={{ base: "auto", md: "0.5" }}
-            bgColor={bgBoxColor}
+    <Fragment>
+      <SidebarDashboardTest>
+        <Stack
+          p={[0, 4]}
+          direction={{ base: "column", md: "row" }}
+          spacing={[2, 8]}
+          w="full"
+        >
+          <Flex
+            flex={1}
             w="full"
-            maxW="xl"
+            h="full"
+            alignItems={["center", "flex-start"]}
           >
-            <OrgHeaderAndDrawer />
-            <OrgAccordion />
-          </Stack>
-        </Flex>
-      </Stack>
-    </SidebarDashboardTest>
+            <Stack
+              direction="column"
+              padding={4}
+              borderRadius="lg"
+              mx={{ base: "auto", md: "0.5" }}
+              bgColor={bgBoxColor}
+              w="full"
+              maxW="xl"
+            >
+              <OrgHeaderAndDrawer />
+              <OrgAccordion />
+            </Stack>
+          </Flex>
+        </Stack>
+      </SidebarDashboardTest>
+    </Fragment>
   );
 }
