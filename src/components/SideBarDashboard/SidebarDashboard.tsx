@@ -2,13 +2,11 @@
 
 import {
   Box,
-  Container,
   Drawer,
   DrawerContent,
   DrawerOverlay,
-  Flex,
-  useColorModeValue,
-  useDisclosure,
+  Stack,
+  useDisclosure
 } from "@chakra-ui/react";
 
 import Footer from "../Footer/Footer";
@@ -23,54 +21,54 @@ export default function SidebarDashboard({ children }: SidebarDashboarProps) {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
-    <Container
-      maxW={"full"}
-      p={0}
-      h={{
-        base: "auto",
-        md: "100vh",
-      }}
-      minHeight="100vh"
+    <Box
+      minH="100vh"
+      // bg={useColorModeValue("gray.100", "gray.900")}
+      justifyContent="space-between"
     >
-      <Flex
-        direction="column"
-        w={"full"}
-        // h={{ base: "100vh", md: "full" }}
-        // h={{ base: "auto", md: "full" }}
-        justifyContent="space-between"
-        minH="100vh"
-        bg={useColorModeValue("gray.50", "gray.900")}
-        overflowY="auto"
+      <SidebarContent
+        onClose={() => onClose}
+        display={{ base: "none", md: "block" }}
+      />
+      <Drawer
+        isOpen={isOpen}
+        placement="left"
+        onClose={onClose}
+        returnFocusOnClose={false}
+        onOverlayClick={onClose}
+        // size="sm"
       >
-        <SidebarContent
-          onClose={() => onClose}
-          display={{ base: "none", md: "block" }}
-        />
-        <Drawer
-          isOpen={isOpen}
-          placement="left"
-          onClose={onClose}
-          returnFocusOnClose={false}
-          onOverlayClick={onClose}
-          // size="sm"
-        >
-          <DrawerOverlay />
-          <DrawerContent>
-            <SidebarContent onClose={onClose} />
-          </DrawerContent>
-        </Drawer>
-        <MobileNav onOpen={onOpen} />
-        <Box
-          flex={1}
-          justifyContent="space-between"
-          ml={{ base: 0, md: 60 }}
-          p={0}
-          // h="full"
+        <DrawerOverlay />
+        <DrawerContent>
+          <SidebarContent onClose={onClose} />
+        </DrawerContent>
+      </Drawer>
+      <MobileNav onOpen={onOpen} />
+      <Box
+        ml={{ base: 0, md: 60 }}
+        h="calc(100vh - 80px)"
+        w="calc(100vw - 240px)"
+        // bg="gray.300"
+        borderColor="gray.900"
+      >
+        <Stack
+          direction={{ base: "column", md: "row" }}
+          spacing={[2, 8]}
+          bg="gray.600"
+          // h="calc(100vh - 80px - 8px - 40px)"
+          h="calc(100vh - 48px - 64px)"
+          borderRadius="lg"
+          overflowY="auto"
+          // w="full"
+          // h={{
+          //   base: "auto",
+          //   md: "full",
+          // }}
         >
           {children}
-        </Box>
-        <Footer my={0} ml={{ base: 0, md: 60 }} px={{ base: 4, md: 4 }} />
-      </Flex>
-    </Container>
+        </Stack>
+        <Footer height="16" px={{ base: 4, md: 4 }} />
+      </Box>
+    </Box>
   );
 }
