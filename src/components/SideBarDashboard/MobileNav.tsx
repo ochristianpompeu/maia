@@ -36,7 +36,7 @@ export default function MobileNav({ onOpen, ...rest }: MobileProps) {
       px={{ base: 4, md: 4 }}
       height="12"
       alignItems="center"
-      bg={useColorModeValue("gray.50", "gray.800")}
+      bg={useColorModeValue("gray.50", "gray.900")}
       // borderBottomWidth="1px"
       // borderBottomColor={useColorModeValue("gray.200", "gray.700")}
       justifyContent={{ base: "space-between", md: "flex-end" }}

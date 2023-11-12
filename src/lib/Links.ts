@@ -11,25 +11,51 @@ interface LinkItemProps {
   icon?: IconType;
 }
 
+export const PanelAndMenuIcons = {
+  dashboard: MdOutlineSpaceDashboard,
+  org: GoOrganization,
+  services: RiServiceLine,
+  professionals: BsPersonBadge,
+  hours: Ri24HoursLine,
+  hours_services: TbTimeDuration30,
+  blog: MdOutlineRssFeed,
+  login: SlLogin,
+};
 export const Links: Array<LinkItemProps> = [
-  { text: "Serviços", link: "/services", icon: RiServiceLine },
-  { text: "Dashboard", link: "/panel", icon: MdOutlineSpaceDashboard },
-  { text: "Blog", link: "/blog", icon: MdOutlineRssFeed },
-  { text: "Login", link: "/login", icon: SlLogin },
-  { text: "Empresa", link: "/organization", icon: GoOrganization },
-  { text: "Profissional", link: "/professional", icon: BsPersonBadge },
-  { text: "Horários", link: "/hours", icon: Ri24HoursLine },
-  { text: "Horários/Serviços", link: "hours-services", icon: TbTimeDuration30 },
+  { text: "Serviços", link: "/services", icon: PanelAndMenuIcons.services },
+  { text: "Dashboard", link: "/panel", icon: PanelAndMenuIcons.dashboard },
+  { text: "Blog", link: "/blog", icon: PanelAndMenuIcons.blog },
+  { text: "Login", link: "/login", icon: PanelAndMenuIcons.login },
+  { text: "Empresa", link: "/organization", icon: PanelAndMenuIcons.org },
+  {
+    text: "Profissional",
+    link: "/professional",
+    icon: PanelAndMenuIcons.professionals,
+  },
+  { text: "Horários", link: "/hours", icon: PanelAndMenuIcons.hours },
+  {
+    text: "Horários/Serviços",
+    link: "hours-services",
+    icon: PanelAndMenuIcons.hours_services,
+  },
 ];
 
 export const PanelLinks: Array<LinkItemProps> = [
-  { text: "Dashboard", link: "/panel", icon: MdOutlineSpaceDashboard },
-  { text: "Empresa", link: "/organization", icon: GoOrganization },
-  { text: "Serviços", link: "/services", icon: RiServiceLine },
-  { text: "Profissional", link: "/professional", icon: BsPersonBadge },
-  { text: "Horários", link: "/hours", icon: Ri24HoursLine },
-  { text: "Horários/Serviços", link: "hours-services", icon: TbTimeDuration30 },
-  { text: "Blog", link: "/blog", icon: MdOutlineRssFeed },
+  { text: "Dashboard", link: "/panel", icon: PanelAndMenuIcons.dashboard },
+  { text: "Empresa", link: "/organization", icon: PanelAndMenuIcons.org },
+  { text: "Serviços", link: "/services", icon: PanelAndMenuIcons.services },
+  {
+    text: "Profissional",
+    link: "/professionals",
+    icon: PanelAndMenuIcons.professionals,
+  },
+  { text: "Horários", link: "/hours", icon: PanelAndMenuIcons.hours },
+  {
+    text: "Horários/Serviços",
+    link: "/hours-services",
+    icon: PanelAndMenuIcons.hours_services,
+  },
+  { text: "Blog", link: "/blog", icon: PanelAndMenuIcons.blog },
 ];
 
 export const HomeLinks: Array<LinkItemProps> = [

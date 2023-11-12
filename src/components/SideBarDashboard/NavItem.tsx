@@ -20,7 +20,7 @@ export default function NavItem({
   ...rest
 }: NavItemProps) {
   const pathName = usePathname();
-  const bgColor = useColorModeValue("gray.50", "gray.800");
+  const bgColor = useColorModeValue("gray.50", "gray.900");
   const activePathColor = useColorModeValue("purple.100", "purple.600");
   return (
     <Box

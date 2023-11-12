@@ -1,15 +1,13 @@
 "use client";
-import SidebarDashboardTest from "@/components/SideBarDashboard/SidebarDashboardTest";
+import SidebarDashboard from "@/components/SideBarDashboard/SidebarDashboard";
 import { Flex, Stack, useColorModeValue } from "@chakra-ui/react";
 import { Fragment } from "react";
-import { OrgHeaderAndDrawer } from "./OrgAddDrawer/OrgHeaderAndDrawer";
+import { OrgDataPanel } from "./OrgDataPanel/OrgDataPanel";
+import { OrgPanel } from "./OrgPanel/OrgPanel";
+import { OrgPanelContent } from "./OrgPanel/OrgPanelContent";
 
 export default function Organization() {
-  // const { isOpen, onOpen, onClose } = useDisclosure();
-  // const firstField = React.useRef() as any;
-  const bgBoxColor = useColorModeValue("white", "gray.800");
-  // const bgColor = useColorModeValue("white", "gray.800");
-  // const tableBorderColoor = useColorModeValue("gray.100", "black");
+  const bgBoxColor = useColorModeValue("gray.100", "gray.800");
 
   function handleClick() {
     return;
@@ -17,9 +15,9 @@ export default function Organization() {
 
   return (
     <Fragment>
-      <SidebarDashboardTest>
+      <SidebarDashboard>
         <Stack
-          p={[0, 4]}
+          p={[0, 2]}
           direction={{ base: "column", md: "row" }}
           spacing={[2, 8]}
           w="full"
@@ -31,20 +29,24 @@ export default function Organization() {
             alignItems={["center", "flex-start"]}
           >
             <Stack
-              direction="column"
-              padding={4}
+              direction={{ base: "column", md: "row" }}
+              padding={2}
               borderRadius="lg"
-              mx={{ base: "auto", md: "0.5" }}
+              // mx={{ base: "auto", md: "0.5" }}
               bgColor={bgBoxColor}
               w="full"
-              maxW="xl"
+              maxW="full"
             >
-              <OrgHeaderAndDrawer />
+              {/* <OrgHeaderAndDrawer /> */}
+              <OrgPanel shadow="none">
+                <OrgPanelContent />
+              </OrgPanel>
+              <OrgDataPanel shadow="none" />
               {/* <OrgAccordion /> */}
             </Stack>
           </Flex>
         </Stack>
-      </SidebarDashboardTest>
+      </SidebarDashboard>
     </Fragment>
   );
 }

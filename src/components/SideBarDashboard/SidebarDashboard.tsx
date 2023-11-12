@@ -6,6 +6,7 @@ import {
   DrawerContent,
   DrawerOverlay,
   Stack,
+  useColorModeValue,
   useDisclosure
 } from "@chakra-ui/react";
 
@@ -48,13 +49,13 @@ export default function SidebarDashboard({ children }: SidebarDashboarProps) {
         ml={{ base: 0, md: 60 }}
         h="calc(100vh - 80px)"
         w="calc(100vw - 240px)"
-        // bg="gray.300"
-        borderColor="gray.900"
+        bg={useColorModeValue("gray.100", "gray.800")}
+        // borderColor="gray.900"
       >
         <Stack
           direction={{ base: "column", md: "row" }}
           spacing={[2, 8]}
-          bg="gray.600"
+          // bg="gray.600"
           // h="calc(100vh - 80px - 8px - 40px)"
           h="calc(100vh - 48px - 64px)"
           borderRadius="lg"

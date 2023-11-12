@@ -17,7 +17,7 @@ export default function SidebarContent({ onClose, ...rest }: SidebarProps) {
   return (
     <Box
       transition="3s ease"
-      bg={useColorModeValue("gray.50", "gray.800")}
+      bg={useColorModeValue("gray.50", "gray.900")}
       // borderRight="1px"
       // borderRightColor={useColorModeValue("purple.200", "purple.800")}
       w={{ base: "full", md: 60 }}
