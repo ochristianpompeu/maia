@@ -2,7 +2,6 @@
 import SidebarDashboardTest from "@/components/SideBarDashboard/SidebarDashboardTest";
 import { Flex, Stack, useColorModeValue } from "@chakra-ui/react";
 import { Fragment } from "react";
-import { OrgAccordion } from "./OrgAccordion/OrgAccordion";
 import { OrgHeaderAndDrawer } from "./OrgAddDrawer/OrgHeaderAndDrawer";
 
 export default function Organization() {
@@ -41,7 +40,7 @@ export default function Organization() {
               maxW="xl"
             >
               <OrgHeaderAndDrawer />
-              <OrgAccordion />
+              {/* <OrgAccordion /> */}
             </Stack>
           </Flex>
         </Stack>
