@@ -7,6 +7,7 @@ import {
   CardBody,
   CardHeader,
   CardProps,
+  Divider,
   Drawer,
   DrawerContent,
   DrawerOverlay,
@@ -17,13 +18,13 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { ReactNode, useRef } from "react";
-import { BsBuildingAdd } from "react-icons/bs";
-import { OrgAddDrawerContent } from "./OrgAddDrawerContent";
-import { OrgPanelContent } from "./OrgPanelContent";
+import { RiServiceLine } from "react-icons/ri";
+import { OrgAddDrawerContent } from "./ServicesAddDrawerContent";
+import { ServicesPanelContent } from "./ServicesPanelContent";
 interface OrgDataPanelProps extends CardProps {
   children?: ReactNode;
 }
-export function OrgPanel({
+export function ServicesPanel({
   bgGradient,
   overflowY,
   w,
@@ -31,15 +32,15 @@ export function OrgPanel({
   ...rest
 }: OrgDataPanelProps) {
   const {
-    isOpen: isOpenAddOrg,
-    onOpen: onOpenAddOrg,
-    onClose: onCloseAddOrg,
+    isOpen: isOpenAddService,
+    onOpen: onOpenAddService,
+    onClose: onCloseAddService,
   } = useDisclosure();
-  
+
   const firstField = useRef() as any;
 
   function handleOnAddClose() {
-    onCloseAddOrg;
+    onCloseAddService;
   }
 
   return (
@@ -53,20 +54,20 @@ export function OrgPanel({
       <CardHeader w="full">
         <HStack justifyContent="space-between">
           <HStack m={0} p={0}>
-            <Icon fontSize="2xl" as={PanelAndMenuIcons.org} />
-            <Heading size="md">Empresa</Heading>
+            <Icon fontSize="2xl" as={PanelAndMenuIcons.services} />
+            <Heading size="md">Serviços</Heading>
           </HStack>
           <IconButton
             display={{ md: "none" }}
             aria-label="Add Org"
             colorScheme="purple"
-            onClick={onOpenAddOrg}
+            onClick={onOpenAddService}
             icon={<AddIcon />}
           />
           <ButtonGroup display={{ base: "none", md: "inline-flex" }}>
             <Button
-              onClick={onOpenAddOrg}
-              leftIcon={<BsBuildingAdd />}
+              onClick={onOpenAddService}
+              leftIcon={<RiServiceLine />}
               colorScheme="purple"
             >
               Adicionar
@@ -74,10 +75,11 @@ export function OrgPanel({
           </ButtonGroup>
         </HStack>
       </CardHeader>
+      <Divider />
       <Drawer
         size={{ base: "full", md: "md" }}
-        isOpen={isOpenAddOrg}
-        onClose={onCloseAddOrg}
+        isOpen={isOpenAddService}
+        onClose={onCloseAddService}
         initialFocusRef={firstField}
       >
         <DrawerOverlay />
@@ -90,7 +92,7 @@ export function OrgPanel({
       </Drawer>
 
       <CardBody h="100vh">
-        <OrgPanelContent />
+        <ServicesPanelContent />
       </CardBody>
     </Card>
   );
