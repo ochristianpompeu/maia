@@ -21,6 +21,7 @@ export function OrgPanelContentItem() {
       }).then((res) => res.json())
     )
   );
+
   return (
     <>
       {orgs.map((org: OrgProps) => (
