@@ -1,4 +1,4 @@
-import { OrgProps } from "@/lib/interfaces";
+import { ServiceProps } from "@/lib/interfaces";
 import {
   ButtonGroup,
   Drawer,
@@ -7,13 +7,13 @@ import {
   IconButton,
   useDisclosure,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { Fragment } from "react";
 import { TbEdit, TbTrash } from "react-icons/tb";
-import { OrgDeleteDrawerContent } from "./ServicesDeleteDrawerContent";
-import { OrgEditDrawerContent } from "./ServicesEditDrawerContent";
+import { DeleteDrawerContent } from "./DeleteDrawerContent";
+import { EditDrawerContent } from "./EditDrawerContent";
 
 interface EditAndDeleteButtonsProps {
-  org: OrgProps;
+  service: ServiceProps;
 }
 
 export function EditAndDeleteButtons(props: EditAndDeleteButtonsProps) {
@@ -38,7 +38,7 @@ export function EditAndDeleteButtons(props: EditAndDeleteButtonsProps) {
   }
 
   return (
-    <>
+    <Fragment>
       <ButtonGroup>
         <IconButton
           size="sm"
@@ -65,10 +65,10 @@ export function EditAndDeleteButtons(props: EditAndDeleteButtonsProps) {
       >
         <DrawerOverlay />
         <DrawerContent>
-          <OrgEditDrawerContent
-            name={props.org.name}
-            description={props.org.description}
-            id={props.org._id as string}
+          <EditDrawerContent
+            name={props.service.name}
+            description={props.service.description}
+            id={props.service._id as string}
             initialRef={firstField}
             onClose={handleCloseEditDrawer}
           />
@@ -79,19 +79,18 @@ export function EditAndDeleteButtons(props: EditAndDeleteButtonsProps) {
         isOpen={isDeleteOpen}
         onClose={onDeleteClose}
         initialFocusRef={firstField}
-        
       >
         <DrawerOverlay />
         <DrawerContent>
-          <OrgDeleteDrawerContent
-            name={props.org.name}
-            description={props.org.description}
-            id={props.org._id as string}
+          <DeleteDrawerContent
+            name={props.service.name}
+            description={props.service.description}
+            id={props.service._id as string}
             initialRef={firstField}
             onClose={handleCloseDeleteDrawer}
           />
         </DrawerContent>
       </Drawer>
-    </>
+    </Fragment>
   );
 }

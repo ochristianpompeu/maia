@@ -1,22 +1,33 @@
+import { ServiceProps } from "@/lib/interfaces";
 import {
   Box,
   Card,
   CardBody,
   CardHeader,
   CardProps,
+  CloseButton,
+  HStack,
   Heading,
   Stack,
   StackDivider,
   Text,
 } from "@chakra-ui/react";
 
-interface OrgDataPanelProps extends CardProps {}
-export function OrgDataPanel({
+interface ServicesDataPanelProps extends CardProps {
+  handleDisplayDetail: (display: string) => void;
+  service?: ServiceProps;
+}
+export function ServicesDataPanel({
   bgGradient,
   overflowY,
   w,
+  handleDisplayDetail,
+  service,
   ...rest
-}: OrgDataPanelProps) {
+}: ServicesDataPanelProps) {
+  function handleClick() {
+    handleDisplayDetail("none");
+  }
   return (
     <Card
       // bgGradient="linear(to-b, gray.100,gray.50)"
@@ -25,25 +36,28 @@ export function OrgDataPanel({
       {...rest}
     >
       <CardHeader>
-        <Heading size="md">Client Report</Heading>
+        <HStack justifyContent="space-between">
+          <Heading size="md">Dados do Serviço</Heading>
+          <CloseButton color="purple" onClick={handleClick} />
+        </HStack>
       </CardHeader>
 
       <CardBody>
         <Stack divider={<StackDivider />} spacing="4">
           <Box>
             <Heading size="xs" textTransform="uppercase">
-              Summary
+              {service?.name}
             </Heading>
             <Text pt="2" fontSize="sm">
-              View a summary of all your clients over the last month.
+              {service?.org?.name}
             </Text>
           </Box>
           <Box>
             <Heading size="xs" textTransform="uppercase">
-              Overview
+              Descrição
             </Heading>
             <Text pt="2" fontSize="sm">
-              Check out the overview of your clients.
+              {service?.description}
             </Text>
           </Box>
         </Stack>

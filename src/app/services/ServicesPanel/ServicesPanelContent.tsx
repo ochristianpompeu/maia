@@ -3,48 +3,42 @@ import {
   TableCaption,
   TableContainer,
   Tbody,
-  Td,
   Tfoot,
   Th,
   Thead,
-  Tr
+  Tr,
 } from "@chakra-ui/react";
+import { useState } from "react";
+import { ServicesPanelContentItem } from "./ServicesPanelContentItem";
 // import { OrgPanelContentItem } from "./ServicesPanelContentItem";
+interface ServicesPanelContentProps {
+  handleDisplayDetail: (display: string) => void;
+}
 
-export function ServicesPanelContent() {
+export function ServicesPanelContent({
+  handleDisplayDetail,
+}: ServicesPanelContentProps) {
+  const [displayDetail, setDisplayDetail] = useState("block");
+
   return (
     <TableContainer>
-      <Table variant="simple">
+      <Table>
         <TableCaption>Imperial to metric conversion factors</TableCaption>
         <Thead>
           <Tr>
-            <Th>To convert</Th>
-            <Th>into</Th>
-            <Th isNumeric>multiply by</Th>
+            <Th>Empresa</Th>
+            <Th>Nome</Th>
+            <Th textAlign="right">{""}</Th>
           </Tr>
         </Thead>
         <Tbody>
-          <Tr>
-            <Td>inches</Td>
-            <Td>millimetres (mm)</Td>
-            <Td isNumeric>25.4</Td>
-          </Tr>
-          <Tr>
-            <Td>feet</Td>
-            <Td>centimetres (cm)</Td>
-            <Td isNumeric>30.48</Td>
-          </Tr>
-          <Tr>
-            <Td>yards</Td>
-            <Td>metres (m)</Td>
-            <Td isNumeric>0.91444</Td>
-          </Tr>
+          <ServicesPanelContentItem handleDisplayDetail={handleDisplayDetail} />
         </Tbody>
         <Tfoot>
           <Tr>
-            <Th>To convert</Th>
-            <Th>into</Th>
-            <Th isNumeric>multiply by</Th>
+            <Th>Empresa</Th>
+            <Th>Nome</Th>
+            <Th textAlign="right">{""}</Th>
           </Tr>
         </Tfoot>
       </Table>

@@ -19,28 +19,30 @@ import {
 } from "@chakra-ui/react";
 import { ReactNode, useRef } from "react";
 import { RiServiceLine } from "react-icons/ri";
-import { OrgAddDrawerContent } from "./ServicesAddDrawerContent";
+import { AddDrawerContent } from "./AddDrawerContent";
 import { ServicesPanelContent } from "./ServicesPanelContent";
-interface OrgDataPanelProps extends CardProps {
+interface DataPanelProps extends CardProps {
   children?: ReactNode;
+  handleDisplayDetail: (display: string) => void;
 }
 export function ServicesPanel({
   bgGradient,
   overflowY,
   w,
   children,
+  handleDisplayDetail,
   ...rest
-}: OrgDataPanelProps) {
+}: DataPanelProps) {
   const {
-    isOpen: isOpenAddService,
-    onOpen: onOpenAddService,
-    onClose: onCloseAddService,
+    isOpen: isOpenAdd,
+    onOpen: onOpenAdd,
+    onClose: onCloseAdd,
   } = useDisclosure();
 
   const firstField = useRef() as any;
 
   function handleOnAddClose() {
-    onCloseAddService;
+    onCloseAdd;
   }
 
   return (
@@ -59,16 +61,17 @@ export function ServicesPanel({
           </HStack>
           <IconButton
             display={{ md: "none" }}
-            aria-label="Add Org"
+            aria-label="Add Service"
             colorScheme="purple"
-            onClick={onOpenAddService}
+            onClick={onOpenAdd}
             icon={<AddIcon />}
           />
           <ButtonGroup display={{ base: "none", md: "inline-flex" }}>
             <Button
-              onClick={onOpenAddService}
+              onClick={onOpenAdd}
               leftIcon={<RiServiceLine />}
               colorScheme="purple"
+              variant="outline"
             >
               Adicionar
             </Button>
@@ -78,13 +81,13 @@ export function ServicesPanel({
       <Divider />
       <Drawer
         size={{ base: "full", md: "md" }}
-        isOpen={isOpenAddService}
-        onClose={onCloseAddService}
+        isOpen={isOpenAdd}
+        onClose={onCloseAdd}
         initialFocusRef={firstField}
       >
         <DrawerOverlay />
         <DrawerContent>
-          <OrgAddDrawerContent
+          <AddDrawerContent
             initialRef={firstField}
             onClose={handleOnAddClose}
           />
@@ -92,7 +95,7 @@ export function ServicesPanel({
       </Drawer>
 
       <CardBody h="100vh">
-        <ServicesPanelContent />
+        <ServicesPanelContent handleDisplayDetail={handleDisplayDetail} />
       </CardBody>
     </Card>
   );

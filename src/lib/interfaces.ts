@@ -1,11 +1,11 @@
 export interface OrgProps {
-  _id: string | undefined;
-  name: string;
-  description: string;
-  createdAt: Date;
-  updatedAt: Date;
-  __v: Number;
-  userAdmin: String;
+  _id?: string | undefined;
+  name?: string;
+  description?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+  __v?: Number;
+  userAdmin?: string;
 }
 
 export interface OrgEditDrawerContentProps {
@@ -23,6 +23,9 @@ export interface ServiceProps {
   name?: string;
   description?: string;
   orgId?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+  org?: OrgProps;
   initialRef?: React.LegacyRef<HTMLInputElement> | undefined;
   onClose?: () => void;
 }

@@ -8,5 +8,8 @@ export const config = {
     "/organization",
     "/professional",
     "/services",
+    "/panel",
+    "/hours",
+    "/hours-services"
   ],
 };

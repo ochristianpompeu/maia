@@ -1,25 +1,19 @@
 "use client";
 import SidebarDashboard from "@/components/SideBarDashboard/SidebarDashboard";
+import { ServiceProps } from "@/lib/interfaces";
 import { Flex, Stack, useColorModeValue } from "@chakra-ui/react";
 import { Fragment, useState } from "react";
+import { ServicesDataPanel } from "./ServicesDataPanel/ServicesDataPanel";
 import { ServicesPanel } from "./ServicesPanel/ServicesPanel";
 
 export default function Organization() {
   const bgBoxColor = useColorModeValue("gray.100", "gray.800");
   const [displayDetail, setDisplayDetail] = useState("none");
+  const [detailService, setDetailService] = useState<ServiceProps>();
 
-  function handleClick() {
-    return;
-  }
-
-  function handleDisplayDetail() {
-    if (displayDetail === "none") {
-      setDisplayDetail("block");
-    }
-
-    if (displayDetail === "block") {
-      setDisplayDetail("none");
-    }
+  function handleDisplayDetail(display: string, service?: ServiceProps) {
+    setDisplayDetail(display);
+    setDetailService(service);
     return;
   }
 
@@ -47,8 +41,16 @@ export default function Organization() {
               w="full"
               maxW="full"
             >
-              <ServicesPanel shadow="none" />
-              {/* <OrgDataPanel display={displayDetail} shadow="none" /> */}
+              <ServicesPanel
+                handleDisplayDetail={handleDisplayDetail}
+                shadow="none"
+              />
+              <ServicesDataPanel
+                display={displayDetail}
+                handleDisplayDetail={handleDisplayDetail}
+                service={detailService}
+                shadow="none"
+              />
             </Stack>
           </Flex>
         </Stack>
