@@ -9,8 +9,8 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { TbEdit, TbTrash } from "react-icons/tb";
-import { OrgDeleteDrawerContent } from "../OrgDeleteDrawer/OrgDeleteDrawerContent";
-import { OrgEditDrawerContent } from "../OrgEditDrawer/OrgEditDrawerContent";
+import { OrgDeleteDrawerContent } from "./OrgDeleteDrawerContent";
+import { OrgEditDrawerContent } from "./OrgEditDrawerContent";
 
 interface EditAndDeleteButtonsProps {
   org: OrgProps;

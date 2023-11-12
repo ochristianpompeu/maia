@@ -1,15 +1,27 @@
 "use client";
 import SidebarDashboard from "@/components/SideBarDashboard/SidebarDashboard";
 import { Flex, Stack, useColorModeValue } from "@chakra-ui/react";
-import { Fragment } from "react";
-import { OrgDataPanel } from "./OrgDataPanel/OrgDataPanel";
+import { Fragment, useState } from "react";
 import { OrgPanel } from "./OrgPanel/OrgPanel";
 import { OrgPanelContent } from "./OrgPanel/OrgPanelContent";
 
 export default function Organization() {
   const bgBoxColor = useColorModeValue("gray.100", "gray.800");
+  const [displayDetail, setDisplayDetail] = useState("none");
 
   function handleClick() {
+    return;
+  }
+
+  function handleDisplayDetail() {
+    if (displayDetail === "none") {
+      setDisplayDetail("block");
+    }
+
+    if (displayDetail === "block") {
+      setDisplayDetail("none");
+    }
+    // setDisplayDetail(!displayDeta);
     return;
   }
 
@@ -37,12 +49,10 @@ export default function Organization() {
               w="full"
               maxW="full"
             >
-              {/* <OrgHeaderAndDrawer /> */}
               <OrgPanel shadow="none">
                 <OrgPanelContent />
               </OrgPanel>
-              <OrgDataPanel shadow="none" />
-              {/* <OrgAccordion /> */}
+              {/* <OrgDataPanel display={displayDetail} shadow="none" /> */}
             </Stack>
           </Flex>
         </Stack>

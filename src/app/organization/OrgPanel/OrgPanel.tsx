@@ -19,6 +19,9 @@ import {
 import { ReactNode, useRef } from "react";
 import { BsBuildingAdd } from "react-icons/bs";
 import { OrgAddDrawerContent } from "./OrgAddDrawerContent";
+import { OrgDeleteDrawerContent } from "./OrgDeleteDrawerContent";
+import { OrgEditDrawerContent } from "./OrgEditDrawerContent";
+import { OrgPanelContent } from "./OrgPanelContent";
 interface OrgDataPanelProps extends CardProps {
   children?: ReactNode;
 }
@@ -34,10 +37,30 @@ export function OrgPanel({
     onOpen: onOpenAddOrg,
     onClose: onCloseAddOrg,
   } = useDisclosure();
+  const {
+    isOpen: isOpenEditOrg,
+    onOpen: onOpenEditOrg,
+    onClose: onCloseEditOrg,
+  } = useDisclosure();
+  const {
+    isOpen: isOpenDeleteOrg,
+    onOpen: onOpenDeleteOrg,
+    onClose: onCloseDeleteOrg,
+  } = useDisclosure();
   const firstField = useRef() as any;
+
   function handleOnAddClose() {
     onCloseAddOrg;
   }
+
+  function handleOnEditClose() {
+    onCloseAddOrg;
+  }
+
+  function handleOnDeleteClose() {
+    onCloseAddOrg;
+  }
+
   return (
     <Card
       // bgGradient="linear(to-b, gray.100,gray.50)"
@@ -85,7 +108,39 @@ export function OrgPanel({
         </DrawerContent>
       </Drawer>
 
-      <CardBody>{children}</CardBody>
+      <Drawer
+        size={{ base: "full", md: "md" }}
+        isOpen={isOpenEditOrg}
+        onClose={onCloseEditOrg}
+        initialFocusRef={firstField}
+      >
+        <DrawerOverlay />
+        <DrawerContent>
+          <OrgEditDrawerContent
+            initialRef={firstField}
+            onClose={handleOnEditClose}
+          />
+        </DrawerContent>
+      </Drawer>
+
+      <Drawer
+        size={{ base: "full", md: "md" }}
+        isOpen={isOpenDeleteOrg}
+        onClose={onCloseDeleteOrg}
+        initialFocusRef={firstField}
+      >
+        <DrawerOverlay />
+        <DrawerContent>
+          <OrgDeleteDrawerContent
+            initialRef={firstField}
+            onClose={handleOnDeleteClose}
+          />
+        </DrawerContent>
+      </Drawer>
+
+      <CardBody h="100vh">
+        <OrgPanelContent />
+      </CardBody>
     </Card>
   );
 }
