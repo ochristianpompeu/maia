@@ -59,7 +59,7 @@ export function OrgPanel({
             onClick={onOpenAddOrg}
             icon={<AddIcon />}
           />
-          <ButtonGroup>
+          <ButtonGroup display={{ base: "none", md: "inline-flex" }}>
             <Button
               onClick={onOpenAddOrg}
               leftIcon={<BsBuildingAdd />}

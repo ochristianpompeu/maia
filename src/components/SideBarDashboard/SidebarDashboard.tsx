@@ -48,7 +48,8 @@ export default function SidebarDashboard({ children }: SidebarDashboarProps) {
       <Box
         ml={{ base: 0, md: 60 }}
         h="calc(100vh - 80px)"
-        w="calc(100vw - 240px)"
+        // w="calc(100vw - 240px)"
+        w={{base:"full", md:"calc(100vw - 240px)"} }
         bg={useColorModeValue("gray.100", "gray.800")}
         // borderColor="gray.900"
       >
