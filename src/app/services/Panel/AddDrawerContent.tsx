@@ -10,7 +10,8 @@ import {
   Input,
   Select,
   Textarea,
-  useToast,
+  useColorModeValue,
+  useToast
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -50,7 +51,7 @@ export function AddDrawerContent(props: ServiceProps) {
   const { orgs } = use(
     queryUser("orgs", () =>
       fetch(
-        applicationConfig.baseUrl + "/api/organization/byUser/" + user!._id,
+        applicationConfig.baseUrl + "/api/organization/byUser/" + user?._id,
         {
           method: "GET",
           headers: {
@@ -61,7 +62,7 @@ export function AddDrawerContent(props: ServiceProps) {
     )
   );
 
-  const mainColor = "purple.600";
+  const mainColor = useColorModeValue("purple.600", "purple.200");
 
   function handleChangeInput(event: ChangeEvent<HTMLInputElement>) {
     const name = event.target.value;
@@ -76,6 +77,14 @@ export function AddDrawerContent(props: ServiceProps) {
   function handleChangeSelect(event: ChangeEvent<HTMLSelectElement>) {
     const orgId = event.target.value;
     setOrgId(orgId);
+    console.log(
+      "Service: ",
+      JSON.stringify({
+        name,
+        description,
+        orgId,
+      })
+    );
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -159,13 +168,15 @@ export function AddDrawerContent(props: ServiceProps) {
 
       <DrawerBody>
         <form id="createServiceForm" onSubmit={handleSubmit}>
-          <FormLabel htmlFor="orgId">Select Owner</FormLabel>
+          <FormLabel textColor={mainColor} htmlFor="orgId">
+            Selecione a Empresa
+          </FormLabel>
           <Select
             id="orgId"
             name="orgId"
-            textColor={mainColor}
             value={orgId}
             onChange={handleChangeSelect}
+            focusBorderColor={mainColor}
           >
             {orgs?.map((org: OrgProps) => (
               <option key={org._id!} value={org._id!}>

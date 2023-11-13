@@ -31,18 +31,18 @@ export default function NavItem({
     >
       <Flex
         align="center"
-        p="4"
+        p="2"
         mx="4"
         borderRadius="md"
         role="group"
         cursor="pointer"
         bgColor={href === pathName ? activePathColor : bgColor}
         // borderColor={href === pathName ? activePathColor : bgColor}
-        borderBottomColor="purple.800"
+        // borderBottomColor="purple.800"
         // borderBottom={href === pathName ? "1px" : 0}
         _hover={{
-          bg: "orange.400",
-          color: "white",
+          bg: activePathColor,
+          // color: "white",
         }}
         {...rest}
         fontWeight={href === pathName ? "bold" : "normal"}
@@ -53,7 +53,7 @@ export default function NavItem({
             mr="4"
             fontSize="16"
             _groupHover={{
-              color: "white",
+              // color: "white",
             }}
             fontWeight={href === pathName ? "bold" : "normal"}
             as={icon}

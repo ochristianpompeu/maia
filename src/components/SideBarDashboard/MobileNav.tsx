@@ -26,6 +26,7 @@ interface MobileProps extends FlexProps {
 
 export default function MobileNav({ onOpen, ...rest }: MobileProps) {
   const { data: session } = useSession();
+  const activePathColor = useColorModeValue("purple.100", "purple.600");
   function handleSignOut() {
     signOut();
   }
@@ -94,13 +95,38 @@ export default function MobileNav({ onOpen, ...rest }: MobileProps) {
               </HStack>
             </MenuButton>
             <MenuList
-              bg={useColorModeValue("white", "gray.900")}
-              borderColor={useColorModeValue("gray.200", "gray.700")}
+              bg={useColorModeValue("gray.50", "gray.900")}
+              borderColor={useColorModeValue("purple.200", "purple.700")}
             >
-              <MenuItem>Perfil</MenuItem>
-              <MenuItem>Configurações</MenuItem>
+              <MenuItem
+                bg={useColorModeValue("gray.50", "gray.900")}
+                _hover={{
+                  bg: activePathColor,
+                  // color: "white",
+                }}
+              >
+                Perfil
+              </MenuItem>
+              <MenuItem
+                bg={useColorModeValue("gray.50", "gray.900")}
+                _hover={{
+                  bg: activePathColor,
+                  // color: "white",
+                }}
+              >
+                Configurações
+              </MenuItem>
               <MenuDivider />
-              <MenuItem onClick={handleSignOut}>Sign out</MenuItem>
+              <MenuItem
+                bg={useColorModeValue("gray.50", "gray.900")}
+                _hover={{
+                  bg: activePathColor,
+                  // color: "white",
+                }}
+                onClick={handleSignOut}
+              >
+                Sign out
+              </MenuItem>
             </MenuList>
           </Menu>
         </Flex>
