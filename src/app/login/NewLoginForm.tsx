@@ -40,7 +40,7 @@ export default function NewLoginForm() {
 
   const [error, setError] = useState("");
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
+  const callbackUrl = searchParams.get("callbackUrl") || `${Routes.dashboard.link}`;
   const [showPassword, setShowPassword] = useState(false);
   const toast = useToast();
 
@@ -69,7 +69,7 @@ export default function NewLoginForm() {
         return;
       }
 
-      router.replace("dashboard");
+      router.replace("panel");
     } catch (error: any) {
       setLoading(false);
       setError(error);
