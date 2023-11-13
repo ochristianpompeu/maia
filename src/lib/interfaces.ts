@@ -29,3 +29,19 @@ export interface ServiceProps {
   initialRef?: React.LegacyRef<HTMLInputElement> | undefined;
   onClose?: () => void;
 }
+
+export interface ProfessionalProps {
+  _id?: string;
+  orgId?: string;
+  name?: string;
+  bio?: string;
+  email?: string;
+  function?: string;
+  image?: string;
+  services?: ServiceProps;
+  org?: OrgProps;
+  createdAt?: Date;
+  updatedAt?: Date;
+  initialRef?: React.LegacyRef<HTMLInputElement> | undefined;
+  onClose?: () => void;
+}
