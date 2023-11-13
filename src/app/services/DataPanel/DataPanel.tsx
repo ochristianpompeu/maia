@@ -17,7 +17,7 @@ interface ServicesDataPanelProps extends CardProps {
   handleDisplayDetail: (display: string) => void;
   service?: ServiceProps;
 }
-export function ServicesDataPanel({
+export function DataPanel({
   bgGradient,
   overflowY,
   w,

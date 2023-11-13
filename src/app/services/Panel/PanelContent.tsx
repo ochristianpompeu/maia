@@ -9,15 +9,15 @@ import {
   Tr,
 } from "@chakra-ui/react";
 import { useState } from "react";
-import { ServicesPanelContentItem } from "./ServicesPanelContentItem";
+import { PanelContentItem } from "./PanelContentItem";
 // import { OrgPanelContentItem } from "./ServicesPanelContentItem";
-interface ServicesPanelContentProps {
+interface PanelContentProps {
   handleDisplayDetail: (display: string) => void;
 }
 
-export function ServicesPanelContent({
+export function PanelContent({
   handleDisplayDetail,
-}: ServicesPanelContentProps) {
+}: PanelContentProps) {
   const [displayDetail, setDisplayDetail] = useState("block");
 
   return (
@@ -32,7 +32,7 @@ export function ServicesPanelContent({
           </Tr>
         </Thead>
         <Tbody>
-          <ServicesPanelContentItem handleDisplayDetail={handleDisplayDetail} />
+          <PanelContentItem handleDisplayDetail={handleDisplayDetail} />
         </Tbody>
         <Tfoot>
           <Tr>

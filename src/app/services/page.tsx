@@ -3,8 +3,8 @@ import SidebarDashboard from "@/components/SideBarDashboard/SidebarDashboard";
 import { ServiceProps } from "@/lib/interfaces";
 import { Flex, Stack, useColorModeValue } from "@chakra-ui/react";
 import { Fragment, useState } from "react";
-import { ServicesDataPanel } from "./ServicesDataPanel/ServicesDataPanel";
-import { ServicesPanel } from "./ServicesPanel/ServicesPanel";
+import { DataPanel } from "./DataPanel/DataPanel";
+import { Panel } from "./Panel/Panel";
 
 export default function Organization() {
   const bgBoxColor = useColorModeValue("gray.100", "gray.800");
@@ -41,11 +41,8 @@ export default function Organization() {
               w="full"
               maxW="full"
             >
-              <ServicesPanel
-                handleDisplayDetail={handleDisplayDetail}
-                shadow="none"
-              />
-              <ServicesDataPanel
+              <Panel handleDisplayDetail={handleDisplayDetail} shadow="none" />
+              <DataPanel
                 display={displayDetail}
                 handleDisplayDetail={handleDisplayDetail}
                 service={detailService}

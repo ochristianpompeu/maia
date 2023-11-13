@@ -20,12 +20,12 @@ import {
 import { ReactNode, useRef } from "react";
 import { RiServiceLine } from "react-icons/ri";
 import { AddDrawerContent } from "./AddDrawerContent";
-import { ServicesPanelContent } from "./ServicesPanelContent";
+import { PanelContent } from "./PanelContent";
 interface DataPanelProps extends CardProps {
   children?: ReactNode;
   handleDisplayDetail: (display: string) => void;
 }
-export function ServicesPanel({
+export function Panel({
   bgGradient,
   overflowY,
   w,
@@ -95,7 +95,7 @@ export function ServicesPanel({
       </Drawer>
 
       <CardBody h="100vh">
-        <ServicesPanelContent handleDisplayDetail={handleDisplayDetail} />
+        <PanelContent handleDisplayDetail={handleDisplayDetail} />
       </CardBody>
     </Card>
   );

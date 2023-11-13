@@ -15,7 +15,7 @@ import {
 } from "@chakra-ui/react";
 import { Fragment } from "react";
 
-interface ServiceDataPanelProps extends CardProps {
+interface DataPanelProps extends CardProps {
   service?: ServiceProps;
   onClose?: () => void;
 }
@@ -23,7 +23,7 @@ interface ServiceDataPanelProps extends CardProps {
 export function DetailDrawerContent({
   service,
   ...rest
-}: ServiceDataPanelProps) {
+}: DataPanelProps) {
   return (
     <Fragment>
       <DrawerCloseButton />

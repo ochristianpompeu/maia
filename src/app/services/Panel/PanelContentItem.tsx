@@ -10,7 +10,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { Fragment, use } from "react";
-import { DetailDrawerContent } from "../ServicesDataPanel/ServiceDetailDrawer";
+import { DetailDrawerContent } from "../DataPanel/DetailDrawer";
 import { EditAndDeleteButtons } from "./EditAndDeleteButtons";
 const fetchMap = new Map<string, Promise<any>>();
 
@@ -22,18 +22,21 @@ function queryClient(name: string, query: () => Promise<any>) {
   return fetchMap.get(name)!;
 }
 
-interface ServicesPanelContentItemProps {
+interface PanelContentItemProps {
   handleDisplayDetail: (display: string, service: ServiceProps) => void;
 }
 
-export function ServicesPanelContentItem({
+export function PanelContentItem({
   handleDisplayDetail,
-}: ServicesPanelContentItemProps) {
+}: PanelContentItemProps) {
   const { localServices } = use(
     queryClient("services", () =>
       fetch(applicationConfig.baseUrl + "/api/service", {
         method: "GET",
-        cache: "no-store",
+        // cache: "no-store",
+        next: {
+          tags: ["services"],
+        },
       }).then((res) => res.json())
     )
   );
