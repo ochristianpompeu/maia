@@ -17,7 +17,7 @@ export function OrgPanelContentItem() {
     queryClient("orgs", () =>
       fetch(applicationConfig.baseUrl + "/api/organization", {
         method: "GET",
-        cache: "no-store",
+        // cache: "no-store",
       }).then((res) => res.json())
     )
   );
