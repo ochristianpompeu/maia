@@ -35,6 +35,7 @@ export function AddDrawerContent(props: ServiceProps) {
   const [error, setError] = useState("");
   const toast = useToast();
   const router = useRouter();
+
   const { user } = use(
     queryUser("user", () =>
       fetch(applicationConfig.baseUrl + "/api/user/" + session?.user?.email, {
@@ -75,14 +76,6 @@ export function AddDrawerContent(props: ServiceProps) {
   function handleChangeSelect(event: ChangeEvent<HTMLSelectElement>) {
     const orgId = event.target.value;
     setOrgId(orgId);
-    // console.log(
-    //   "data: ",
-    //   JSON.stringify({
-    //     name,
-    //     description,
-    //     orgId,
-    //   })
-    // );
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -165,10 +158,11 @@ export function AddDrawerContent(props: ServiceProps) {
       </DrawerHeader>
 
       <DrawerBody>
-        <form id="createOrgForm" onSubmit={handleSubmit}>
-          <FormLabel htmlFor="owner">Select Owner</FormLabel>
+        <form id="createServiceForm" onSubmit={handleSubmit}>
+          <FormLabel htmlFor="orgId">Select Owner</FormLabel>
           <Select
             id="orgId"
+            name="orgId"
             textColor={mainColor}
             value={orgId}
             onChange={handleChangeSelect}
@@ -211,7 +205,7 @@ export function AddDrawerContent(props: ServiceProps) {
           colorScheme="purple"
           variant="outline"
           type="submit"
-          form="createOrgForm"
+          form="createServiceForm"
           onClick={props.onClose}
           isLoading={loading}
           leftIcon={<RiSaveLine />}

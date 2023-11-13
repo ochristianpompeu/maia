@@ -1,4 +1,5 @@
 import { applicationConfig } from "@/lib/config";
+import { query } from "@/lib/genericFunctions";
 import { ServiceProps } from "@/lib/interfaces";
 import {
   Drawer,
@@ -12,15 +13,6 @@ import {
 import { Fragment, use } from "react";
 import { DetailDrawerContent } from "../DataPanel/DetailDrawer";
 import { EditAndDeleteButtons } from "./EditAndDeleteButtons";
-const fetchMap = new Map<string, Promise<any>>();
-
-function queryClient(name: string, query: () => Promise<any>) {
-  if (!fetchMap.has(name)) {
-    fetchMap.set(name, query());
-  }
-
-  return fetchMap.get(name)!;
-}
 
 interface PanelContentItemProps {
   handleDisplayDetail: (display: string, service: ServiceProps) => void;
@@ -30,13 +22,13 @@ export function PanelContentItem({
   handleDisplayDetail,
 }: PanelContentItemProps) {
   const { localServices } = use(
-    queryClient("services", () =>
+    query("services", () =>
       fetch(applicationConfig.baseUrl + "/api/service", {
         method: "GET",
-        // cache: "no-store",
-        next: {
-          tags: ["services"],
-        },
+        cache: "no-store",
+        // next: {
+        //   tags: ["services"],
+        // },
       }).then((res) => res.json())
     )
   );

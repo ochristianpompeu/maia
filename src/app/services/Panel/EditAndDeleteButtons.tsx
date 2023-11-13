@@ -68,7 +68,7 @@ export function EditAndDeleteButtons(props: EditAndDeleteButtonsProps) {
           <EditDrawerContent
             name={props.service.name}
             description={props.service.description}
-            id={props.service._id as string}
+            _id={props.service._id as string}
             initialRef={firstField}
             onClose={handleCloseEditDrawer}
           />
@@ -85,7 +85,7 @@ export function EditAndDeleteButtons(props: EditAndDeleteButtonsProps) {
           <DeleteDrawerContent
             name={props.service.name}
             description={props.service.description}
-            id={props.service._id as string}
+            _id={props.service._id as string}
             initialRef={firstField}
             onClose={handleCloseDeleteDrawer}
           />

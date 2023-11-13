@@ -7,12 +7,17 @@ export async function PUT(
   { params }: { params: { id: string } }
 ) {
   const { id } = params;
-  const { newName: name, newDescription: description } = await request.json();
+  const {
+    newName: name,
+    newDescription: description,
+    newOrgId: orgId,
+  } = await request.json();
   await connectMongoDB();
 
   await Service.findByIdAndUpdate(id, {
     name: name,
     description: description,
+    orgId: orgId,
   });
   return NextResponse.json(
     {

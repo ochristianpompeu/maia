@@ -1,15 +1,15 @@
 "use client";
 import { OrgEditDrawerContentProps } from "@/lib/interfaces";
 import {
-    Button,
-    DrawerBody,
-    DrawerCloseButton,
-    DrawerFooter,
-    DrawerHeader,
-    FormLabel,
-    Input,
-    Textarea,
-    useToast,
+  Button,
+  DrawerBody,
+  DrawerCloseButton,
+  DrawerFooter,
+  DrawerHeader,
+  FormLabel,
+  Input,
+  Textarea,
+  useToast,
 } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import React, { Fragment, useState } from "react";
@@ -84,7 +84,7 @@ export function OrgDeleteDrawerContent(props: OrgDeleteDrawerContent) {
       </DrawerHeader>
 
       <DrawerBody>
-        <form id="alterOrgForm" onSubmit={handleSubmit}>
+        <form id="deleteOrgForm" onSubmit={handleSubmit}>
           <FormLabel pt="4" htmlFor="name">
             Nome da Empresa
           </FormLabel>
@@ -119,7 +119,7 @@ export function OrgDeleteDrawerContent(props: OrgDeleteDrawerContent) {
           colorScheme="red"
           variant="outline"
           type="submit"
-          form="alterOrgForm"
+          form="deleteOrgForm"
           onClick={props.onClose}
           isLoading={loading}
         >

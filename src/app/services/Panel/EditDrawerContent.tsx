@@ -1,5 +1,7 @@
 "use client";
-import { OrgEditDrawerContentProps } from "@/lib/interfaces";
+import { applicationConfig } from "@/lib/config";
+import { query } from "@/lib/genericFunctions";
+import { OrgProps, ServiceProps } from "@/lib/interfaces";
 import {
   Button,
   DrawerBody,
@@ -8,19 +10,50 @@ import {
   DrawerHeader,
   FormLabel,
   Input,
+  Select,
   Textarea,
   useToast,
 } from "@chakra-ui/react";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import React, { ChangeEvent, Fragment, useState } from "react";
+import React, { ChangeEvent, Fragment, use, useState } from "react";
+import { TbRefresh } from "react-icons/tb";
 
-export function EditDrawerContent(props: OrgEditDrawerContentProps) {
+export function EditDrawerContent(props: ServiceProps) {
+  const { data: session } = useSession();
   const [name, setName] = useState(props.name);
   const [description, setDescription] = useState(props.description);
+  const [orgId, setOrgId] = useState(props.orgId);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const toast = useToast();
   const router = useRouter();
+  const mainColor = "purple.600";
+
+  const { user } = use(
+    query("user", () =>
+      fetch(applicationConfig.baseUrl + "/api/user/" + session?.user?.email, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).then((res) => res.json())
+    )
+  );
+
+  const { orgs } = use(
+    query("orgs", () =>
+      fetch(
+        applicationConfig.baseUrl + "/api/organization/byUser/" + user!._id,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      ).then((res) => res.json())
+    )
+  );
 
   function handleChangeInput(event: ChangeEvent<HTMLInputElement>) {
     const name = event.target.value;
@@ -32,10 +65,16 @@ export function EditDrawerContent(props: OrgEditDrawerContentProps) {
     setDescription(description);
   }
 
+  function handleChangeSelect(event: ChangeEvent<HTMLSelectElement>) {
+    const orgId = event.target.value;
+    setOrgId(orgId);
+  }
+
   async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault;
+    e.preventDefault();
     const newName = name;
     const newDescription = description;
+    const newOrgId = orgId;
     if (!name) {
       setError("O campo nome não pode ficar em branco");
       toast({
@@ -51,7 +90,7 @@ export function EditDrawerContent(props: OrgEditDrawerContentProps) {
 
     try {
       setLoading(true);
-      const responseUpdateOrg = await fetch("/api/organization/" + props.id, {
+      const responseUpdateService = await fetch("/api/service/" + props._id, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -59,12 +98,13 @@ export function EditDrawerContent(props: OrgEditDrawerContentProps) {
         body: JSON.stringify({
           newName,
           newDescription,
+          newOrgId,
         }),
       });
 
       setLoading(false);
 
-      if (responseUpdateOrg.ok) {
+      if (responseUpdateService.ok) {
         toast({
           title: "Sucesso",
           description: "Dados atualizados com sucesso",
@@ -76,7 +116,7 @@ export function EditDrawerContent(props: OrgEditDrawerContentProps) {
 
         router.refresh();
       } else {
-        const responseError = await responseUpdateOrg.json();
+        const responseError = await responseUpdateService.json();
         setError(responseError);
         toast({
           title: "Ocorreu um erro",
@@ -104,32 +144,48 @@ export function EditDrawerContent(props: OrgEditDrawerContentProps) {
   return (
     <Fragment>
       <DrawerCloseButton />
-      <DrawerHeader textColor="purple.500" borderBottomWidth="1px">
-        Edição do cadastro da empresa
+      <DrawerHeader textColor={mainColor} borderBottomWidth="1px">
+        Edição do Cadastro do Serviço
       </DrawerHeader>
 
       <DrawerBody>
-        <form id="alterOrgForm" onSubmit={handleSubmit}>
-          <FormLabel pt="4" htmlFor="name">
-            Nome da Empresa
+        <form id="alterServiceForm" onSubmit={handleSubmit}>
+          <FormLabel textColor={mainColor} htmlFor="orgId">
+            Select Owner
+          </FormLabel>
+          <Select
+            id="orgId"
+            name="orgId"
+            textColor={mainColor}
+            value={orgId}
+            onChange={handleChangeSelect}
+          >
+            {orgs?.map((org: OrgProps) => (
+              <option key={org._id!} value={org._id!}>
+                {org.name!}
+              </option>
+            ))}
+          </Select>
+          <FormLabel textColor={mainColor} pt="4" htmlFor="name">
+            Nome do Serviço
           </FormLabel>
           <Input
             ref={props.initialRef}
             id="name"
             name="name"
-            placeholder="Nome da Empresa..."
-            focusBorderColor="purple.400"
+            placeholder="Nome do Serviço..."
+            focusBorderColor={mainColor}
             value={name}
             onChange={handleChangeInput}
           />
-          <FormLabel pt="4" htmlFor="description">
+          <FormLabel textColor={mainColor} pt="4" htmlFor="description">
             Descrição
           </FormLabel>
           <Textarea
             id="description"
             name="description"
-            placeholder="Digite uma descrição para a sua empresa..."
-            focusBorderColor="purple.400"
+            placeholder="Digite uma descrição para o serviços prestado..."
+            focusBorderColor={mainColor}
             value={description}
             size="md"
             onChange={handleChangeTextArea}
@@ -142,9 +198,10 @@ export function EditDrawerContent(props: OrgEditDrawerContentProps) {
           colorScheme="purple"
           variant="outline"
           type="submit"
-          form="alterOrgForm"
+          form="alterServiceForm"
           onClick={props.onClose}
           isLoading={loading}
+          leftIcon={<TbRefresh />}
         >
           Atualizar
         </Button>
