@@ -75,14 +75,14 @@ export function AddDrawerContent(props: ServiceProps) {
   function handleChangeSelect(event: ChangeEvent<HTMLSelectElement>) {
     const orgId = event.target.value;
     setOrgId(orgId);
-    console.log(
-      "data: ",
-      JSON.stringify({
-        name,
-        description,
-        orgId,
-      })
-    );
+    // console.log(
+    //   "data: ",
+    //   JSON.stringify({
+    //     name,
+    //     description,
+    //     orgId,
+    //   })
+    // );
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -173,7 +173,7 @@ export function AddDrawerContent(props: ServiceProps) {
             value={orgId}
             onChange={handleChangeSelect}
           >
-            {orgs.map((org: OrgProps) => (
+            {orgs?.map((org: OrgProps) => (
               <option key={org._id!} value={org._id!}>
                 {org.name!}
               </option>

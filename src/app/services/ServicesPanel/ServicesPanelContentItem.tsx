@@ -71,7 +71,7 @@ export function ServicesPanelContentItem({
 
   return (
     <Fragment>
-      {localServices.map((service: ServiceProps) => (
+      {localServices?.map((service: ServiceProps) => (
         <Tr
           key={service._id}
           _hover={{
