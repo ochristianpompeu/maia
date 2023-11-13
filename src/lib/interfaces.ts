@@ -26,6 +26,7 @@ export interface ServiceProps {
   createdAt?: Date;
   updatedAt?: Date;
   org?: OrgProps;
+  professionals?: ProfessionalProps[]
   initialRef?: React.LegacyRef<HTMLInputElement> | undefined;
   onClose?: () => void;
 }
@@ -38,7 +39,7 @@ export interface ProfessionalProps {
   email?: string;
   function?: string;
   image?: string;
-  services?: ServiceProps;
+  services?: ServiceProps[];
   org?: OrgProps;
   createdAt?: Date;
   updatedAt?: Date;

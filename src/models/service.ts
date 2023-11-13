@@ -15,6 +15,7 @@ const serviceSchema = new Schema(
       type: ObjectId,
       required: false,
     },
+    professionals: [{ type: ObjectId, required: false, ref: "Professional" }],
   },
   {
     timestamps: true,
