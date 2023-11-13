@@ -6,7 +6,7 @@ import { Fragment, useState } from "react";
 import { DataPanel } from "./DataPanel/DataPanel";
 import { Panel } from "./Panel/Panel";
 
-export default function Services() {
+export default function Professionals() {
   const bgBoxColor = useColorModeValue("gray.100", "gray.800");
   const [displayDetail, setDisplayDetail] = useState("none");
   const [detailService, setDetailService] = useState<ServiceProps>();
