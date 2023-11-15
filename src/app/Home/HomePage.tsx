@@ -19,7 +19,7 @@ export default function HomePage() {
       <Flex 
         direction="column"
         w={"full"}
-        h={"full"}
+        // h={"full"}
         justifyContent="space-between"
       >
         <NavBar />
