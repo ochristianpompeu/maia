@@ -24,7 +24,6 @@ export default function SidebarDashboard({ children }: SidebarDashboarProps) {
   return (
     <Box
       minH="100vh"
-      // bg={useColorModeValue("gray.100", "gray.900")}
       justifyContent="space-between"
     >
       <SidebarContent
@@ -37,7 +36,6 @@ export default function SidebarDashboard({ children }: SidebarDashboarProps) {
         onClose={onClose}
         returnFocusOnClose={false}
         onOverlayClick={onClose}
-        // size="sm"
       >
         <DrawerOverlay />
         <DrawerContent>
@@ -56,16 +54,9 @@ export default function SidebarDashboard({ children }: SidebarDashboarProps) {
         <Stack
           direction={{ base: "column", md: "row" }}
           spacing={[2, 8]}
-          // bg="gray.600"
-          // h="calc(100vh - 80px - 8px - 40px)"
           h="calc(100vh - 48px - 64px)"
           borderRadius="lg"
           overflowY="auto"
-          // w="full"
-          // h={{
-          //   base: "auto",
-          //   md: "full",
-          // }}
         >
           {children}
         </Stack>

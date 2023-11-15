@@ -38,13 +38,10 @@ export default function MobileNav({ onOpen, ...rest }: MobileProps) {
       height="12"
       alignItems="center"
       bg={useColorModeValue("gray.50", "gray.900")}
-      // borderBottomWidth="1px"
-      // borderBottomColor={useColorModeValue("gray.200", "gray.700")}
       justifyContent={{ base: "space-between", md: "flex-end" }}
       {...rest}
       position="static"
       pos="relative"
-      // bgColor="white"
     >
       <IconButton
         display={{ base: "flex", md: "none" }}
