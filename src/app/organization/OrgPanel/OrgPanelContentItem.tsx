@@ -1,23 +1,20 @@
 import { applicationConfig } from "@/lib/config";
+import { query } from "@/lib/genericFunctions";
 import { OrgProps } from "@/lib/interfaces";
 import { Box, Divider, HStack, Heading, Text } from "@chakra-ui/react";
 import { use } from "react";
 import { EditAndDeleteButtons } from "./EditAndDeleteButtons";
 const fetchMap = new Map<string, Promise<any>>();
 
-function queryClient(name: string, query: () => Promise<any>) {
-  if (!fetchMap.has(name)) {
-    fetchMap.set(name, query());
-  }
-
-  return fetchMap.get(name)!;
-}
 export function OrgPanelContentItem() {
   const { orgs } = use(
-    queryClient("orgs", () =>
+    query("orgs", () =>
       fetch(applicationConfig.baseUrl + "/api/organization", {
         method: "GET",
         // cache: "no-store",
+        next: {
+          revalidate: 300,
+        },
       }).then((res) => res.json())
     )
   );
