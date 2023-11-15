@@ -49,15 +49,15 @@ export default function HomeSignInForm() {
   }
 
   async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault;
-
+    e.preventDefault();
+    setError("")
     if (!formValues.name || !formValues.email || !formValues.password) {
       setError("Todos os campos são obrigatórios");
       toast({
-        title: "Ocorreu um erro",
-        description: error,
+        title: error ? error : "Todos os campos são obrigatórios",
+        description: error ? "" : "Todos os campos são obrigatórios",
         status: "error",
-        duration: 9000,
+        duration: 3000,
         isClosable: true,
         position: "top",
       });
@@ -80,10 +80,10 @@ export default function HomeSignInForm() {
         setError("Usuário já existe");
         setLoading(false);
         toast({
-          title: "Ocorreu um erro",
-          description: error,
+          title: error ? error : "Usuário já existe",
+          description: error ? "" : "Usuário já existe",
           status: "error",
-          duration: 9000,
+          duration: 3000,
           isClosable: true,
           position: "top",
         });
@@ -106,7 +106,7 @@ export default function HomeSignInForm() {
           name: "",
           password: "",
         });
-        router.push("/auth/login");
+        router.push(Routes.login.link);
       } else {
         const responseError = await responseSignIn.json();
         setError(responseError);
@@ -118,7 +118,7 @@ export default function HomeSignInForm() {
         title: "Ocorreu um erro",
         description: error,
         status: "error",
-        duration: 9000,
+        duration: 3000,
         isClosable: true,
         position: "top",
       });
@@ -128,7 +128,6 @@ export default function HomeSignInForm() {
   return (
     <VStack
       w="full"
-      // height="auto"
       h={{
         base: "auto",
         md: applicationConfig.staticHeight,
@@ -142,12 +141,10 @@ export default function HomeSignInForm() {
     >
       <Stack
         h="auto"
-        // spacing={4}
         mx="auto"
         alignItems="center"
         justifyContent="center"
         px={4}
-        // py={20}
         onSubmit={handleSubmit}
       >
         <Stack
@@ -155,7 +152,7 @@ export default function HomeSignInForm() {
           align={"center"}
           direction={{ base: "column", md: "row" }}
         >
-          <Heading fontSize={"4xl"}>Faça seu Cadastro</Heading>
+          <Heading textColor="purple.600" fontSize={"4xl"}>Faça seu Cadastro</Heading>
           <Heading fontSize={"4xl"}>✌️</Heading>
         </Stack>
         <FormControl id="name">
@@ -217,14 +214,14 @@ export default function HomeSignInForm() {
             colorScheme="purple"
             variant="outline"
             w="full"
-            leftIcon={<TiUserAddOutline />}
+            leftIcon={<TiUserAddOutline fontSize="20" />}
           >
             {loading ? <Spinner /> : "Cadastrar"}
           </Button>
         </Stack>
         <Text textAlign="end" w="full">
           Já possui cadastro?{" "}
-          <Link color={"blue.600"} as={NextLink} href={Routes.login.link}>
+          <Link color={"purple.600"} as={NextLink} href={Routes.login.link}>
             Clique aqui
           </Link>
         </Text>

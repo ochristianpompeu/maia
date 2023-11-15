@@ -11,7 +11,7 @@ import {
   VisuallyHidden,
 } from "@chakra-ui/react";
 import { ReactNode } from "react";
-import { FaInstagram, FaTwitter, FaYoutube } from "react-icons/fa";
+import { TbBrandGithubFilled, TbBrandYoutubeFilled } from "react-icons/tb";
 interface FooterProps extends BoxProps {}
 
 const SocialButton = ({
@@ -62,16 +62,13 @@ export default function Footer({ ...rest }: FooterProps) {
         justify={{ base: "center", md: "space-between" }}
         align={{ base: "center", md: "center" }}
       >
-        <Text>© 2022 Chakra Templates. All rights reserved</Text>
+        <Text>Maia Agendador de Serviços</Text>
         <Stack direction={"row"} spacing={6}>
-          <SocialButton label={"Twitter"} href={"#"}>
-            <FaTwitter />
+          <SocialButton label={"Twitter"} href={"https://github.com/ochristianpompeu/maia"}>
+            <TbBrandGithubFilled />
           </SocialButton>
-          <SocialButton label={"YouTube"} href={"#"}>
-            <FaYoutube />
-          </SocialButton>
-          <SocialButton label={"Instagram"} href={"#"}>
-            <FaInstagram />
+          <SocialButton label={"YouTube"} href={"https://www.youtube.com/channel/UC7E41zZsqVRcypu2iAGwjXQ"}>
+            <TbBrandYoutubeFilled />
           </SocialButton>
         </Stack>
       </Container>
