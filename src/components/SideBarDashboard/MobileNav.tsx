@@ -27,6 +27,8 @@ interface MobileProps extends FlexProps {
 export default function MobileNav({ onOpen, ...rest }: MobileProps) {
   const { data: session } = useSession();
   const activePathColor = useColorModeValue("purple.100", "purple.600");
+  const bgMenuItemColor = useColorModeValue("gray.50", "gray.900");
+  const menuListBorderColor = useColorModeValue("purple.200", "purple.700");
   function handleSignOut() {
     signOut();
   }
@@ -91,12 +93,9 @@ export default function MobileNav({ onOpen, ...rest }: MobileProps) {
                 </Box>
               </HStack>
             </MenuButton>
-            <MenuList
-              bg={useColorModeValue("gray.50", "gray.900")}
-              borderColor={useColorModeValue("purple.200", "purple.700")}
-            >
+            <MenuList bg={bgMenuItemColor} borderColor={menuListBorderColor}>
               <MenuItem
-                bg={useColorModeValue("gray.50", "gray.900")}
+                bg={bgMenuItemColor}
                 _hover={{
                   bg: activePathColor,
                   // color: "white",
@@ -105,7 +104,7 @@ export default function MobileNav({ onOpen, ...rest }: MobileProps) {
                 Perfil
               </MenuItem>
               <MenuItem
-                bg={useColorModeValue("gray.50", "gray.900")}
+                bg={bgMenuItemColor}
                 _hover={{
                   bg: activePathColor,
                   // color: "white",
@@ -115,7 +114,7 @@ export default function MobileNav({ onOpen, ...rest }: MobileProps) {
               </MenuItem>
               <MenuDivider />
               <MenuItem
-                bg={useColorModeValue("gray.50", "gray.900")}
+                bg={bgMenuItemColor}
                 _hover={{
                   bg: activePathColor,
                   // color: "white",

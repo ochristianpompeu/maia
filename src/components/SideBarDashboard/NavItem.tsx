@@ -22,6 +22,7 @@ export default function NavItem({
   const pathName = usePathname();
   const bgColor = useColorModeValue("gray.50", "gray.900");
   const activePathColor = useColorModeValue("purple.100", "purple.600");
+  const hoverColor = useColorModeValue("purple.200", "purple.700");
   return (
     <Box
       as="a"
@@ -31,18 +32,15 @@ export default function NavItem({
     >
       <Flex
         align="center"
-        p="2"
+        px="2"
+        py="1"
         mx="4"
         borderRadius="md"
         role="group"
         cursor="pointer"
         bgColor={href === pathName ? activePathColor : bgColor}
-        // borderColor={href === pathName ? activePathColor : bgColor}
-        // borderBottomColor="purple.800"
-        // borderBottom={href === pathName ? "1px" : 0}
         _hover={{
-          bg: activePathColor,
-          // color: "white",
+          bg: hoverColor,
         }}
         {...rest}
         fontWeight={href === pathName ? "bold" : "normal"}
@@ -52,9 +50,11 @@ export default function NavItem({
           <Icon
             mr="4"
             fontSize="16"
-            _groupHover={{
-              // color: "white",
-            }}
+            _groupHover={
+              {
+                // color: "white",
+              }
+            }
             fontWeight={href === pathName ? "bold" : "normal"}
             as={icon}
           />
