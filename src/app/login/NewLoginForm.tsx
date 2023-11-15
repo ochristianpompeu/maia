@@ -1,19 +1,22 @@
 "use client";
 
-import MaiaLogo from "@/components/Logo/MaiaLogo";
+import { Logo } from "@/components/Logo/Logo";
 import { Routes } from "@/lib/Links";
+import { applicationConfig } from "@/lib/config";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { Link } from "@chakra-ui/next-js";
 import {
   AbsoluteCenter,
   Box,
   Button,
+  ButtonGroup,
   Checkbox,
   Divider,
   Flex,
   FormControl,
   FormLabel,
   Heading,
+  IconButton,
   Input,
   InputGroup,
   InputRightElement,
@@ -29,6 +32,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { ChangeEvent, useState } from "react";
 import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
+import { SlLogin } from "react-icons/sl";
 
 export default function NewLoginForm() {
   const router = useRouter();
@@ -37,15 +41,18 @@ export default function NewLoginForm() {
     email: "",
     password: "",
   });
+  const mainColor = useColorModeValue("purple.600", "purple.100");
 
   const [error, setError] = useState("");
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || `${Routes.dashboard.link}`;
+  const callbackUrl =
+    searchParams.get("callbackUrl") || `${Routes.dashboard.link}`;
   const [showPassword, setShowPassword] = useState(false);
   const toast = useToast();
 
   async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault;
+    e.preventDefault();
+    setError("");
     try {
       setLoading(true);
 
@@ -55,14 +62,13 @@ export default function NewLoginForm() {
         password: formValues.password,
       });
 
-      setLoading(false);
       if (res?.error) {
         setError("Dados informados inválidos");
         toast({
-          title: "Ocorreu um erro",
-          description: error,
+          title: error ? error : "Dados informados inválidos",
+          description: error ? "" : "Dados informados inválidos",
           status: "error",
-          duration: 9000,
+          duration: 3000,
           isClosable: true,
           position: "top",
         });
@@ -74,10 +80,10 @@ export default function NewLoginForm() {
       setLoading(false);
       setError(error);
       toast({
-        title: "Ocorreu um erro",
-        description: error,
+        title: error ? error : "Ocorreu um erro",
+        description: !error && "Ocorreu um erro",
         status: "error",
-        duration: 9000,
+        duration: 3000,
         isClosable: true,
         position: "top",
       });
@@ -91,33 +97,43 @@ export default function NewLoginForm() {
 
   return (
     <Flex
-      align={"center"}
-      justify={"center"}
-      //   bg={useColorModeValue("gray.50", "gray.800")}
-      flex={1}
+      h={{
+        base: "auto",
+        md: applicationConfig.staticHeight,
+      }}
+      width="full"
+      overflowY="auto"
+      py={8}
     >
-      <Stack spacing={2} mx={"auto"} maxW={"lg"} py={12} px={6}>
+      <Stack w="full" spacing={2} mx={"auto"} maxW={"lg"} px="2">
         <Stack align={"center"}>
-          <MaiaLogo mb={10} boxSize={[12, 16, 20]} rounded="full" />
-          <Stack align={"center"}>
+          <Logo
+            boxSize={["16", "24", "32", "40"]}
+            p={["8", "12", "16", "20"]}
+            borderRadius="full"
+          />
+          <Stack direction={{ base: "column", md: "row" }} align={"center"}>
+            <Heading fontSize={["3xl", "4xl"]} textColor={mainColor}>
+              Entrar
+            </Heading>
             <Heading
               fontSize={"4xl"}
               textColor={useColorModeValue("purple.600", "purple.100")}
             >
-              Entrar ✌️
+              🤟
             </Heading>
           </Stack>
         </Stack>
         <Box
           rounded={"lg"}
-          bg={useColorModeValue("purple.50", "gray.700")}
+          bg={useColorModeValue("gray.50", "gray.700")}
           boxShadow={"lg"}
           p={8}
-          // w="sm"
+          overflowY="auto"
         >
           <Stack spacing={4} onSubmit={handleSubmit}>
             <FormControl id="email">
-              <FormLabel>Email</FormLabel>
+              <FormLabel textColor={mainColor}>Email</FormLabel>
               <Input
                 type="email"
                 name="email"
@@ -125,10 +141,11 @@ export default function NewLoginForm() {
                 value={formValues.email}
                 onChange={handleChange}
                 w={"full"}
+                focusBorderColor={mainColor}
               />
             </FormControl>
             <FormControl id="password">
-              <FormLabel>Senha</FormLabel>
+              <FormLabel textColor={mainColor}>Senha</FormLabel>
               <InputGroup>
                 <Input
                   type={showPassword ? "text" : "password"}
@@ -136,10 +153,12 @@ export default function NewLoginForm() {
                   name="password"
                   value={formValues.password}
                   onChange={handleChange}
+                  focusBorderColor={mainColor}
                 />
                 <InputRightElement h="full">
                   <Button
                     variant="ghost"
+                    colorScheme="purple"
                     onClick={() =>
                       setShowPassword((showPassword) => !showPassword)
                     }
@@ -149,33 +168,43 @@ export default function NewLoginForm() {
                 </InputRightElement>
               </InputGroup>
             </FormControl>
-            <Stack >
+            <Stack>
               <Stack
                 direction={{ base: "column", md: "row" }}
                 justifyContent={"space-between"}
                 w="full"
-                p={0}
+                px={0}
+                py="2"
               >
                 <Checkbox colorScheme="purple">Remember me</Checkbox>
-                <Text color={"blue.600"}>Esqueceu sua senha?</Text>
+                <Text color={mainColor}>Esqueceu sua senha?</Text>
               </Stack>
-              <Button
-                type="submit"
-                disabled={loading}
+              <ButtonGroup
+                variant="outline"
                 colorScheme="purple"
-                onClick={handleSubmit}
+                w="full"
+                justifyContent="right"
+                isAttached
               >
-                {loading ? <Spinner /> : "Entrar"}
-              </Button>
+                <Button
+                  type="submit"
+                  disabled={loading}
+                  variant="solid"
+                  onClick={handleSubmit}
+                  w="full"
+                >
+                  {loading ? <Spinner /> : "Entrar"}
+                </Button>
+                <IconButton aria-label="login button" icon={<SlLogin />} />
+              </ButtonGroup>
             </Stack>
-            <Divider />
-            <Text textAlign="right" w="full">
+            <Text textAlign="right" w="full" py="2">
               Não possui cadastro?{" "}
-              <Link color={"blue.600"} as={NextLink} href="/">
+              <Link color={mainColor} as={NextLink} href="/">
                 Clique aqui
               </Link>
             </Text>
-            <Box position="relative" paddingY="4">
+            <Box position="relative" paddingY="2">
               <Divider />
               <AbsoluteCenter
                 bg={useColorModeValue("purple.50", "gray.700")}
@@ -184,30 +213,42 @@ export default function NewLoginForm() {
                 Ou
               </AbsoluteCenter>
             </Box>
-            <Button
-              variant="outline"
-              onClick={() =>
-                signIn("google", {
-                  callbackUrl: Routes.dashboard.link,
-                })
-              }
-              leftIcon={<FcGoogle />}
-              colorScheme="red"
+            <Stack
+              justifyContent={{ base: "center", md: "space-between" }}
+              w="full"
+              direction={{ base: "column", md: "row" }}
+              spacing="4"
             >
-              Login com Google
-            </Button>
-            <Button
-              variant="outline"
-              onClick={() =>
-                signIn("github", {
-                  callbackUrl: Routes.dashboard.link,
-                })
-              }
-              leftIcon={<FaGithub />}
-              colorScheme="blackAlpha"
-            >
-              Login com Github
-            </Button>
+              <ButtonGroup
+                variant="outline"
+                colorScheme="red"
+                onClick={() =>
+                  signIn("google", {
+                    callbackUrl: Routes.dashboard.link,
+                  })
+                }
+                w="full"
+                isAttached
+              >
+                <IconButton aria-label="login com Google" icon={<FcGoogle />} />
+
+                <Button w="full">Login com Google</Button>
+              </ButtonGroup>
+              <ButtonGroup
+                colorScheme="purple"
+                w="full"
+                variant="outline"
+                onClick={() =>
+                  signIn("github", {
+                    callbackUrl: Routes.dashboard.link,
+                  })
+                }
+                isAttached
+              >
+                <IconButton aria-label="login com github" icon={<FaGithub />} />
+                <Button w={"full"}>Login com Github</Button>
+              </ButtonGroup>
+            </Stack>
           </Stack>
         </Box>
       </Stack>

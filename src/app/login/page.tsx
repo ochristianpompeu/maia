@@ -1,6 +1,7 @@
 import Footer from "@/components/Footer/Footer";
 import { Routes } from "@/lib/Links";
 import { authOptions } from "@/lib/auth";
+import { applicationConfig } from "@/lib/config";
 import { Container, Flex } from "@chakra-ui/react";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
@@ -15,7 +16,7 @@ export default async function Login() {
 
   return (
     <Container
-      maxW={"full"}
+      maxW="full"
       p={0}
       h={{
         base: "auto",
@@ -24,17 +25,16 @@ export default async function Login() {
     >
       <Flex
         direction="column"
-        w={"full"}
-        h={"full"}
+        w="full"
         justifyContent="space-between"
       >
         <NavBar />
         <Flex
+          w="full"
           h={{
             base: "auto",
-            md: "100vh",
+            md: applicationConfig.staticHeight,
           }}
-          // py={[0, 10, 20]}
           direction={{
             base: "column-reverse",
             md: "row",
