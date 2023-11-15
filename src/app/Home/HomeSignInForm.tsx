@@ -1,3 +1,4 @@
+import { applicationConfig } from "@/lib/config";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import {
   AbsoluteCenter,
@@ -15,7 +16,6 @@ import {
   Stack,
   Text,
   VStack,
-  useColorMode,
   useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
@@ -25,12 +25,10 @@ import { useRouter } from "next/navigation";
 import React, { ChangeEvent, useState } from "react";
 import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
+import { TiUserAddOutline } from "react-icons/ti";
 import { Routes } from "../../lib/Links";
 
 export default function HomeSignInForm() {
-  const { toggleColorMode, colorMode } = useColorMode();
-  const bgColor = useColorModeValue("gray.50", "whiteAlpha.50");
-
   const [formValues, setFormValues] = useState({
     name: "",
     email: "",
@@ -129,27 +127,36 @@ export default function HomeSignInForm() {
 
   return (
     <VStack
-      w={"full"}
-      h={"full"}
-      py={[2, 0]}
+      w="full"
+      // height="auto"
+      h={{
+        base: "auto",
+        md: applicationConfig.staticHeight,
+      }}
+      py={2}
       m={0}
       spacing={0}
-      justifyContent="center"
       flex={1}
+      overflowY="auto"
+      justifyContent={{ lg: "center" }}
     >
       <Stack
-        h="full"
-        spacing={4}
-        mx={"auto"}
-        // maxW={"full"}
+        h="auto"
+        // spacing={4}
+        mx="auto"
         alignItems="center"
         justifyContent="center"
-        px={6}
+        px={4}
         // py={20}
         onSubmit={handleSubmit}
       >
-        <Stack align={"center"}>
-          <Heading fontSize={"4xl"}>Faça seu Cadastro ✌️</Heading>
+        <Stack
+          py={4}
+          align={"center"}
+          direction={{ base: "column", md: "row" }}
+        >
+          <Heading fontSize={"4xl"}>Faça seu Cadastro</Heading>
+          <Heading fontSize={"4xl"}>✌️</Heading>
         </Stack>
         <FormControl id="name">
           <FormLabel>Nome</FormLabel>
@@ -203,17 +210,18 @@ export default function HomeSignInForm() {
             </InputRightElement>
           </InputGroup>
         </FormControl>
-        <Stack spacing={10} w="full">
+        <Stack w="full">
           <Button
             onClick={handleSubmit}
             type="submit"
             colorScheme="purple"
             variant="outline"
+            w="full"
+            leftIcon={<TiUserAddOutline />}
           >
             {loading ? <Spinner /> : "Cadastrar"}
           </Button>
         </Stack>
-        <Divider />
         <Text textAlign="end" w="full">
           Já possui cadastro?{" "}
           <Link color={"blue.600"} as={NextLink} href={Routes.login.link}>

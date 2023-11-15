@@ -26,7 +26,7 @@ export default function NavBar() {
       bg={useColorModeValue("gray.50", "gray.900")}
       color={useColorModeValue("gray.700", "gray.200")}
     >
-      <Container maxW="container.xl" p={0}>
+      <Container maxW="full" p={0}>
         <Flex h={12} alignItems={"center"} justifyContent={"space-between"}>
           <IconButton
             size={"md"}
