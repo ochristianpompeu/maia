@@ -15,5 +15,23 @@ export async function GET(
   const orgs = await Organization.find({
     userAdmin: userAdmin,
   });
+  if (!orgs) {
+    return NextResponse.json(
+      {
+        orgs: [
+          {
+            _id: "",
+            name: "",
+            description: "",
+            userAdmin: "",
+            createdAt: "",
+            updatedAt: "",
+            __v: 0,
+          },
+        ],
+      },
+      { status: 200 }
+    );
+  }
   return NextResponse.json({ orgs }, { status: 200 });
 }

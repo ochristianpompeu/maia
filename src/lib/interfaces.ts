@@ -1,3 +1,13 @@
+export interface UserProps{
+  _id?: string,
+  email?: string,
+  name?: string,
+  user?: string
+  password?: string,
+  createdAt?: Date,
+  updatedAt?: Date,
+  __v?: 0
+}
 export interface OrgProps {
   _id?: string | undefined;
   name?: string;

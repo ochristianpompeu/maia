@@ -11,10 +11,13 @@ export async function GET(
   }
 ) {
   const { email } = params;
+
   await connectMongoDB();
+  
   const user = await User.findOne({
     email: email,
   });
+
   return NextResponse.json(
     { user },
     {

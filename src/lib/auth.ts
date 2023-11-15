@@ -21,8 +21,8 @@ interface SignInProps {
 
 export const authOptions: NextAuthOptions = {
   pages: {
-    signIn: Routes.home.link, 
-    signOut: Routes.home.link
+    signIn: Routes.home.link,
+    signOut: Routes.home.link,
   },
   session: {
     strategy: "jwt", // Use JSON Web Tokens (JWT) for session management
@@ -46,7 +46,6 @@ export const authOptions: NextAuthOptions = {
           email: string;
           password: string;
         };
-        console.log("Credentials: ", email, password);
 
         try {
           await connectMongoDB();
@@ -102,6 +101,13 @@ export const authOptions: NextAuthOptions = {
       }
 
       return user;
+    },
+    jwt({ token, trigger, session }) {
+      if (trigger === "update" && session?.name) {
+        // Note, that `session` can be any arbitrary object, remember to validate it!
+        token.name = session.name;
+      }
+      return token;
     },
   },
 };

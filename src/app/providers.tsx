@@ -11,10 +11,12 @@ interface Props {
 
 export function Providers({ children }: Props) {
   return (
-    <SessionProvider>
-      <CacheProvider>
-        <ChakraProvider theme={theme}>{children}</ChakraProvider>
-      </CacheProvider>
-    </SessionProvider>
+    // <ErrorBoundary>
+      <SessionProvider>
+        <CacheProvider>
+          <ChakraProvider theme={theme}>{children}</ChakraProvider>
+        </CacheProvider>
+      </SessionProvider>
+    // </ErrorBoundary>
   );
 }
