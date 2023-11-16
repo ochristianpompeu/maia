@@ -2,7 +2,6 @@
 import SidebarDashboard from "@/components/SideBarDashboard/SidebarDashboard";
 import { Flex, Stack, useColorModeValue } from "@chakra-ui/react";
 import { Fragment, useState } from "react";
-import { UserProvider } from "../hooks/useUser";
 import { OrgPanel } from "./OrgPanel/OrgPanel";
 import { OrgPanelContent } from "./OrgPanel/OrgPanelContent";
 
@@ -28,7 +27,7 @@ export default function Organization() {
 
   return (
     <Fragment>
-      <UserProvider>
+      {/* <UserProvider> */}
         <SidebarDashboard>
           <Stack
             p={[0, 2]}
@@ -59,7 +58,7 @@ export default function Organization() {
             </Flex>
           </Stack>
         </SidebarDashboard>
-      </UserProvider>
+      {/* </UserProvider> */}
     </Fragment>
   );
 }

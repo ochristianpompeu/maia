@@ -14,6 +14,7 @@ const organizationSchema = new Schema(
     userAdmin: {
       type: ObjectId,
       required: false,
+      ref: "User"
     },
   },
   { timestamps: true }

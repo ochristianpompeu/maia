@@ -1,49 +1,36 @@
 "use client";
-import { applicationConfig } from "@/lib/config";
+import { useUser } from "@/app/hooks/useUser";
 import { OrgAddDrawerContentProps } from "@/lib/interfaces";
 import {
   Button,
+  ButtonGroup,
   DrawerBody,
   DrawerCloseButton,
   DrawerFooter,
   DrawerHeader,
   FormLabel,
+  IconButton,
   Input,
   Textarea,
+  useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { ChangeEvent, Fragment, use, useState } from "react";
+import { ChangeEvent, Fragment, useState } from "react";
+import { BsBuildingFillAdd } from "react-icons/bs";
 
-const fetchMap = new Map<string, Promise<any>>();
-function queryUser(name: string, query: () => Promise<any>) {
-  if (!fetchMap.has(name)) {
-    fetchMap.set(name, query());
-  }
-
-  return fetchMap.get(name)!;
-}
 
 export function OrgAddDrawerContent(props: OrgAddDrawerContentProps) {
-  const { data: session } = useSession();
   const [name, setName] = useState(props.name);
   const [description, setDescription] = useState(props.description);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const textColor = useColorModeValue("purple.600", "purple.100");
+  const borderColor = "purple.600";
   const toast = useToast();
   const router = useRouter();
-  
-  const { user } = use(
-    queryUser("user", () =>
-      fetch(applicationConfig.baseUrl + "/api/user/" + session?.user?.email, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }).then((res) => res.json())
-    )
-  );
+
+  const {user} = useUser();
 
   function handleChangeInput(event: ChangeEvent<HTMLInputElement>) {
     const name = event.target.value;
@@ -56,8 +43,9 @@ export function OrgAddDrawerContent(props: OrgAddDrawerContentProps) {
   }
 
   async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault;
+    e.preventDefault();
     const userAdmin = user._id;
+    setLoading(true);
 
     if (!name) {
       setError("O campo nome não pode ficar em branco");
@@ -131,13 +119,13 @@ export function OrgAddDrawerContent(props: OrgAddDrawerContentProps) {
   return (
     <Fragment>
       <DrawerCloseButton />
-      <DrawerHeader textColor="purple.500" borderBottomWidth="1px">
+      <DrawerHeader textColor={textColor} borderBottomWidth="1px">
         Cadastre sua empresa
       </DrawerHeader>
 
       <DrawerBody>
         <form id="createOrgForm" onSubmit={handleSubmit}>
-          <FormLabel textColor="purple.600" pt="4" htmlFor="name">
+          <FormLabel textColor={textColor} pt="4" htmlFor="name">
             Nome da Empresa
           </FormLabel>
           <Input
@@ -145,18 +133,18 @@ export function OrgAddDrawerContent(props: OrgAddDrawerContentProps) {
             id="name"
             name="name"
             placeholder="Nome da Empresa..."
-            focusBorderColor="purple.600"
+            focusBorderColor={borderColor}
             onChange={handleChangeInput}
             value={name}
           />
-          <FormLabel textColor="purple.600" pt="4" htmlFor="description">
+          <FormLabel textColor={textColor} pt="4" htmlFor="description">
             Descrição
           </FormLabel>
           <Textarea
             id="description"
             name="description"
             placeholder="Digite uma descrição para a sua empresa..."
-            focusBorderColor="purple.400"
+            focusBorderColor={borderColor}
             value={description}
             size="md"
             onChange={handleChangeTextArea}
@@ -165,16 +153,27 @@ export function OrgAddDrawerContent(props: OrgAddDrawerContentProps) {
       </DrawerBody>
 
       <DrawerFooter>
-        <Button
+        <ButtonGroup
           colorScheme="purple"
           variant="outline"
-          type="submit"
-          form="createOrgForm"
           onClick={props.onClose}
-          isLoading={loading}
+          isAttached
         >
-          Salvar
-        </Button>
+          <IconButton
+            type="submit"
+            form="createOrgForm"
+            aria-label="Save Org"
+            icon={<BsBuildingFillAdd />}            
+          />
+          <Button
+            type="submit"
+            form="createOrgForm"
+            onClick={props.onClose}
+            isLoading={loading}
+          >
+            Salvar
+          </Button>
+        </ButtonGroup>
       </DrawerFooter>
     </Fragment>
   );

@@ -1,13 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useOrgs } from "@/app/hooks/useOrgs";
-import { useUser } from "@/app/hooks/useUser";
 import { OrgProps } from "@/lib/interfaces";
 import { Box, Divider, HStack, Heading, Text } from "@chakra-ui/react";
 import { EditAndDeleteButtons } from "./EditAndDeleteButtons";
 
 export function OrgPanelContentItem() {
-  const user = useUser();
   const { orgs } = useOrgs();
+  console.log("Orgs: ", orgs);
 
   return (
     <>
@@ -25,8 +24,7 @@ export function OrgPanelContentItem() {
           <Divider pb="4" />
         </Box>
       ))}
-      {/* {JSON.stringify(user)}
-      {JSON.stringify(orgs)} */}
+      {JSON.stringify(orgs)}
     </>
   );
 }

@@ -35,7 +35,7 @@ export function OrgPanel({
     onOpen: onOpenAddOrg,
     onClose: onCloseAddOrg,
   } = useDisclosure();
-  
+
   const firstField = useRef() as any;
 
   function handleOnAddClose() {
