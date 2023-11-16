@@ -61,6 +61,8 @@ export function PanelContentItem({
             bg: "purple.100",
           }}
           borderRadius="sm"
+          p={0}
+          m={0}
         >
           <Td
             _hover={{

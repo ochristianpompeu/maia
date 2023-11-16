@@ -1,59 +1,41 @@
 "use client";
-import { applicationConfig } from "@/lib/config";
-import { query } from "@/lib/genericFunctions";
+import { useOrgs } from "@/app/hooks/useOrgs";
+import { useServices } from "@/app/hooks/useServices";
 import { OrgProps, ServiceProps } from "@/lib/interfaces";
 import {
   Button,
+  ButtonGroup,
   DrawerBody,
   DrawerCloseButton,
   DrawerFooter,
   DrawerHeader,
   FormLabel,
+  IconButton,
   Input,
   Select,
   Textarea,
   useToast,
 } from "@chakra-ui/react";
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import React, { ChangeEvent, Fragment, use, useState } from "react";
+import React, { ChangeEvent, Fragment, useState } from "react";
 import { TbRefresh } from "react-icons/tb";
 
 export function EditDrawerContent(props: ServiceProps) {
-  const { data: session } = useSession();
   const [name, setName] = useState(props.name);
   const [description, setDescription] = useState(props.description);
-  const [orgId, setOrgId] = useState(props.orgId);
+  const [orgId, setOrgId] = useState(props.org?._id);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const { orgs } = useOrgs();
+  const { updateServices } = useServices();
   const toast = useToast();
   const router = useRouter();
   const mainColor = "purple.600";
 
-  const { user } = use(
-    query("user", () =>
-      fetch(applicationConfig.baseUrl + "/api/user/" + session?.user?.email, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }).then((res) => res.json())
-    )
-  );
-
-  const { orgs } = use(
-    query("orgs", () =>
-      fetch(
-        applicationConfig.baseUrl + "/api/organization/byUser/" + user!._id,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      ).then((res) => res.json())
-    )
-  );
+  function handleServices() {
+    updateServices();
+    router.refresh();
+  }
 
   function handleChangeInput(event: ChangeEvent<HTMLInputElement>) {
     const name = event.target.value;
@@ -81,7 +63,7 @@ export function EditDrawerContent(props: ServiceProps) {
         title: "Ocorreu um erro",
         description: error,
         status: "error",
-        duration: 9000,
+        duration: 3000,
         isClosable: true,
         position: "top",
       });
@@ -90,7 +72,7 @@ export function EditDrawerContent(props: ServiceProps) {
 
     try {
       setLoading(true);
-      const responseUpdateService = await fetch("/api/service/" + props._id, {
+      const responseUpdate = await fetch("/api/service/" + props._id, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -104,28 +86,29 @@ export function EditDrawerContent(props: ServiceProps) {
 
       setLoading(false);
 
-      if (responseUpdateService.ok) {
+      if (responseUpdate.ok) {
         toast({
           title: "Sucesso",
           description: "Dados atualizados com sucesso",
           status: "success",
-          duration: 9000,
+          duration: 3000,
           isClosable: true,
           position: "top",
         });
 
-        router.refresh();
+        handleServices();
       } else {
-        const responseError = await responseUpdateService.json();
+        const responseError = await responseUpdate.json();
         setError(responseError);
         toast({
           title: "Ocorreu um erro",
           description: error,
           status: "error",
-          duration: 9000,
+          duration: 3000,
           isClosable: true,
           position: "top",
         });
+        handleServices();
       }
     } catch (erro: any) {
       setLoading(false);
@@ -134,10 +117,11 @@ export function EditDrawerContent(props: ServiceProps) {
         title: "Ocorreu um erro",
         description: error,
         status: "error",
-        duration: 9000,
+        duration: 3000,
         isClosable: true,
         position: "top",
       });
+      handleServices();
     }
   }
 
@@ -149,9 +133,9 @@ export function EditDrawerContent(props: ServiceProps) {
       </DrawerHeader>
 
       <DrawerBody>
-        <form id="alterServiceForm" onSubmit={handleSubmit}>
+        <form id="alterForm" onSubmit={handleSubmit}>
           <FormLabel textColor={mainColor} htmlFor="orgId">
-            Select Owner
+            Selcione a Empresa
           </FormLabel>
           <Select
             id="orgId"
@@ -193,18 +177,25 @@ export function EditDrawerContent(props: ServiceProps) {
         </form>
       </DrawerBody>
 
-      <DrawerFooter>
-        <Button
-          colorScheme="purple"
-          variant="outline"
-          type="submit"
-          form="alterServiceForm"
-          onClick={props.onClose}
-          isLoading={loading}
-          leftIcon={<TbRefresh />}
-        >
-          Atualizar
-        </Button>
+      <DrawerFooter borderTopWidth="1px">
+        <ButtonGroup colorScheme="purple" variant="outline" isAttached>
+          <IconButton
+            aria-label="alter service"
+            type="submit"
+            form="alterForm"
+            onClick={props.onClose}
+            isLoading={loading}
+            icon={<TbRefresh />}
+          />
+          <Button
+            type="submit"
+            form="alterForm"
+            onClick={props.onClose}
+            isLoading={loading}
+          >
+            Atualizar
+          </Button>
+        </ButtonGroup>
       </DrawerFooter>
     </Fragment>
   );

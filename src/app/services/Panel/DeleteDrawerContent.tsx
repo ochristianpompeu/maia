@@ -1,12 +1,15 @@
 "use client";
+import { useServices } from "@/app/hooks/useServices";
 import { ServiceProps } from "@/lib/interfaces";
 import {
   Button,
+  ButtonGroup,
   DrawerBody,
   DrawerCloseButton,
   DrawerFooter,
   DrawerHeader,
   FormLabel,
+  IconButton,
   Input,
   Select,
   Textarea,
@@ -25,6 +28,12 @@ export function DeleteDrawerContent(props: ServiceProps) {
   const mainColor = "red.600";
   const toast = useToast();
   const router = useRouter();
+  const { updateServices } = useServices();
+
+  function handleServices() {
+    updateServices();
+    router.refresh();
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -49,8 +58,7 @@ export function DeleteDrawerContent(props: ServiceProps) {
           isClosable: true,
           position: "top",
         });
-        router.refresh();
-        return;
+        handleServices();
       } else {
         const responseError = await responseDeleteService.json();
         setError(responseError);
@@ -62,7 +70,7 @@ export function DeleteDrawerContent(props: ServiceProps) {
           isClosable: true,
           position: "top",
         });
-        return;
+        handleServices();
       }
     } catch (erro: any) {
       setLoading(false);
@@ -75,7 +83,7 @@ export function DeleteDrawerContent(props: ServiceProps) {
         isClosable: true,
         position: "top",
       });
-      return;
+      handleServices();
     }
   }
 
@@ -87,13 +95,13 @@ export function DeleteDrawerContent(props: ServiceProps) {
         textColor="white"
         borderBottomWidth="1px"
       >
-        Deletar Empresa?
+        Deletar Serviço?
       </DrawerHeader>
 
       <DrawerBody>
         <form id="deleteForm" onSubmit={handleSubmit}>
           <FormLabel textColor={mainColor} htmlFor="orgId">
-            Select Owner
+            Empresa
           </FormLabel>
           <Select
             id="orgId"
@@ -123,28 +131,35 @@ export function DeleteDrawerContent(props: ServiceProps) {
           <Textarea
             id="description"
             name="description"
-            focusBorderColor="red.400"
+            focusBorderColor={mainColor}
             value={description}
             size="md"
             disabled
-            borderColor="red.400"
+            borderColor={mainColor}
             variant="filled"
           />
         </form>
       </DrawerBody>
 
-      <DrawerFooter>
-        <Button
-          colorScheme="red"
-          variant="outline"
-          type="submit"
-          form="deleteForm"
-          onClick={props.onClose}
-          isLoading={loading}
-          leftIcon={<TbTrash />}
-        >
-          Deletar
-        </Button>
+      <DrawerFooter borderTopWidth="1px" borderTopColor={mainColor}>
+        <ButtonGroup colorScheme="red" variant="outline" isAttached>
+          <IconButton
+            aria-label="delete service"
+            form="deleteForm"
+            type="submit"
+            onClick={props.onClose}
+            isLoading={loading}
+            icon={<TbTrash />}
+          />
+          <Button
+            type="submit"
+            form="deleteForm"
+            onClick={props.onClose}
+            isLoading={loading}
+          >
+            Deletar
+          </Button>
+        </ButtonGroup>
       </DrawerFooter>
     </Fragment>
   );

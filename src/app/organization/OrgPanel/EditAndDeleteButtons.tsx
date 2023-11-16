@@ -39,18 +39,14 @@ export function EditAndDeleteButtons(props: EditAndDeleteButtonsProps) {
 
   return (
     <>
-      <ButtonGroup>
+      <ButtonGroup variant="outline" isAttached size={["sm", "xs"]}>
         <IconButton
-          size="sm"
-          variant="outline"
           colorScheme="purple"
           aria-label="Edit"
           onClick={onEditOpen}
           icon={<TbEdit />}
         />
         <IconButton
-          size="sm"
-          variant="outline"
           colorScheme="orange"
           aria-label="Delete"
           onClick={onDeleteOpen}
@@ -58,7 +54,7 @@ export function EditAndDeleteButtons(props: EditAndDeleteButtonsProps) {
         />
       </ButtonGroup>
       <Drawer
-        size={{ base: "full", md: "md" }}
+        size={{ base: "xs", md: "sm" }}
         isOpen={isEditOpen}
         onClose={onEditClose}
         initialFocusRef={firstField}
@@ -75,7 +71,7 @@ export function EditAndDeleteButtons(props: EditAndDeleteButtonsProps) {
         </DrawerContent>
       </Drawer>
       <Drawer
-        size={{ base: "full", md: "md" }}
+        size={{ base: "xs", md: "sm" }}
         isOpen={isDeleteOpen}
         onClose={onDeleteClose}
         initialFocusRef={firstField}

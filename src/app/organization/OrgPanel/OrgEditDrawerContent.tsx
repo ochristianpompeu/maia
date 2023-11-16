@@ -2,17 +2,20 @@
 import { OrgEditDrawerContentProps } from "@/lib/interfaces";
 import {
   Button,
+  ButtonGroup,
   DrawerBody,
   DrawerCloseButton,
   DrawerFooter,
   DrawerHeader,
   FormLabel,
+  IconButton,
   Input,
   Textarea,
   useToast,
 } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import React, { ChangeEvent, Fragment, useState } from "react";
+import { TbRefresh } from "react-icons/tb";
 
 export function OrgEditDrawerContent(props: OrgEditDrawerContentProps) {
   const [name, setName] = useState(props.name);
@@ -21,6 +24,7 @@ export function OrgEditDrawerContent(props: OrgEditDrawerContentProps) {
   const [loading, setLoading] = useState(false);
   const toast = useToast();
   const router = useRouter();
+  const mainColor = "purple.600";
 
   function handleChangeInput(event: ChangeEvent<HTMLInputElement>) {
     const name = event.target.value;
@@ -42,7 +46,7 @@ export function OrgEditDrawerContent(props: OrgEditDrawerContentProps) {
         title: "Ocorreu um erro",
         description: error,
         status: "error",
-        duration: 9000,
+        duration: 3000,
         isClosable: true,
         position: "top",
       });
@@ -69,7 +73,7 @@ export function OrgEditDrawerContent(props: OrgEditDrawerContentProps) {
           title: "Sucesso",
           description: "Dados atualizados com sucesso",
           status: "success",
-          duration: 9000,
+          duration: 3000,
           isClosable: true,
           position: "top",
         });
@@ -82,7 +86,7 @@ export function OrgEditDrawerContent(props: OrgEditDrawerContentProps) {
           title: "Ocorreu um erro",
           description: error,
           status: "error",
-          duration: 9000,
+          duration: 3000,
           isClosable: true,
           position: "top",
         });
@@ -94,7 +98,7 @@ export function OrgEditDrawerContent(props: OrgEditDrawerContentProps) {
         title: "Ocorreu um erro",
         description: error,
         status: "error",
-        duration: 9000,
+        duration: 3000,
         isClosable: true,
         position: "top",
       });
@@ -109,8 +113,8 @@ export function OrgEditDrawerContent(props: OrgEditDrawerContentProps) {
       </DrawerHeader>
 
       <DrawerBody>
-        <form id="alterOrgForm" onSubmit={handleSubmit}>
-          <FormLabel pt="4" htmlFor="name">
+        <form id="alterForm" onSubmit={handleSubmit}>
+          <FormLabel pt="4" htmlFor="name" textColor={mainColor}>
             Nome da Empresa
           </FormLabel>
           <Input
@@ -118,18 +122,18 @@ export function OrgEditDrawerContent(props: OrgEditDrawerContentProps) {
             id="name"
             name="name"
             placeholder="Nome da Empresa..."
-            focusBorderColor="purple.400"
+            focusBorderColor={mainColor}
             value={name}
             onChange={handleChangeInput}
           />
-          <FormLabel pt="4" htmlFor="description">
+          <FormLabel pt="4" htmlFor="description" textColor={mainColor}>
             Descrição
           </FormLabel>
           <Textarea
             id="description"
             name="description"
             placeholder="Digite uma descrição para a sua empresa..."
-            focusBorderColor="purple.400"
+            focusBorderColor={mainColor}
             value={description}
             size="md"
             onChange={handleChangeTextArea}
@@ -137,17 +141,25 @@ export function OrgEditDrawerContent(props: OrgEditDrawerContentProps) {
         </form>
       </DrawerBody>
 
-      <DrawerFooter>
-        <Button
-          colorScheme="purple"
-          variant="outline"
-          type="submit"
-          form="alterOrgForm"
-          onClick={props.onClose}
-          isLoading={loading}
-        >
-          Atualizar
-        </Button>
+      <DrawerFooter borderTopWidth="1px">
+        <ButtonGroup colorScheme="purple" variant="outline" isAttached>
+          <IconButton
+            aria-label="alter service"
+            type="submit"
+            form="alterForm"
+            onClick={props.onClose}
+            isLoading={loading}
+            icon={<TbRefresh />}
+          />
+          <Button
+            type="submit"
+            form="alterForm"
+            onClick={props.onClose}
+            isLoading={loading}
+          >
+            Atualizar
+          </Button>
+        </ButtonGroup>
       </DrawerFooter>
     </Fragment>
   );

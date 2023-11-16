@@ -15,15 +15,15 @@ interface PanelContentProps {
   handleDisplayDetail: (display: string) => void;
 }
 
-export function PanelContent({
-  handleDisplayDetail,
-}: PanelContentProps) {
+export function PanelContent({ handleDisplayDetail }: PanelContentProps) {
   const [displayDetail, setDisplayDetail] = useState("block");
 
   return (
-    <TableContainer>
-      <Table>
-        <TableCaption>Imperial to metric conversion factors</TableCaption>
+    <TableContainer borderRadius="md" overflowY="auto">
+      <Table size="sm" overflowY="auto">
+        <TableCaption>
+          Serviços relacionados às Empresas do usuário
+        </TableCaption>
         <Thead>
           <Tr>
             <Th>Empresa</Th>

@@ -78,6 +78,7 @@ export function OrgPanel({
             colorScheme="purple"
             display={{ base: "none", md: "inline-flex" }}
             isAttached
+            size="sm"
           >
             <IconButton
               onClick={onOpenAddOrg}

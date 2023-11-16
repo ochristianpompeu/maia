@@ -1,6 +1,5 @@
 import { useServices } from "@/app/hooks/useServices";
 import { PanelAndMenuIcons } from "@/lib/Links";
-import { applicationConfig } from "@/lib/config";
 import { AddIcon } from "@chakra-ui/icons";
 import {
   Button,
@@ -60,7 +59,7 @@ export function Panel({
       w="full"
       {...rest}
       m={0}
-      height={{ base: "auto", md: applicationConfig.staticHeightPanel }}
+      // height={{ base: "auto", md: applicationConfig.staticHeightPanel }}
       borderRadius="md"
     >
       <CardHeader borderRadius="md" w="full" p="2" bg={bgCargHeader}>
@@ -82,6 +81,7 @@ export function Panel({
             colorScheme="purple"
             display={{ base: "none", md: "inline-flex" }}
             isAttached
+            size="sm"
           >
             <IconButton
               onClick={onOpenAdd}
@@ -113,7 +113,7 @@ export function Panel({
         </DrawerContent>
       </Drawer>
 
-      <CardBody overflowY="auto">
+      <CardBody borderRadius="md">
         <PanelContent handleDisplayDetail={handleDisplayDetail} />
       </CardBody>
     </Card>

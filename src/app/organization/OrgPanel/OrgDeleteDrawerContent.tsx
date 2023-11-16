@@ -2,17 +2,20 @@
 import { OrgEditDrawerContentProps } from "@/lib/interfaces";
 import {
   Button,
+  ButtonGroup,
   DrawerBody,
   DrawerCloseButton,
   DrawerFooter,
   DrawerHeader,
   FormLabel,
+  IconButton,
   Input,
   Textarea,
   useToast,
 } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import React, { Fragment, useState } from "react";
+import { TbTrash } from "react-icons/tb";
 
 interface OrgDeleteDrawerContent extends OrgEditDrawerContentProps {}
 
@@ -21,11 +24,12 @@ export function OrgDeleteDrawerContent(props: OrgDeleteDrawerContent) {
   const [description, setDescription] = useState(props.description);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const mainColor = "red.600";
   const toast = useToast();
   const router = useRouter();
 
   async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault;
+    e.preventDefault();
 
     try {
       setLoading(true);
@@ -79,7 +83,7 @@ export function OrgDeleteDrawerContent(props: OrgDeleteDrawerContent) {
   return (
     <Fragment>
       <DrawerCloseButton color="white" />
-      <DrawerHeader bgColor="red.400" textColor="white" borderBottomWidth="1px">
+      <DrawerHeader bgColor={mainColor} textColor="white" borderBottomWidth="1px">
         Deletar Empresa?
       </DrawerHeader>
 
@@ -92,10 +96,10 @@ export function OrgDeleteDrawerContent(props: OrgDeleteDrawerContent) {
             ref={props.initialRef}
             id="name"
             name="name"
-            focusBorderColor="red.400"
+            focusBorderColor={mainColor}
             value={name}
             disabled
-            borderColor="red.400"
+            borderColor={mainColor}
             variant="filled"
           />
           <FormLabel pt="4" htmlFor="description">
@@ -104,27 +108,35 @@ export function OrgDeleteDrawerContent(props: OrgDeleteDrawerContent) {
           <Textarea
             id="description"
             name="description"
-            focusBorderColor="red.400"
+            focusBorderColor={mainColor}
             value={description}
             size="md"
             disabled
-            borderColor="red.400"
+            borderColor={mainColor}
             variant="filled"
           />
         </form>
       </DrawerBody>
 
-      <DrawerFooter>
-        <Button
-          colorScheme="red"
-          variant="outline"
-          type="submit"
-          form="deleteOrgForm"
-          onClick={props.onClose}
-          isLoading={loading}
-        >
-          Deletar
-        </Button>
+      <DrawerFooter borderTopWidth="1px" borderTopColor={mainColor}>
+        <ButtonGroup colorScheme="red" variant="outline" isAttached>
+          <IconButton
+            aria-label="delete org"
+            form="deleteOrgForm"
+            type="submit"
+            onClick={props.onClose}
+            isLoading={loading}
+            icon={<TbTrash />}
+          />
+          <Button
+            type="submit"
+            form="deleteOrgForm"
+            onClick={props.onClose}
+            isLoading={loading}
+          >
+            Deletar
+          </Button>
+        </ButtonGroup>
       </DrawerFooter>
     </Fragment>
   );
