@@ -33,6 +33,7 @@ export function OrgAddDrawerContent(props: OrgAddDrawerContentProps) {
   const [error, setError] = useState("");
   const toast = useToast();
   const router = useRouter();
+  
   const { user } = use(
     queryUser("user", () =>
       fetch(applicationConfig.baseUrl + "/api/user/" + session?.user?.email, {
@@ -64,7 +65,7 @@ export function OrgAddDrawerContent(props: OrgAddDrawerContentProps) {
         title: "Ocorreu um erro",
         description: error,
         status: "error",
-        duration: 9000,
+        duration: 3000,
         isClosable: true,
         position: "top",
       });
@@ -95,7 +96,7 @@ export function OrgAddDrawerContent(props: OrgAddDrawerContentProps) {
           title: "Sucesso",
           description: "Empresa cadastrada com sucesso",
           status: "success",
-          duration: 9000,
+          duration: 3000,
           isClosable: true,
           position: "top",
         });
@@ -108,7 +109,7 @@ export function OrgAddDrawerContent(props: OrgAddDrawerContentProps) {
           title: "Ocorreu um erro",
           description: error,
           status: "error",
-          duration: 9000,
+          duration: 3000,
           isClosable: true,
           position: "top",
         });
@@ -120,7 +121,7 @@ export function OrgAddDrawerContent(props: OrgAddDrawerContentProps) {
         title: "Ocorreu um erro",
         description: error,
         status: "error",
-        duration: 9000,
+        duration: 3000,
         isClosable: true,
         position: "top",
       });
