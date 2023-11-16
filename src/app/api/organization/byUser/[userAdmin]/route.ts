@@ -12,26 +12,11 @@ export async function GET(
 ) {
   const { userAdmin } = params;
   await connectMongoDB();
+  if (userAdmin === undefined) {
+    return NextResponse.json({ orgs: {} }, { status: 200 });
+  }
   const orgs = await Organization.find({
     userAdmin: userAdmin,
   });
-  if (!orgs) {
-    return NextResponse.json(
-      {
-        orgs: [
-          {
-            _id: "",
-            name: "",
-            description: "",
-            userAdmin: "",
-            createdAt: "",
-            updatedAt: "",
-            __v: 0,
-          },
-        ],
-      },
-      { status: 200 }
-    );
-  }
   return NextResponse.json({ orgs }, { status: 200 });
 }

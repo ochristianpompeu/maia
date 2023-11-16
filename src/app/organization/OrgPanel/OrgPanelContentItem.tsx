@@ -1,29 +1,37 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import { UserContext } from "@/app/contexts/userContext";
 import { useOrgs } from "@/app/hooks/useOrgs";
-import { OrgProps } from "@/lib/interfaces";
-import { Box, Divider, HStack, Heading, Text } from "@chakra-ui/react";
+import { Box, Divider, HStack, Heading, SkeletonText, Text } from "@chakra-ui/react";
+import { useContext } from "react";
 import { EditAndDeleteButtons } from "./EditAndDeleteButtons";
 
 export function OrgPanelContentItem() {
+  const user = useContext(UserContext);
   const { orgs } = useOrgs();
-  console.log("Orgs: ", orgs);
+  if (orgs) {
+    return (
+      <>
+        {orgs?.map((org: any) => (
+          <Box pt="2" key={org?._id}>
+            <HStack justifyContent="space-between">
+              <Heading size="xs" textTransform="uppercase">
+                {org?.name}
+              </Heading>
+              <EditAndDeleteButtons org={org} />
+            </HStack>
+            <Text pt="2" fontSize="sm">
+              {org?.description}
+            </Text>
+            <Divider pb="4" />
+          </Box>
+        ))}
+        {/* <Heading>{user?.name}</Heading>
+        {orgs.map((org: OrgProps) => (
+          <Heading key={org._id}>{org?.name}</Heading>
+        ))} */}
+      </>
+    );
+  }
 
-  return (
-    <>
-      {orgs?.map((org: OrgProps) => (
-        <Box pt="2" key={org._id}>
-          <HStack justifyContent="space-between">
-            <Heading size="xs" textTransform="uppercase">
-              {org.name}
-            </Heading>
-            <EditAndDeleteButtons org={org} />
-          </HStack>
-          <Text pt="2" fontSize="sm">
-            {org.description}
-          </Text>
-          <Divider pb="4" />
-        </Box>
-      ))}
-    </>
-  );
+  return <SkeletonText />;
 }
