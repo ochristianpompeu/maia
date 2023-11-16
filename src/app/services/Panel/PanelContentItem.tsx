@@ -1,5 +1,4 @@
-import { applicationConfig } from "@/lib/config";
-import { query } from "@/lib/genericFunctions";
+import { useServices } from "@/app/hooks/useServices";
 import { ServiceProps } from "@/lib/interfaces";
 import {
   Drawer,
@@ -10,7 +9,7 @@ import {
   useBreakpointValue,
   useDisclosure,
 } from "@chakra-ui/react";
-import { Fragment, use } from "react";
+import { Fragment } from "react";
 import { DetailDrawerContent } from "../DataPanel/DetailDrawer";
 import { EditAndDeleteButtons } from "./EditAndDeleteButtons";
 
@@ -21,18 +20,7 @@ interface PanelContentItemProps {
 export function PanelContentItem({
   handleDisplayDetail,
 }: PanelContentItemProps) {
-  const { localServices } = use(
-    query("services", () =>
-      fetch(applicationConfig.baseUrl + "/api/service", {
-        method: "GET",
-        cache: "no-store",
-        // next: {
-        //   tags: ["services"],
-        // },
-      }).then((res) => res.json())
-    )
-  );
-
+  const { services } = useServices();
   const dimension = useBreakpointValue(
     {
       base: "base",
@@ -66,7 +54,7 @@ export function PanelContentItem({
 
   return (
     <Fragment>
-      {localServices?.map((service: ServiceProps) => (
+      {services?.map((service: ServiceProps) => (
         <Tr
           key={service._id}
           _hover={{

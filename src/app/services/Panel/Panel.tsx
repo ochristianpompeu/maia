@@ -1,3 +1,4 @@
+import { useServices } from "@/app/hooks/useServices";
 import { PanelAndMenuIcons } from "@/lib/Links";
 import { applicationConfig } from "@/lib/config";
 import { AddIcon } from "@chakra-ui/icons";
@@ -19,6 +20,7 @@ import {
   useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
+import { useRouter } from "next/navigation";
 import { ReactNode, useRef } from "react";
 import { RiServiceLine } from "react-icons/ri";
 import { TbReload } from "react-icons/tb";
@@ -44,9 +46,13 @@ export function Panel({
 
   const firstField = useRef() as any;
   const bgCargHeader = useColorModeValue("gray.50", "whiteAlpha.100");
+  const { updateServices } = useServices();
+  const router = useRouter();
 
   function handleOnAddClose() {
+    updateServices();
     onCloseAdd;
+    router.refresh()
   }
 
   return (
@@ -84,7 +90,7 @@ export function Panel({
             />
             <Button onClick={onOpenAdd}>Adicionar</Button>
             <IconButton
-              // onClick={updateOrgs}
+              onClick={updateServices}
               aria-label="Refresh"
               icon={<TbReload />}
             />
@@ -93,7 +99,7 @@ export function Panel({
       </CardHeader>
       <Divider />
       <Drawer
-        size={{ base: "full", md: "md" }}
+        size={{ base: "full", md: "sm" }}
         isOpen={isOpenAdd}
         onClose={onCloseAdd}
         initialFocusRef={firstField}

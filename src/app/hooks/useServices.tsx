@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import { useOrgs } from "@/app/hooks/useOrgs";
 import { useUser } from "@/app/hooks/useUser";
-import { OrgProps } from "@/lib/interfaces";
+import { ServiceProps } from "@/lib/interfaces";
 import { useSession } from "next-auth/react";
 import {
   ReactNode,
@@ -10,27 +11,30 @@ import {
   useState,
 } from "react";
 
-interface OrgProviderProps {
+interface ServicesProviderProps {
   children: ReactNode;
 }
 
-interface OrgsContextData {
-  orgs: OrgProps[];
-  updateOrgs: () => void;
+interface ServicesContextData {
+  services: ServiceProps[];
+  updateServices: () => void;
 }
 
-const OrgsContext = createContext<OrgsContextData>({} as OrgsContextData);
+const ServicesContext = createContext<ServicesContextData>(
+  {} as ServicesContextData
+);
 
-export function OrgsProvider({ children }: OrgProviderProps) {
+export function ServicesProvider({ children }: ServicesProviderProps) {
   const { data: session } = useSession();
   const { user } = useUser();
-  const [orgs, setOrgs] = useState([]);
+  const { orgs } = useOrgs();
+  const [services, setServices] = useState([]);
 
   useEffect(() => {
     async function fetchApi() {
       if (user === undefined) {
         const res = await fetch(
-          `/api/organization/byUser/6543f7feb31c7cbd35d04ab4`,
+          `/api/service/byUser/6543f7feb31c7cbd35d04ab4`,
           {
             method: "GET",
             headers: {
@@ -39,19 +43,18 @@ export function OrgsProvider({ children }: OrgProviderProps) {
           }
         );
         const data = await res.json();
-        setOrgs(data?.orgs);
+        setServices(data?.localServices);
       }
-
-      if (user) {
+      if (orgs) {
         try {
-          const res = await fetch(`/api/organization/byUser/${user?._id}`, {
+          const res = await fetch(`/api/service/byUser/${user?._id}`, {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
             },
           });
           const data = await res.json();
-          setOrgs(data?.orgs);
+          setServices(data?.localServices);
         } catch (error) {
           return;
         }
@@ -64,11 +67,11 @@ export function OrgsProvider({ children }: OrgProviderProps) {
     }
   }, [user]);
 
-  function updateOrgs() {
+  function updateServices() {
     async function fetchApi() {
       if (user === undefined) {
         const res = await fetch(
-          `/api/organization/byUser/6543f7feb31c7cbd35d04ab4`,
+          `/api/service/byUser/6543f7feb31c7cbd35d04ab4`,
           {
             method: "GET",
             headers: {
@@ -77,19 +80,19 @@ export function OrgsProvider({ children }: OrgProviderProps) {
           }
         );
         const data = await res.json();
-        setOrgs(data?.orgs);
+        setServices(data?.localServices);
       }
 
       if (user) {
         try {
-          const res = await fetch(`/api/organization/byUser/${user?._id}`, {
+          const res = await fetch(`/api/service/byUser/${user?._id}`, {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
             },
           });
           const data = await res.json();
-          setOrgs(data?.orgs);
+          setServices(data?.localServices);
         } catch (error) {
           return;
         }
@@ -103,13 +106,13 @@ export function OrgsProvider({ children }: OrgProviderProps) {
   }
 
   return (
-    <OrgsContext.Provider value={{ orgs, updateOrgs }}>
+    <ServicesContext.Provider value={{ services, updateServices }}>
       {children}
-    </OrgsContext.Provider>
+    </ServicesContext.Provider>
   );
 }
 
-export function useOrgs() {
-  const context = useContext(OrgsContext);
+export function useServices() {
+  const context = useContext(ServicesContext);
   return context;
 }

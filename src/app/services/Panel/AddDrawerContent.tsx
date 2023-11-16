@@ -1,68 +1,44 @@
-import { applicationConfig } from "@/lib/config";
+import { useOrgs } from "@/app/hooks/useOrgs";
+import { useServices } from "@/app/hooks/useServices";
 import { OrgProps, ServiceProps } from "@/lib/interfaces";
 import {
   Button,
+  ButtonGroup,
   DrawerBody,
   DrawerCloseButton,
   DrawerFooter,
   DrawerHeader,
   FormLabel,
+  IconButton,
   Input,
   Select,
   Textarea,
   useColorModeValue,
-  useToast
+  useToast,
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { ChangeEvent, Fragment, use, useState } from "react";
+import { ChangeEvent, Fragment, useState } from "react";
 import { RiSaveLine } from "react-icons/ri";
-
-const fetchMap = new Map<string, Promise<any>>();
-function queryUser(name: string, query: () => Promise<any>) {
-  if (!fetchMap.has(name)) {
-    fetchMap.set(name, query());
-  }
-
-  return fetchMap.get(name)!;
-}
 
 export function AddDrawerContent(props: ServiceProps) {
   const { data: session } = useSession();
+  const { orgs } = useOrgs();
   const [name, setName] = useState(props.name);
   const [description, setDescription] = useState(props.description);
-  const [orgId, setOrgId] = useState(props.orgId);
+  const [orgId, setOrgId] = useState(orgs[0]._id);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const toast = useToast();
   const router = useRouter();
-
-  const { user } = use(
-    queryUser("user", () =>
-      fetch(applicationConfig.baseUrl + "/api/user/" + session?.user?.email, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }).then((res) => res.json())
-    )
-  );
-
-  const { orgs } = use(
-    queryUser("orgs", () =>
-      fetch(
-        applicationConfig.baseUrl + "/api/organization/byUser/" + user?._id,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      ).then((res) => res.json())
-    )
-  );
+  const { updateServices } = useServices();
 
   const mainColor = useColorModeValue("purple.600", "purple.200");
+
+  function handleRouter() {
+    updateServices();
+    router.refresh();
+  }
 
   function handleChangeInput(event: ChangeEvent<HTMLInputElement>) {
     const name = event.target.value;
@@ -77,14 +53,6 @@ export function AddDrawerContent(props: ServiceProps) {
   function handleChangeSelect(event: ChangeEvent<HTMLSelectElement>) {
     const orgId = event.target.value;
     setOrgId(orgId);
-    console.log(
-      "Service: ",
-      JSON.stringify({
-        name,
-        description,
-        orgId,
-      })
-    );
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -96,7 +64,7 @@ export function AddDrawerContent(props: ServiceProps) {
         title: "Ocorreu um erro",
         description: error,
         status: "error",
-        duration: 9000,
+        duration: 3000,
         isClosable: true,
         position: "top",
       });
@@ -106,7 +74,7 @@ export function AddDrawerContent(props: ServiceProps) {
     try {
       setLoading(true);
 
-      const responseCreateOrg = await fetch("/api/service/", {
+      const responseCreate = await fetch("/api/service/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -120,27 +88,27 @@ export function AddDrawerContent(props: ServiceProps) {
 
       setLoading(false);
 
-      if (responseCreateOrg.ok) {
+      if (responseCreate.ok) {
         setName("");
         setDescription("");
         toast({
           title: "Sucesso",
           description: "Serviço cadastrado com sucesso",
           status: "success",
-          duration: 9000,
+          duration: 3000,
           isClosable: true,
           position: "top",
         });
 
-        router.refresh();
+        handleRouter();
       } else {
-        const responseError = await responseCreateOrg.json();
+        const responseError = await responseCreate.json();
         setError(responseError);
         toast({
           title: "Ocorreu um erro",
           description: error,
           status: "error",
-          duration: 9000,
+          duration: 3000,
           isClosable: true,
           position: "top",
         });
@@ -152,7 +120,7 @@ export function AddDrawerContent(props: ServiceProps) {
         title: "Ocorreu um erro",
         description: error,
         status: "error",
-        duration: 9000,
+        duration: 3000,
         isClosable: true,
         position: "top",
       });
@@ -163,7 +131,7 @@ export function AddDrawerContent(props: ServiceProps) {
     <Fragment>
       <DrawerCloseButton />
       <DrawerHeader textColor={mainColor} borderBottomWidth="1px">
-        Cadastre sua empresa
+        Cadastrar Serviço
       </DrawerHeader>
 
       <DrawerBody>
@@ -211,18 +179,29 @@ export function AddDrawerContent(props: ServiceProps) {
         </form>
       </DrawerBody>
 
-      <DrawerFooter>
-        <Button
+      <DrawerFooter borderTopWidth="1px">
+        <ButtonGroup
           colorScheme="purple"
           variant="outline"
-          type="submit"
-          form="createServiceForm"
           onClick={props.onClose}
-          isLoading={loading}
-          leftIcon={<RiSaveLine />}
+          isAttached
         >
-          Salvar
-        </Button>
+          <IconButton
+            type="submit"
+            form="createServiceForm"
+            aria-label="Add Service"
+            icon={<RiSaveLine />}
+            // onClick={props.onClose}
+          />
+          <Button
+            type="submit"
+            form="createServiceForm"
+            // onClick={props.onClose}
+            isLoading={loading}
+          >
+            Salvar
+          </Button>
+        </ButtonGroup>
       </DrawerFooter>
     </Fragment>
   );

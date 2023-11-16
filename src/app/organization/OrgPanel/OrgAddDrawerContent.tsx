@@ -169,7 +169,7 @@ export function OrgAddDrawerContent(props: OrgAddDrawerContentProps) {
             form="createOrgForm"
             aria-label="Save Org"
             icon={<BsBuildingFillAdd />}
-            onClick={props.onClose}
+            // onClick={props.onClose}
           />
           <Button
             type="submit"

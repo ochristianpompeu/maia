@@ -14,6 +14,7 @@ const serviceSchema = new Schema(
     orgId: {
       type: ObjectId,
       required: false,
+      ref: "Organiozation",
     },
     professionals: [{ type: ObjectId, required: false, ref: "Professional" }],
   },
