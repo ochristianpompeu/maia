@@ -59,7 +59,7 @@ export function OrgPanel({
       m={0}
       height={{ base: "auto", md: applicationConfig.staticHeightPanel }}
     >
-      <CardHeader w="full" p="2" bg={bgCargHeader}>
+      <CardHeader borderRadius="md" w="full" p="2" bg={bgCargHeader}>
         <HStack p={0} justifyContent="space-between">
           <HStack m={0} p={0}>
             <Icon fontSize="2xl" as={PanelAndMenuIcons.org} />
@@ -70,6 +70,7 @@ export function OrgPanel({
             aria-label="Add Org"
             colorScheme="purple"
             onClick={onOpenAddOrg}
+            variant="outline"
             icon={<AddIcon />}
           />
           <ButtonGroup

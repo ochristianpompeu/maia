@@ -1,5 +1,6 @@
 "use client";
 import SidebarDashboard from "@/components/SideBarDashboard/SidebarDashboard";
+import { applicationConfig } from "@/lib/config";
 import { ServiceProps } from "@/lib/interfaces";
 import { Flex, Stack, useColorModeValue } from "@chakra-ui/react";
 import { Fragment, useState } from "react";
@@ -26,20 +27,15 @@ export default function Services() {
           spacing={[2, 8]}
           w="full"
         >
-          <Flex
-            flex={1}
-            w="full"
-            h="full"
-            alignItems={["center", "flex-start"]}
-          >
+          <Flex flex={1} w="full" alignItems={["center", "flex-start"]}>
             <Stack
               direction={{ base: "column", md: "row" }}
               padding={2}
               borderRadius="lg"
-              // mx={{ base: "auto", md: "0.5" }}
               bgColor={bgBoxColor}
               w="full"
               maxW="full"
+              height={{ base: "auto", md: applicationConfig.staticHeightPanel }}
             >
               <Panel handleDisplayDetail={handleDisplayDetail} shadow="none" />
               <DataPanel

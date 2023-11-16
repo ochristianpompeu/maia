@@ -1,4 +1,5 @@
 import { PanelAndMenuIcons } from "@/lib/Links";
+import { applicationConfig } from "@/lib/config";
 import { AddIcon } from "@chakra-ui/icons";
 import {
   Button,
@@ -15,10 +16,12 @@ import {
   Heading,
   Icon,
   IconButton,
+  useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
 import { ReactNode, useRef } from "react";
 import { RiServiceLine } from "react-icons/ri";
+import { TbReload } from "react-icons/tb";
 import { AddDrawerContent } from "./AddDrawerContent";
 import { PanelContent } from "./PanelContent";
 interface DataPanelProps extends CardProps {
@@ -40,6 +43,7 @@ export function Panel({
   } = useDisclosure();
 
   const firstField = useRef() as any;
+  const bgCargHeader = useColorModeValue("gray.50", "whiteAlpha.100");
 
   function handleOnAddClose() {
     onCloseAdd;
@@ -47,13 +51,13 @@ export function Panel({
 
   return (
     <Card
-      // bgGradient="linear(to-b, gray.100,gray.50)"
-      overflowY="auto"
       w="full"
       {...rest}
       m={0}
+      height={{ base: "auto", md: applicationConfig.staticHeightPanel }}
+      borderRadius="md"
     >
-      <CardHeader w="full">
+      <CardHeader borderRadius="md" w="full" p="2" bg={bgCargHeader}>
         <HStack justifyContent="space-between">
           <HStack m={0} p={0}>
             <Icon fontSize="2xl" as={PanelAndMenuIcons.services} />
@@ -64,17 +68,26 @@ export function Panel({
             aria-label="Add Service"
             colorScheme="purple"
             onClick={onOpenAdd}
+            variant="outline"
             icon={<AddIcon />}
           />
-          <ButtonGroup display={{ base: "none", md: "inline-flex" }}>
-            <Button
+          <ButtonGroup
+            variant="outline"
+            colorScheme="purple"
+            display={{ base: "none", md: "inline-flex" }}
+            isAttached
+          >
+            <IconButton
               onClick={onOpenAdd}
-              leftIcon={<RiServiceLine />}
-              colorScheme="purple"
-              variant="outline"
-            >
-              Adicionar
-            </Button>
+              aria-label="Add Service"
+              icon={<RiServiceLine />}
+            />
+            <Button onClick={onOpenAdd}>Adicionar</Button>
+            <IconButton
+              // onClick={updateOrgs}
+              aria-label="Refresh"
+              icon={<TbReload />}
+            />
           </ButtonGroup>
         </HStack>
       </CardHeader>
@@ -94,7 +107,7 @@ export function Panel({
         </DrawerContent>
       </Drawer>
 
-      <CardBody h="100vh">
+      <CardBody overflowY="auto">
         <PanelContent handleDisplayDetail={handleDisplayDetail} />
       </CardBody>
     </Card>

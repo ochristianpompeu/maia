@@ -32,7 +32,6 @@ export default function Organization() {
 
   return (
     <UserContext.Provider value={user}>
-      {/* <Fragment> */}
       <SidebarDashboard>
         <Stack
           p={[0, 2]}
@@ -58,7 +57,6 @@ export default function Organization() {
           </Flex>
         </Stack>
       </SidebarDashboard>
-      {/* </Fragment> */}
     </UserContext.Provider>
   );
 }
