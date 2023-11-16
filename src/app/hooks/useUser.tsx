@@ -25,7 +25,7 @@ export function UserProvider({ children }: UserProviderProps) {
   const { data: session } = useSession();
   const [user, setUser] = useState({} as any);
   useEffect(() => {
-    fetch("/api/user/christianpompeu@gmail.com", {
+    fetch("/api/user/"+session?.user?.email, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -33,8 +33,7 @@ export function UserProvider({ children }: UserProviderProps) {
     })
       .then((res) => res.json())
       .then((data) => setUser(data));
-    console.log("User:",user);
-  }, []);
+  }, [session]);
 
   return <UserContext.Provider value={user}>{children}</UserContext.Provider>;
 }
