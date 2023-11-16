@@ -28,7 +28,7 @@ const SocialButton = ({
       bg={useColorModeValue("blackAlpha.100", "whiteAlpha.100")}
       rounded={"full"}
       w={8}
-      h={8}
+      h={{ base: "auto", md: 8 }}
       cursor={"pointer"}
       as={"a"}
       href={href}
@@ -64,10 +64,16 @@ export default function Footer({ ...rest }: FooterProps) {
       >
         <Text>Maia Agendador de Serviços</Text>
         <Stack direction={"row"} spacing={6}>
-          <SocialButton label={"Twitter"} href={"https://github.com/ochristianpompeu/maia"}>
+          <SocialButton
+            label={"Twitter"}
+            href={"https://github.com/ochristianpompeu/maia"}
+          >
             <TbBrandGithubFilled />
           </SocialButton>
-          <SocialButton label={"YouTube"} href={"https://www.youtube.com/channel/UC7E41zZsqVRcypu2iAGwjXQ"}>
+          <SocialButton
+            label={"YouTube"}
+            href={"https://www.youtube.com/channel/UC7E41zZsqVRcypu2iAGwjXQ"}
+          >
             <TbBrandYoutubeFilled />
           </SocialButton>
         </Stack>

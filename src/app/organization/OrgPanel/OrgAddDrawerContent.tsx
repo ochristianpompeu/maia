@@ -1,4 +1,5 @@
 "use client";
+import { useOrgs } from "@/app/hooks/useOrgs";
 import { useUser } from "@/app/hooks/useUser";
 import { OrgAddDrawerContentProps } from "@/lib/interfaces";
 import {
@@ -19,7 +20,6 @@ import { useRouter } from "next/navigation";
 import { ChangeEvent, Fragment, useState } from "react";
 import { BsBuildingFillAdd } from "react-icons/bs";
 
-
 export function OrgAddDrawerContent(props: OrgAddDrawerContentProps) {
   const [name, setName] = useState(props.name);
   const [description, setDescription] = useState(props.description);
@@ -29,12 +29,17 @@ export function OrgAddDrawerContent(props: OrgAddDrawerContentProps) {
   const borderColor = "purple.600";
   const toast = useToast();
   const router = useRouter();
-
-  const {user} = useUser();
+  const { user } = useUser();
+  const { updateOrgs } = useOrgs();
 
   function handleChangeInput(event: ChangeEvent<HTMLInputElement>) {
     const name = event.target.value;
     setName(name);
+  }
+
+  function handleRouter() {
+    updateOrgs()
+    router.refresh();
   }
 
   function handleChangeTextArea(event: ChangeEvent<HTMLTextAreaElement>) {
@@ -88,8 +93,8 @@ export function OrgAddDrawerContent(props: OrgAddDrawerContentProps) {
           isClosable: true,
           position: "top",
         });
-
-        router.refresh();
+        // router.push("/organization");
+        handleRouter();
       } else {
         const responseError = await responseCreateOrg.json();
         setError(responseError);
@@ -163,12 +168,13 @@ export function OrgAddDrawerContent(props: OrgAddDrawerContentProps) {
             type="submit"
             form="createOrgForm"
             aria-label="Save Org"
-            icon={<BsBuildingFillAdd />}            
+            icon={<BsBuildingFillAdd />}
+            onClick={props.onClose}
           />
           <Button
             type="submit"
             form="createOrgForm"
-            onClick={props.onClose}
+            // onClick={props.onClose}
             isLoading={loading}
           >
             Salvar

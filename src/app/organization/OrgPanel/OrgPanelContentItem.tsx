@@ -1,7 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { UserContext } from "@/app/contexts/userContext";
 import { useOrgs } from "@/app/hooks/useOrgs";
-import { Box, Divider, HStack, Heading, SkeletonText, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Divider,
+  HStack,
+  Heading,
+  SkeletonText,
+  Text,
+} from "@chakra-ui/react";
 import { useContext } from "react";
 import { EditAndDeleteButtons } from "./EditAndDeleteButtons";
 
@@ -12,17 +19,16 @@ export function OrgPanelContentItem() {
     return (
       <>
         {orgs?.map((org: any) => (
-          <Box pt="2" key={org?._id}>
-            <HStack justifyContent="space-between">
-              <Heading size="xs" textTransform="uppercase">
+          <Box key={org?._id}>
+            <HStack justifyContent="space-between" alignItems="center">
+              <Heading m={0} p={0} size="xs" textTransform="uppercase">
                 {org?.name}
               </Heading>
               <EditAndDeleteButtons org={org} />
             </HStack>
-            <Text pt="2" fontSize="sm">
-              {org?.description}
-            </Text>
+            <Text fontSize="sm">{org?.description}</Text>
             <Divider pb="4" />
+            <Divider />
           </Box>
         ))}
         {/* <Heading>{user?.name}</Heading>

@@ -45,15 +45,12 @@ export function OrgsProvider({ children }: OrgProviderProps) {
 
       if (user) {
         try {
-          const res = await fetch(
-            `/api/organization/byUser/${user?._id as string}`,
-            {
-              method: "GET",
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
-          );
+          const res = await fetch(`/api/organization/byUser/${user?._id}`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
           const data = await res.json();
           console.log("data: ", data);
           setOrgs(data?.orgs);
@@ -70,14 +67,43 @@ export function OrgsProvider({ children }: OrgProviderProps) {
   }, [user]);
 
   function updateOrgs() {
-    fetch(`/api/organization/byUser/${user?._id}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => setOrgs(data?.orgs));
+    async function fetchApi() {
+      if (user === undefined) {
+        const res = await fetch(
+          `/api/organization/byUser/6543f7feb31c7cbd35d04ab4`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const data = await res.json();
+        console.log("data: ", data);
+        setOrgs(data?.orgs);
+      }
+
+      if (user) {
+        try {
+          const res = await fetch(`/api/organization/byUser/${user?._id}`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+          const data = await res.json();
+          console.log("data: ", data);
+          setOrgs(data?.orgs);
+        } catch (error) {
+          return;
+        }
+      }
+    }
+    try {
+      fetchApi();
+    } catch (error) {
+      console.log("Error ao realizar fetch:", error);
+    }
   }
 
   return (
