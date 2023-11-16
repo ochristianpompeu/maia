@@ -1,5 +1,5 @@
 import { IconType } from "react-icons";
-import { BsPersonBadge } from "react-icons/bs";
+import { BsPersonAdd, BsPersonBadge } from "react-icons/bs";
 import { GoOrganization } from "react-icons/go";
 import { MdOutlineRssFeed, MdOutlineSpaceDashboard } from "react-icons/md";
 import { Ri24HoursLine, RiServiceLine } from "react-icons/ri";
@@ -16,6 +16,7 @@ export const PanelAndMenuIcons = {
   org: GoOrganization,
   services: RiServiceLine,
   professionals: BsPersonBadge,
+  proessionalsAdd: BsPersonAdd,
   hours: Ri24HoursLine,
   hours_services: TbTimeDuration30,
   blog: MdOutlineRssFeed,

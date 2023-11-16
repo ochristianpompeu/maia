@@ -1,18 +1,24 @@
-import { applicationConfig } from "@/lib/config";
-import { query } from "@/lib/genericFunctions";
+"use client";
+import { useServices } from "@/app/hooks/useServices";
 import { ServiceProps } from "@/lib/interfaces";
 import {
-  Drawer,
-  DrawerContent,
-  DrawerOverlay,
-  Td,
-  Tr,
+  Avatar,
+  Badge,
+  Box,
+  Button,
+  ButtonGroup,
+  Flex,
+  Heading,
+  IconButton,
+  Image,
+  Stack,
+  Text,
+  WrapItem,
   useBreakpointValue,
+  useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
-import { Fragment, use } from "react";
-import { DetailDrawerContent } from "../DataPanel/DetailDrawer";
-import { EditAndDeleteButtons } from "./EditAndDeleteButtons";
+import { TbEdit, TbTrash } from "react-icons/tb";
 
 interface PanelContentItemProps {
   handleDisplayDetail: (display: string, service: ServiceProps) => void;
@@ -21,18 +27,7 @@ interface PanelContentItemProps {
 export function PanelContentItem({
   handleDisplayDetail,
 }: PanelContentItemProps) {
-  const { localServices } = use(
-    query("services", () =>
-      fetch(applicationConfig.baseUrl + "/api/service", {
-        method: "GET",
-        cache: "no-store",
-        // next: {
-        //   tags: ["services"],
-        // },
-      }).then((res) => res.json())
-    )
-  );
-
+  const { services } = useServices();
   const dimension = useBreakpointValue(
     {
       base: "base",
@@ -65,47 +60,108 @@ export function PanelContentItem({
   }
 
   return (
-    <Fragment>
-      {localServices?.map((service: ServiceProps) => (
-        <Tr
-          key={service._id}
-          _hover={{
-            bg: "purple.100",
-          }}
-          borderRadius="sm"
-        >
-          <Td
-            _hover={{
-              cursor: "pointer",
-            }}
-            onClick={() => handdleLineClick("block", service)}
-          >
-            {service.org?.name}
-          </Td>
-          <Td
-            _hover={{
-              cursor: "pointer",
-            }}
-            onClick={() => handdleLineClick("block", service)}
-          >
-            {service.name}
-          </Td>
-          <Td textAlign="right">
-            <EditAndDeleteButtons service={service} />
-          </Td>
-        </Tr>
-      ))}
-      <Drawer
-        size={{ base: "xl", md: "md" }}
-        isOpen={isOpenView}
-        onClose={onCloseView}
-        placement="bottom"
+    <WrapItem>
+      <Box
+        maxW={"320px"}
+        minW={"320px"}
+        w={"full"}
+        bg={useColorModeValue("white", "gray.800")}
+        boxShadow={"lg"}
+        rounded={"md"}
+        overflow={"hidden"}
+        borderColor="purple.400"
+        border="1px"
       >
-        <DrawerOverlay />
-        <DrawerContent>
-          <DetailDrawerContent onClose={handleOnClose} />
-        </DrawerContent>
-      </Drawer>
-    </Fragment>
+        <Image
+          h={"120px"}
+          w={"full"}
+          src={
+            "https://images.unsplash.com/photo-1612865547334-09cb8cb455da?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80"
+          }
+          objectFit="cover"
+          alt="#"
+        />
+        <Flex justify={"center"} mt={-12}>
+          <Avatar
+            size={"xl"}
+            src={"https://i.pravatar.cc/300"}
+            css={{
+              border: "2px solid white",
+            }}
+          />
+        </Flex>
+        <Box p={6} textAlign="center" w="full">
+          <Heading fontSize={"2xl"} fontFamily={"body"}>
+            Lindsey James
+          </Heading>
+          <Text fontWeight={600} color={"gray.500"} mb={4}>
+            @lindsey_jam3s
+          </Text>
+          <Text
+            textAlign={"center"}
+            color={useColorModeValue("gray.700", "gray.400")}
+            px={3}
+          >
+            Actress, musician, songwriter and artist. PM for work inquires...
+          </Text>
+
+          <Stack align={"center"} justify={"center"} direction={"row"} mt={6}>
+            <Badge
+              px={2}
+              py={1}
+              // bg={useColorModeValue("gray.50", "gray.800")}
+              fontWeight={"400"}
+              colorScheme="purple"
+            >
+              #art
+            </Badge>
+            <Badge
+              px={2}
+              py={1}
+              // bg={useColorModeValue("gray.50", "gray.800")}
+              fontWeight={"400"}
+              colorScheme="purple"
+            >
+              #photography
+            </Badge>
+            <Badge
+              px={2}
+              py={1}
+              // bg={useColorModeValue("gray.50", "gray.800")}
+              fontWeight={"400"}
+              colorScheme="purple"
+            >
+              #music
+            </Badge>
+          </Stack>
+          <Stack
+            mt={4}
+            direction={"row"}
+            spacing={4}
+            w="full"
+            justifyContent="center"
+          >
+            <ButtonGroup
+              w="full"
+              variant="outline"
+              isAttached
+              colorScheme="purple"
+            >
+              <IconButton
+                icon={<TbEdit />}
+                aria-label="Edit Professional"
+                colorScheme="teal"
+              />
+              <Button w="full">Visualizar</Button>
+              <IconButton
+                icon={<TbTrash />}
+                aria-label="Delete Professional"
+                colorScheme="red"
+              />
+            </ButtonGroup>
+          </Stack>
+        </Box>
+      </Box>
+    </WrapItem>
   );
 }

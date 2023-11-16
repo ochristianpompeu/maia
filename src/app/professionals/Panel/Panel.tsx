@@ -1,3 +1,4 @@
+import { useServices } from "@/app/hooks/useServices";
 import { PanelAndMenuIcons } from "@/lib/Links";
 import { AddIcon } from "@chakra-ui/icons";
 import {
@@ -15,10 +16,13 @@ import {
   Heading,
   Icon,
   IconButton,
+  useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
+import { useRouter } from "next/navigation";
 import { ReactNode, useRef } from "react";
-import { RiServiceLine } from "react-icons/ri";
+import { BsPersonBadge } from "react-icons/bs";
+import { TbReload } from "react-icons/tb";
 import { AddDrawerContent } from "./AddDrawerContent";
 import { PanelContent } from "./PanelContent";
 interface DataPanelProps extends CardProps {
@@ -40,47 +44,62 @@ export function Panel({
   } = useDisclosure();
 
   const firstField = useRef() as any;
+  const bgCargHeader = useColorModeValue("gray.50", "whiteAlpha.100");
+  const { updateServices } = useServices();
+  const router = useRouter();
 
   function handleOnAddClose() {
+    updateServices();
     onCloseAdd;
+    router.refresh()
   }
 
   return (
     <Card
-      // bgGradient="linear(to-b, gray.100,gray.50)"
-      overflowY="auto"
       w="full"
       {...rest}
       m={0}
+      // height={{ base: "auto", md: applicationConfig.staticHeightPanel }}
+      borderRadius="md"
     >
-      <CardHeader w="full">
+      <CardHeader borderRadius="md" w="full" p="2" bg={bgCargHeader}>
         <HStack justifyContent="space-between">
           <HStack m={0} p={0}>
-            <Icon fontSize="2xl" as={PanelAndMenuIcons.services} />
-            <Heading size="md">Serviços</Heading>
+            <Icon fontSize="2xl" as={PanelAndMenuIcons.professionals} />
+            <Heading size="md">Profissionais</Heading>
           </HStack>
           <IconButton
             display={{ md: "none" }}
-            aria-label="Add Service"
+            aria-label="Add Professional"
             colorScheme="purple"
             onClick={onOpenAdd}
+            variant="outline"
             icon={<AddIcon />}
           />
-          <ButtonGroup display={{ base: "none", md: "inline-flex" }}>
-            <Button
+          <ButtonGroup
+            variant="outline"
+            colorScheme="purple"
+            display={{ base: "none", md: "inline-flex" }}
+            isAttached
+            size="sm"
+          >
+            <IconButton
               onClick={onOpenAdd}
-              leftIcon={<RiServiceLine />}
-              colorScheme="purple"
-              variant="outline"
-            >
-              Adicionar
-            </Button>
+              aria-label="Add Professional"
+              icon={<BsPersonBadge />}
+            />
+            <Button onClick={onOpenAdd}>Adicionar</Button>
+            <IconButton
+              // onClick={updateServices}
+              aria-label="Refresh"
+              icon={<TbReload />}
+            />
           </ButtonGroup>
         </HStack>
       </CardHeader>
       <Divider />
       <Drawer
-        size={{ base: "full", md: "md" }}
+        size={{ base: "full", md: "sm" }}
         isOpen={isOpenAdd}
         onClose={onCloseAdd}
         initialFocusRef={firstField}
@@ -94,7 +113,7 @@ export function Panel({
         </DrawerContent>
       </Drawer>
 
-      <CardBody h="100vh">
+      <CardBody borderRadius="md" overflowY="auto">
         <PanelContent handleDisplayDetail={handleDisplayDetail} />
       </CardBody>
     </Card>

@@ -1,7 +1,7 @@
 import { ProfessionalProps } from "@/lib/interfaces";
 import { connectMongoDB } from "@/lib/mongodb";
 import { Professional } from "@/models/professional";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: Request) {
   const { name, orgId, bio, email, func, image, services } =
@@ -38,4 +38,18 @@ export async function GET() {
   return NextResponse.json({
     localProfessionals,
   });
+}
+
+export async function DELETE(request: NextRequest) {
+  const profId = request.nextUrl.searchParams.get("id");
+  await connectMongoDB();
+  await Professional.findByIdAndDelete(profId);
+  return NextResponse.json(
+    {
+      message: "Profissional removido",
+    },
+    {
+      status: 200,
+    }
+  );
 }
