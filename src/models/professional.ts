@@ -10,6 +10,7 @@ const professionalSchema = new Schema(
     orgId: {
       type: ObjectId,
       required: false,
+      ref: "Organization",
     },
     bio: { type: String, required: false },
     email: {

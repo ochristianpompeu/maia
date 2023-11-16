@@ -5,6 +5,7 @@ import { CacheProvider } from "@chakra-ui/next-js";
 import { ChakraProvider } from "@chakra-ui/react";
 import { SessionProvider } from "next-auth/react";
 import { OrgsProvider } from "./hooks/useOrgs";
+import { ProfessionalsProvider } from "./hooks/useProfessionals";
 import { ServicesProvider } from "./hooks/useServices";
 import { UserProvider } from "./hooks/useUser";
 import theme from "./theme";
@@ -27,9 +28,11 @@ export function Providers({ children }: Props) {
       <UserProvider>
         <OrgsProvider>
           <ServicesProvider>
-            <CacheProvider>
-              <ChakraProvider theme={theme}>{children}</ChakraProvider>
-            </CacheProvider>
+            <ProfessionalsProvider>
+              <CacheProvider>
+                <ChakraProvider theme={theme}>{children}</ChakraProvider>
+              </CacheProvider>
+            </ProfessionalsProvider>
           </ServicesProvider>
         </OrgsProvider>
       </UserProvider>

@@ -4,7 +4,7 @@ import { Professional } from "@/models/professional";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: Request) {
-  const { name, orgId, bio, email, func, image, services } =
+  const { name, email, image, bio, func, orgId, services } =
     await request.json();
 
   await connectMongoDB();

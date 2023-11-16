@@ -1,9 +1,12 @@
 import { useOrgs } from "@/app/hooks/useOrgs";
+import { useProfessionals } from "@/app/hooks/useProfessionals";
 import { useServices } from "@/app/hooks/useServices";
-import { OrgProps, ServiceProps } from "@/lib/interfaces";
+import { OrgProps, ProfessionalProps, ServiceProps } from "@/lib/interfaces";
 import {
   Button,
   ButtonGroup,
+  Checkbox,
+  CheckboxGroup,
   DrawerBody,
   DrawerCloseButton,
   DrawerFooter,
@@ -12,53 +15,75 @@ import {
   IconButton,
   Input,
   Select,
+  Stack,
   Textarea,
   useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, Fragment, useState } from "react";
 import { RiSaveLine } from "react-icons/ri";
 
-export function AddDrawerContent(props: ServiceProps) {
-  const { data: session } = useSession();
+export function AddDrawerContent(props: ProfessionalProps) {
   const { orgs } = useOrgs();
-  const [name, setName] = useState(props.name);
-  const [description, setDescription] = useState(props.description);
-  const [orgId, setOrgId] = useState(orgs[0]._id);
+  const { services } = useServices();
+  const { updateProfessionals } = useProfessionals();
+  const [formValues, setFormValues] = useState({
+    name: "",
+    email: "",
+    image: "",
+    bio: "",
+    func: "",
+    orgId: orgs[0]._id,
+    services: services.filter(
+      (service) => service.org?._id === orgs[0]._id
+    ) as ServiceProps[],
+  });
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const toast = useToast();
   const router = useRouter();
-  const { updateServices } = useServices();
 
   const mainColor = useColorModeValue("purple.600", "purple.200");
 
   function handleRouter() {
-    updateServices();
+    updateProfessionals();
     router.refresh();
   }
 
   function handleChangeInput(event: ChangeEvent<HTMLInputElement>) {
-    const name = event.target.value;
-    setName(name);
+    const { name, value } = event.target;
+    setFormValues({
+      ...formValues,
+      [name]: value,
+    });
   }
 
   function handleChangeTextArea(event: ChangeEvent<HTMLTextAreaElement>) {
-    const description = event.target.value;
-    setDescription(description);
+    const newBio = event.target.value;
+    setFormValues({
+      ...formValues,
+      bio: newBio,
+    });
   }
 
   function handleChangeSelect(event: ChangeEvent<HTMLSelectElement>) {
-    const orgId = event.target.value;
-    setOrgId(orgId);
+    const newOrgId = event.target.value;
+    const localServices = services.filter(
+      (service) => service.org?._id === newOrgId
+    );
+    setFormValues({
+      ...formValues,
+      orgId: newOrgId,
+      services: localServices,
+    });
   }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
-    if (!name) {
+    if (!formValues.name) {
       setError("O campo nome não pode ficar em branco");
       toast({
         title: "Ocorreu um erro",
@@ -74,23 +99,31 @@ export function AddDrawerContent(props: ServiceProps) {
     try {
       setLoading(true);
 
-      const responseCreate = await fetch("/api/service/", {
+      const responseCreate = await fetch("/api/professional/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          name,
-          description,
-          orgId,
+          ...formValues,
         }),
       });
 
       setLoading(false);
 
       if (responseCreate.ok) {
-        setName("");
-        setDescription("");
+        setFormValues({
+          name: "",
+          email: "",
+          image: "",
+          bio: "",
+          func: "",
+          orgId: orgs[0]._id,
+          services: services.filter(
+            (service) => service.org?._id === orgs[0]._id
+          ) as ServiceProps[],
+        });
+
         toast({
           title: "Sucesso",
           description: "Serviço cadastrado com sucesso",
@@ -131,18 +164,18 @@ export function AddDrawerContent(props: ServiceProps) {
     <Fragment>
       <DrawerCloseButton />
       <DrawerHeader textColor={mainColor} borderBottomWidth="1px">
-        Cadastrar Serviço
+        Cadastrar Profissional
       </DrawerHeader>
 
       <DrawerBody>
-        <form id="createServiceForm" onSubmit={handleSubmit}>
+        <form id="createForm" onSubmit={handleSubmit}>
           <FormLabel textColor={mainColor} htmlFor="orgId">
             Selecione a Empresa
           </FormLabel>
           <Select
             id="orgId"
             name="orgId"
-            value={orgId}
+            value={formValues.orgId}
             onChange={handleChangeSelect}
             focusBorderColor={mainColor}
           >
@@ -153,29 +186,79 @@ export function AddDrawerContent(props: ServiceProps) {
             ))}
           </Select>
           <FormLabel textColor={mainColor} pt="4" htmlFor="name">
-            Nome do Serviço
+            Nome
           </FormLabel>
           <Input
             ref={props.initialRef}
             id="name"
             name="name"
-            placeholder="Nome do Serviço..."
+            placeholder="Nome do Profissional..."
             focusBorderColor={mainColor}
             onChange={handleChangeInput}
-            value={name!}
+            value={formValues.name}
+            type="text"
           />
-          <FormLabel textColor={mainColor} pt="4" htmlFor="description">
-            Descrição
+          <FormLabel textColor={mainColor} pt="4" htmlFor="email">
+            E-mail
+          </FormLabel>
+          <Input
+            id="email"
+            name="email"
+            placeholder="E-mail..."
+            focusBorderColor={mainColor}
+            onChange={handleChangeInput}
+            value={formValues.email}
+            type="email"
+          />
+          <FormLabel textColor={mainColor} pt="4" htmlFor="func">
+            Função
+          </FormLabel>
+          <Input
+            id="func"
+            name="func"
+            placeholder="Função..."
+            focusBorderColor={mainColor}
+            onChange={handleChangeInput}
+            value={formValues.func}
+            type="text"
+          />
+          <FormLabel textColor={mainColor} pt="4" htmlFor="image">
+            URL da Imagem
+          </FormLabel>
+          <Input
+            id="image"
+            name="image"
+            placeholder="preencha com a url da imagem"
+            focusBorderColor={mainColor}
+            onChange={handleChangeInput}
+            value={formValues.image}
+            type="url"
+          />
+
+          <FormLabel textColor={mainColor} pt="4" htmlFor="bio">
+            Sobre
           </FormLabel>
           <Textarea
-            id="description"
-            name="description"
-            placeholder="Digite uma descrição para seu serviço..."
+            id="bio"
+            name="bio"
+            placeholder="Fale um pouco sobre o profissional..."
             focusBorderColor={mainColor}
-            value={description!}
+            value={formValues.bio}
             size="md"
             onChange={handleChangeTextArea}
           />
+          <FormLabel textColor={mainColor} pt="4" htmlFor="services">
+            Selecione os Serviços
+          </FormLabel>
+          <CheckboxGroup colorScheme="purple" defaultValue={[]}>
+            <Stack spacing={[1, 5]} direction={["column", "row"]}>
+              {formValues.services.map((service) => (
+                <Checkbox key={service._id} value={service._id}>
+                  {service.name}
+                </Checkbox>
+              ))}
+            </Stack>
+          </CheckboxGroup>
         </form>
       </DrawerBody>
 
@@ -188,14 +271,14 @@ export function AddDrawerContent(props: ServiceProps) {
         >
           <IconButton
             type="submit"
-            form="createServiceForm"
-            aria-label="Add Service"
+            form="createForm"
+            aria-label="Add"
             icon={<RiSaveLine />}
             // onClick={props.onClose}
           />
           <Button
             type="submit"
-            form="createServiceForm"
+            form="createForm"
             // onClick={props.onClose}
             isLoading={loading}
           >
