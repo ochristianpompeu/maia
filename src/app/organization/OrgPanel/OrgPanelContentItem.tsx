@@ -24,7 +24,6 @@ export function OrgPanelContentItem() {
           <Divider pb="4" />
         </Box>
       ))}
-      {JSON.stringify(orgs)}
     </>
   );
 }
