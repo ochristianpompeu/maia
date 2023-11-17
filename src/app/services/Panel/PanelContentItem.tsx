@@ -63,15 +63,7 @@ export function PanelContentItem({
           borderRadius="sm"
           p={0}
           m={0}
-        >
-          <Td
-            _hover={{
-              cursor: "pointer",
-            }}
-            onClick={() => handdleLineClick("block", service)}
-          >
-            {service.org?.name}
-          </Td>
+        > 
           <Td
             _hover={{
               cursor: "pointer",
@@ -79,6 +71,14 @@ export function PanelContentItem({
             onClick={() => handdleLineClick("block", service)}
           >
             {service.name}
+          </Td>
+          <Td
+            _hover={{
+              cursor: "pointer",
+            }}
+            onClick={() => handdleLineClick("block", service)}
+          >
+            {service.org?.name}
           </Td>
           <Td textAlign="right">
             <EditAndDeleteButtons service={service} />

@@ -109,8 +109,6 @@ export function PanelContentItem({
             px={3}
           >
             {professional.bio?.substring(0, 80)}...
-            {/* {professional.services?.map((service) => service.name)} */}
-            {/* Actress, musician, songwriter and artist. PM for work inquires... */}
           </Text>
 
           <Stack align={"center"} justify={"center"} direction={"row"} mt={6}>

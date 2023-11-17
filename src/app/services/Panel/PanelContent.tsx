@@ -26,8 +26,8 @@ export function PanelContent({ handleDisplayDetail }: PanelContentProps) {
         </TableCaption>
         <Thead>
           <Tr>
-            <Th>Empresa</Th>
             <Th>Nome</Th>
+            <Th>Empresa</Th>
             <Th textAlign="right">{""}</Th>
           </Tr>
         </Thead>

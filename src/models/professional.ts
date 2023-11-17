@@ -1,5 +1,6 @@
 import { ObjectId } from "mongodb";
 import mongoose, { Schema, models } from "mongoose";
+import { Service } from "./service";
 
 const professionalSchema = new Schema(
   {
@@ -26,6 +27,7 @@ const professionalSchema = new Schema(
       required: false,
     },
     services: [{ type: ObjectId, required: false, ref: "Service" }],
+    completeServices: { type: [Service], require: false },
   },
   {
     timestamps: true,

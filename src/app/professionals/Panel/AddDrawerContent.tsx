@@ -27,6 +27,9 @@ import { RiSaveLine } from "react-icons/ri";
 export function AddDrawerContent(props: ProfessionalProps) {
   const { orgs } = useOrgs();
   const { services } = useServices();
+  const formServices = services.filter(
+    (service) => service.org?._id === orgs[0]._id
+  ) as ServiceProps[];
   const { updateProfessionals } = useProfessionals();
   const [formValues, setFormValues] = useState({
     name: "",
@@ -35,9 +38,7 @@ export function AddDrawerContent(props: ProfessionalProps) {
     bio: "",
     func: "",
     orgId: orgs[0]._id,
-    services: services.filter(
-      (service) => service.org?._id === orgs[0]._id
-    ) as ServiceProps[],
+    services: [] as string[],
   });
 
   const [loading, setLoading] = useState(false);
@@ -69,13 +70,38 @@ export function AddDrawerContent(props: ProfessionalProps) {
   }
 
   function handleChangeSelect(event: ChangeEvent<HTMLSelectElement>) {
-    const newOrgId = event.target.value;
-    const localServices = services.filter(
-      (service) => service.org?._id === newOrgId
-    );
+    const localOrgId = event.target.value;
     setFormValues({
       ...formValues,
-      orgId: newOrgId,
+      orgId: localOrgId,
+    });
+    console.log(formValues.services);
+  }
+
+  function handleChangeCheckBox(event: ChangeEvent<HTMLInputElement>) {
+    const localServices = formValues.services;
+    const newArray = [] as string[];
+    const value = event.target.value;
+    const checked = event.target.checked;
+    if (checked && localServices.indexOf(value) < 0) {
+      localServices.push(value);
+    }
+
+    if (!checked && localServices.indexOf(value) >= 0) {
+      for (let i = 0; i < localServices.length; i++) {
+        if (localServices[i] !== value) {
+          newArray.push(localServices[i]);
+        }
+      }
+
+      setFormValues({
+        ...formValues,
+        services: newArray,
+      });
+      return;
+    }
+    setFormValues({
+      ...formValues,
       services: localServices,
     });
   }
@@ -119,9 +145,7 @@ export function AddDrawerContent(props: ProfessionalProps) {
           bio: "",
           func: "",
           orgId: orgs[0]._id,
-          services: services.filter(
-            (service) => service.org?._id === orgs[0]._id
-          ) as ServiceProps[],
+          services: [] as string[],
         });
 
         toast({
@@ -250,10 +274,14 @@ export function AddDrawerContent(props: ProfessionalProps) {
           <FormLabel textColor={mainColor} pt="4" htmlFor="services">
             Selecione os Serviços
           </FormLabel>
-          <CheckboxGroup colorScheme="purple" defaultValue={[]}>
+          <CheckboxGroup colorScheme="purple">
             <Stack spacing={[1, 5]} direction={["column", "row"]}>
-              {formValues.services.map((service) => (
-                <Checkbox key={service._id} value={service._id}>
+              {formServices.map((service) => (
+                <Checkbox
+                  key={service._id}
+                  value={service._id}
+                  onChange={handleChangeCheckBox}
+                >
                   {service.name}
                 </Checkbox>
               ))}

@@ -63,5 +63,5 @@ export interface LocalServices extends ServiceProps {
 }
 export interface LocalProfessionals extends ProfessionalProps {
   org: OrgProps;
-  localServices: LocalServices[];
+  localServices: ServiceProps[];
 }

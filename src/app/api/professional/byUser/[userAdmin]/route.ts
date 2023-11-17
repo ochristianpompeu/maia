@@ -1,4 +1,4 @@
-import { LocalProfessionals } from "@/lib/interfaces";
+import { LocalProfessionals, ServiceProps } from "@/lib/interfaces";
 import { connectMongoDB } from "@/lib/mongodb";
 import { Organization } from "@/models/organization";
 import { Professional } from "@/models/professional";
@@ -15,7 +15,6 @@ export async function GET(
     };
   }
 ) {
-    
   const { userAdmin } = params;
 
   await connectMongoDB();
@@ -25,6 +24,7 @@ export async function GET(
   });
 
   const localProfessionals: LocalProfessionals[] = [];
+  let localServices: ServiceProps[] = [];
 
   for (const org of orgs) {
     const professionals = await Professional.find({
@@ -53,7 +53,7 @@ export async function GET(
   }
   return NextResponse.json(
     {
-        localProfessionals,
+      localProfessionals,
     },
     {
       status: 200,
