@@ -1,5 +1,5 @@
 "use client";
-import { LocalProfessionals, ServiceProps } from "@/lib/interfaces";
+import { ProfessionalProps } from "@/lib/interfaces";
 import {
   Avatar,
   Box,
@@ -7,60 +7,22 @@ import {
   ButtonGroup,
   Flex,
   Heading,
-  IconButton,
   Image,
   Stack,
   Text,
   VStack,
+  Wrap,
   WrapItem,
-  useBreakpointValue,
   useColorModeValue,
-  useDisclosure,
 } from "@chakra-ui/react";
-import { TbTrash } from "react-icons/tb";
+import { DeleteDrawerContent } from "./DeleteDrawerContent";
 import { EditDrawerContent } from "./EditDrawerContent";
 import { ProfessionalContentItemBadge } from "./ProfessionalContentItemBadge";
 
 interface PanelContentItemProps {
-  professional: LocalProfessionals;
-  handleDisplayDetail: (display: string, service: ServiceProps) => void;
+  professional: ProfessionalProps;
 }
-
-export function PanelContentItem({
-  professional,
-  handleDisplayDetail,
-}: PanelContentItemProps) {
-  const dimension = useBreakpointValue(
-    {
-      base: "base",
-      md: "md",
-    },
-    { fallback: "md" }
-  );
-
-  const {
-    isOpen: isOpenView,
-    onOpen: onOpenView,
-    onClose: onCloseView,
-  } = useDisclosure();
-
-  function handdleLineClick(display: string, service: ServiceProps) {
-    if (dimension === "base") {
-      console.log("dimension: ", dimension);
-      onOpenView;
-    } else {
-      handleDisplayDetail(display, service);
-    }
-  }
-
-  function handleOnOpen() {
-    onOpenView;
-  }
-
-  function handleOnClose() {
-    onCloseView;
-  }
-
+export function PanelContentItem({ professional }: PanelContentItemProps) {
   return (
     <WrapItem mx={{ base: "auto", md: "0" }}>
       <Box
@@ -112,12 +74,14 @@ export function PanelContentItem({
           </Text>
 
           <Stack align={"center"} justify={"center"} direction={"row"} mt={6}>
-            {professional.localServices?.map((service) => (
-              <ProfessionalContentItemBadge
-                key={service._id}
-                name={service.name as string}
-              />
-            ))}
+            <Wrap>
+              {professional.completeServices?.map((service) => (
+                <ProfessionalContentItemBadge
+                  key={service._id}
+                  name={service.name as string}
+                />
+              ))}
+            </Wrap>
           </Stack>
           <Stack
             mt={4}
@@ -132,20 +96,16 @@ export function PanelContentItem({
               isAttached
               colorScheme="purple"
             >
-              {/* <IconButton
-                icon={<TbEdit />}
-                aria-label="Edit Professional"
-                colorScheme="teal"
-              /> */}
               <EditDrawerContent {...professional} />
               <Button disabled={true} w="full">
                 Visualizar
               </Button>
-              <IconButton
+              <DeleteDrawerContent {...professional} />
+              {/* <IconButton
                 icon={<TbTrash />}
                 aria-label="Delete Professional"
                 colorScheme="red"
-              />
+              /> */}
             </ButtonGroup>
           </Stack>
         </Box>

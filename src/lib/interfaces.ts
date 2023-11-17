@@ -44,13 +44,15 @@ export interface ServiceProps {
 export interface ProfessionalProps {
   _id?: string;
   orgId?: string;
+  org?: OrgProps;
   name?: string;
   bio?: string;
   email?: string;
   function?: string;
   image?: string;
-  services?: ServiceProps[];
-  org?: OrgProps;
+  services?: string[];
+  localServices?: ServiceProps[];
+  completeServices?: ServiceProps[];
   createdAt?: Date;
   updatedAt?: Date;
   initialRef?: React.LegacyRef<HTMLInputElement> | undefined;

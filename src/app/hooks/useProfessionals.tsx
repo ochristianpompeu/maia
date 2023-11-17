@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useUser } from "@/app/hooks/useUser";
-import { LocalProfessionals } from "@/lib/interfaces";
+import { ProfessionalProps } from "@/lib/interfaces";
 import {
   ReactNode,
   createContext,
@@ -14,7 +14,7 @@ interface ProfessionalsProviderProps {
 }
 
 interface ProfessionalsContextData {
-  professionals: LocalProfessionals[];
+  professionals: ProfessionalProps[];
   updateProfessionals: () => void;
 }
 
@@ -26,7 +26,7 @@ export function ProfessionalsProvider({
   children,
 }: ProfessionalsProviderProps) {
   const { user } = useUser();
-  const [professionals, setProfessionals] = useState<LocalProfessionals[]>([]);
+  const [professionals, setProfessionals] = useState<ProfessionalProps[]>([]);
 
   useEffect(() => {
     async function fetchApi() {
@@ -67,19 +67,19 @@ export function ProfessionalsProvider({
 
   function updateProfessionals() {
     async function fetchApi() {
-      if (user === undefined) {
-        const res = await fetch(
-          `/api/service/professional/6543f7feb31c7cbd35d04ab4`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        const data = await res.json();
-        setProfessionals(data?.localProfessionals);
-      }
+      // if (user === undefined) {
+      //   const res = await fetch(
+      //     `/api/service/professional/6543f7feb31c7cbd35d04ab4`,
+      //     {
+      //       method: "GET",
+      //       headers: {
+      //         "Content-Type": "application/json",
+      //       },
+      //     }
+      //   );
+      //   const data = await res.json();
+      //   setProfessionals(data?.localProfessionals);
+      // }
 
       if (user) {
         try {

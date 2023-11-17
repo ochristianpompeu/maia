@@ -2,7 +2,7 @@
 import { useOrgs } from "@/app/hooks/useOrgs";
 import { useProfessionals } from "@/app/hooks/useProfessionals";
 import { useServices } from "@/app/hooks/useServices";
-import { LocalProfessionals, OrgProps } from "@/lib/interfaces";
+import { OrgProps, ProfessionalProps, ServiceProps } from "@/lib/interfaces";
 import {
   Button,
   ButtonGroup,
@@ -29,13 +29,19 @@ import { useRouter } from "next/navigation";
 import React, { ChangeEvent, Fragment, useRef, useState } from "react";
 import { TbEdit, TbRefresh } from "react-icons/tb";
 
-export function EditDrawerContent(props: LocalProfessionals) {
+export function EditDrawerContent(props: ProfessionalProps) {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const { updateProfessionals } = useProfessionals();
   const { orgs } = useOrgs();
   const { services } = useServices();
+  const [formServices, setFormServices] = useState(
+    services.filter((service) => service.org?._id === props.org?._id)
+  );
+  const [checkboxDefaultValue, setCheckboxDefaultValue] = useState(
+    props.services
+  );
   const { isOpen, onClose, onOpen } = useDisclosure();
 
   const initialRef = useRef() as any;
@@ -52,11 +58,22 @@ export function EditDrawerContent(props: LocalProfessionals) {
     func: props.function,
     orgId: props.orgId,
     services: props.services,
+    completeServices: props.completeServices,
   });
 
   function handleRouter() {
     updateProfessionals();
     router.refresh();
+  }
+
+  function getProfessionalServices() {
+    const completeServices = [];
+    for (let i = 0; i < formValues.services!.length; i++) {
+      completeServices.push(
+        ...services.filter((service) => service._id === formValues.services![i])
+      );
+    }
+    return completeServices;
   }
 
   function handleChangeInput(event: ChangeEvent<HTMLInputElement>) {
@@ -80,15 +97,75 @@ export function EditDrawerContent(props: LocalProfessionals) {
     const localServices = services.filter(
       (service) => service.org?._id === newOrgId
     );
+
     setFormValues({
       ...formValues,
       orgId: newOrgId,
+    });
+
+    setFormServices(localServices);
+  }
+
+  function handleChangeCheckBox(event: ChangeEvent<HTMLInputElement>) {
+    const localServices = formValues.services!;
+
+    const newArray = [] as string[];
+
+    const value = event.target.value;
+    const checked = event.target.checked;
+
+    if (checked && formValues.services!.indexOf(value) < 0) {
+      localServices.push(value);
+    }
+
+    if (checked && checkboxDefaultValue!.indexOf(value) < 0) {
+      localServices.push(value);
+    }
+
+    if (!checked && formValues.services!.indexOf(value) >= 0) {
+      for (let i = 0; i < formValues.services!.length; i++) {
+        if (localServices[i] !== value) {
+          newArray.push(formValues.services![i]);
+        }
+      }
+
+      setFormValues({
+        ...formValues,
+        services: newArray,
+      });
+      setCheckboxDefaultValue(newArray);
+      return;
+    }
+
+    if (!checked && checkboxDefaultValue!.indexOf(value) >= 0) {
+      for (let i = 0; i < checkboxDefaultValue!.length; i++) {
+        if (localServices[i] !== value) {
+          newArray.push(checkboxDefaultValue![i]);
+        }
+      }
+
+      setFormValues({
+        ...formValues,
+        services: newArray,
+      });
+      setCheckboxDefaultValue(newArray);
+      return;
+    }
+
+    setFormValues({
+      ...formValues,
       services: localServices,
     });
   }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    const professionalServices = getProfessionalServices();
+    setFormValues({
+      ...formValues,
+      completeServices: professionalServices,
+    });
+
     const updateProfessional = {
       newName: formValues.name,
       newEmail: formValues.email,
@@ -97,6 +174,7 @@ export function EditDrawerContent(props: LocalProfessionals) {
       newFunc: formValues.func,
       newOrgId: formValues.orgId,
       newServices: formValues.services,
+      newCompleteServices: professionalServices,
     };
     if (!updateProfessional.newName) {
       setError("O campo nome não pode ficar em branco");
@@ -211,7 +289,7 @@ export function EditDrawerContent(props: LocalProfessionals) {
                 placeholder="Nome do Profissional..."
                 focusBorderColor={mainColor}
                 onChange={handleChangeInput}
-                value={formValues.name}
+                value={formValues?.name}
                 type="text"
               />
               <FormLabel textColor={mainColor} pt="4" htmlFor="email">
@@ -223,7 +301,7 @@ export function EditDrawerContent(props: LocalProfessionals) {
                 placeholder="E-mail..."
                 focusBorderColor={mainColor}
                 onChange={handleChangeInput}
-                value={formValues.email}
+                value={formValues?.email}
                 type="email"
               />
               <FormLabel textColor={mainColor} pt="4" htmlFor="func">
@@ -235,7 +313,7 @@ export function EditDrawerContent(props: LocalProfessionals) {
                 placeholder="Função..."
                 focusBorderColor={mainColor}
                 onChange={handleChangeInput}
-                value={formValues.func}
+                value={formValues?.func}
                 type="text"
               />
               <FormLabel textColor={mainColor} pt="4" htmlFor="image">
@@ -247,7 +325,7 @@ export function EditDrawerContent(props: LocalProfessionals) {
                 placeholder="preencha com a url da imagem"
                 focusBorderColor={mainColor}
                 onChange={handleChangeInput}
-                value={formValues.image}
+                value={formValues?.image}
                 type="url"
               />
 
@@ -259,17 +337,24 @@ export function EditDrawerContent(props: LocalProfessionals) {
                 name="bio"
                 placeholder="Fale um pouco sobre o profissional..."
                 focusBorderColor={mainColor}
-                value={formValues.bio}
+                value={formValues?.bio}
                 size="md"
                 onChange={handleChangeTextArea}
               />
               <FormLabel textColor={mainColor} pt="4" htmlFor="services">
                 Selecione os Serviços
               </FormLabel>
-              <CheckboxGroup colorScheme="purple" defaultValue={[]}>
+              <CheckboxGroup
+                colorScheme="purple"
+                defaultValue={checkboxDefaultValue}
+              >
                 <Stack spacing={[1, 5]} direction={["column", "row"]}>
-                  {formValues.services?.map((service) => (
-                    <Checkbox key={service._id} value={service._id}>
+                  {formServices.map((service: ServiceProps) => (
+                    <Checkbox
+                      key={service._id}
+                      value={service._id}
+                      onChange={handleChangeCheckBox}
+                    >
                       {service.name}
                     </Checkbox>
                   ))}

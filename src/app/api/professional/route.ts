@@ -1,22 +1,22 @@
-import { ProfessionalProps } from "@/lib/interfaces";
 import { connectMongoDB } from "@/lib/mongodb";
 import { Professional } from "@/models/professional";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: Request) {
-  const { name, email, image, bio, func, orgId, services } =
+  const { name, email, image, bio, func, orgId, services, completeServices } =
     await request.json();
 
   await connectMongoDB();
 
   await Professional.create({
     name: name,
-    orgId: orgId,
-    bio: bio,
     email: email,
-    function: func,
     image: image,
+    bio: bio,
+    function: func,
+    orgId: orgId,
     services: services,
+    completeServices: completeServices,
   });
 
   return NextResponse.json(
@@ -31,8 +31,6 @@ export async function POST(request: Request) {
 
 export async function GET() {
   await connectMongoDB();
-  const professionals: ProfessionalProps[] = [];
-
   const localProfessionals = await Professional.find();
 
   return NextResponse.json({

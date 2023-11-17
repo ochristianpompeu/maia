@@ -15,17 +15,19 @@ export async function PUT(
     newFunc: func,
     newOrgId: orgId,
     newServices: services,
+    newCompleteServices: completeServices,
   } = await request.json();
   await connectMongoDB();
 
   await Professional.findByIdAndUpdate(id, {
     name: name,
-    orgId: orgId,
-    bio: bio,
     email: email,
-    function: func,
     image: image,
+    bio: bio,
+    function: func,
+    orgId: orgId,
     services: services,
+    completeServices: completeServices,
   });
   return NextResponse.json(
     {

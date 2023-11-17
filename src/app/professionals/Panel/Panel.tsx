@@ -1,28 +1,16 @@
-import { useProfessionals } from "@/app/hooks/useProfessionals";
 import { PanelAndMenuIcons } from "@/lib/Links";
-import { AddIcon } from "@chakra-ui/icons";
 import {
-  Button,
-  ButtonGroup,
   Card,
   CardBody,
   CardHeader,
   CardProps,
   Divider,
-  Drawer,
-  DrawerContent,
-  DrawerOverlay,
   HStack,
   Heading,
   Icon,
-  IconButton,
-  useColorModeValue,
-  useDisclosure,
+  useColorModeValue
 } from "@chakra-ui/react";
-import { useRouter } from "next/navigation";
-import { ReactNode, useRef } from "react";
-import { BsPersonBadge } from "react-icons/bs";
-import { TbReload } from "react-icons/tb";
+import { ReactNode } from "react";
 import { AddDrawerContent } from "./AddDrawerContent";
 import { PanelContent } from "./PanelContent";
 interface DataPanelProps extends CardProps {
@@ -37,22 +25,7 @@ export function Panel({
   handleDisplayDetail,
   ...rest
 }: DataPanelProps) {
-  const {
-    isOpen: isOpenAdd,
-    onOpen: onOpenAdd,
-    onClose: onCloseAdd,
-  } = useDisclosure();
-
-  const firstField = useRef() as any;
   const bgCargHeader = useColorModeValue("gray.50", "whiteAlpha.100");
-  const { updateProfessionals } = useProfessionals();
-  const router = useRouter();
-
-  function handleOnAddClose() {
-    updateProfessionals();
-    onCloseAdd;
-    router.refresh();
-  }
 
   return (
     <Card
@@ -68,53 +41,13 @@ export function Panel({
             <Icon fontSize="2xl" as={PanelAndMenuIcons.professionals} />
             <Heading size="md">Profissionais</Heading>
           </HStack>
-          <IconButton
-            display={{ md: "none" }}
-            aria-label="Add Professional"
-            colorScheme="purple"
-            onClick={onOpenAdd}
-            variant="outline"
-            icon={<AddIcon />}
-          />
-          <ButtonGroup
-            variant="outline"
-            colorScheme="purple"
-            display={{ base: "none", md: "inline-flex" }}
-            isAttached
-            size="sm"
-          >
-            <IconButton
-              onClick={onOpenAdd}
-              aria-label="Add Professional"
-              icon={<BsPersonBadge />}
-            />
-            <Button onClick={onOpenAdd}>Adicionar</Button>
-            <IconButton
-              onClick={updateProfessionals}
-              aria-label="Refresh"
-              icon={<TbReload />}
-            />
-          </ButtonGroup>
+          <AddDrawerContent />
         </HStack>
       </CardHeader>
       <Divider />
-      <Drawer
-        size={{ base: "full", md: "sm" }}
-        isOpen={isOpenAdd}
-        onClose={onCloseAdd}
-        initialFocusRef={firstField}
-      >
-        <DrawerOverlay />
-        <DrawerContent>
-          <AddDrawerContent
-            initialRef={firstField}
-            onClose={handleOnAddClose}
-          />
-        </DrawerContent>
-      </Drawer>
 
       <CardBody borderRadius="md" overflowY="auto">
-        <PanelContent handleDisplayDetail={handleDisplayDetail} />
+        <PanelContent />
       </CardBody>
     </Card>
   );

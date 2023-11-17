@@ -1,23 +1,17 @@
 import { useProfessionals } from "@/app/hooks/useProfessionals";
+import { ProfessionalProps } from "@/lib/interfaces";
 import { Skeleton, SkeletonCircle, SkeletonText, Wrap } from "@chakra-ui/react";
-import { useState } from "react";
 import { PanelContentItem } from "./PanelContentItem";
-// import { OrgPanelContentItem } from "./ServicesPanelContentItem";
-interface PanelContentProps {
-  handleDisplayDetail: (display: string) => void;
-}
 
-export function PanelContent({ handleDisplayDetail }: PanelContentProps) {
-  const [displayDetail, setDisplayDetail] = useState("block");
+export function PanelContent() {
   const { professionals } = useProfessionals();
 
   if (professionals) {
     return (
       <Wrap spacing="4" w="full">
-        {professionals.map((professional) => (
+        {professionals.map((professional: ProfessionalProps) => (
           <PanelContentItem
             key={professional._id}
-            handleDisplayDetail={handleDisplayDetail}
             professional={professional}
           />
         ))}
