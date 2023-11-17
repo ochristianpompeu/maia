@@ -1,12 +1,12 @@
-export interface UserProps{
-  _id?: string,
-  email?: string,
-  name?: string,
-  user?: string
-  password?: string,
-  createdAt?: Date,
-  updatedAt?: Date,
-  __v?: 0
+export interface UserProps {
+  _id?: string;
+  email?: string;
+  name?: string;
+  user?: string;
+  password?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+  __v?: 0;
 }
 export interface OrgProps {
   _id?: string | undefined;
@@ -36,7 +36,7 @@ export interface ServiceProps {
   createdAt?: Date;
   updatedAt?: Date;
   org?: OrgProps;
-  professionals?: ProfessionalProps[]
+  professionals?: ProfessionalProps[];
   initialRef?: React.LegacyRef<HTMLInputElement> | undefined;
   onClose?: () => void;
 }
@@ -55,4 +55,13 @@ export interface ProfessionalProps {
   updatedAt?: Date;
   initialRef?: React.LegacyRef<HTMLInputElement> | undefined;
   onClose?: () => void;
+}
+
+export interface LocalServices extends ServiceProps {
+  userAdmin: string;
+  org: OrgProps;
+}
+export interface LocalProfessionals extends ProfessionalProps {
+  org: OrgProps;
+  localServices: LocalServices[];
 }

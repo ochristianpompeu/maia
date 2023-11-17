@@ -1,4 +1,4 @@
-import { useServices } from "@/app/hooks/useServices";
+import { useProfessionals } from "@/app/hooks/useProfessionals";
 import { PanelAndMenuIcons } from "@/lib/Links";
 import { AddIcon } from "@chakra-ui/icons";
 import {
@@ -45,13 +45,13 @@ export function Panel({
 
   const firstField = useRef() as any;
   const bgCargHeader = useColorModeValue("gray.50", "whiteAlpha.100");
-  const { updateServices } = useServices();
+  const { updateProfessionals } = useProfessionals();
   const router = useRouter();
 
   function handleOnAddClose() {
-    updateServices();
+    updateProfessionals();
     onCloseAdd;
-    router.refresh()
+    router.refresh();
   }
 
   return (
@@ -90,7 +90,7 @@ export function Panel({
             />
             <Button onClick={onOpenAdd}>Adicionar</Button>
             <IconButton
-              // onClick={updateServices}
+              onClick={updateProfessionals}
               aria-label="Refresh"
               icon={<TbReload />}
             />

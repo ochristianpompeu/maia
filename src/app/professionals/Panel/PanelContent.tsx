@@ -18,6 +18,7 @@ export function PanelContent({ handleDisplayDetail }: PanelContentProps) {
           <PanelContentItem
             key={professional._id}
             handleDisplayDetail={handleDisplayDetail}
+            professional={professional}
           />
         ))}
       </Wrap>

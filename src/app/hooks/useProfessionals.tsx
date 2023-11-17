@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useUser } from "@/app/hooks/useUser";
-import { ProfessionalProps } from "@/lib/interfaces";
+import { LocalProfessionals } from "@/lib/interfaces";
 import {
   ReactNode,
   createContext,
@@ -14,7 +14,7 @@ interface ProfessionalsProviderProps {
 }
 
 interface ProfessionalsContextData {
-  professionals: ProfessionalProps[];
+  professionals: LocalProfessionals[];
   updateProfessionals: () => void;
 }
 
@@ -26,7 +26,7 @@ export function ProfessionalsProvider({
   children,
 }: ProfessionalsProviderProps) {
   const { user } = useUser();
-  const [professionals, setProfessionals] = useState([]);
+  const [professionals, setProfessionals] = useState<LocalProfessionals[]>([]);
 
   useEffect(() => {
     async function fetchApi() {
@@ -53,7 +53,6 @@ export function ProfessionalsProvider({
           });
           const data = await res.json();
           setProfessionals(data?.localProfessionals);
-          console.log("useProfessionals: ", professionals)
         } catch (error) {
           return;
         }

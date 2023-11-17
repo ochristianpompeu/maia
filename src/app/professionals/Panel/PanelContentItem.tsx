@@ -1,9 +1,8 @@
 "use client";
-import { useServices } from "@/app/hooks/useServices";
-import { ServiceProps } from "@/lib/interfaces";
+import { useProfessionals } from "@/app/hooks/useProfessionals";
+import { LocalProfessionals, ServiceProps } from "@/lib/interfaces";
 import {
   Avatar,
-  Badge,
   Box,
   Button,
   ButtonGroup,
@@ -13,21 +12,25 @@ import {
   Image,
   Stack,
   Text,
+  VStack,
   WrapItem,
   useBreakpointValue,
   useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
 import { TbEdit, TbTrash } from "react-icons/tb";
+import { ProfessionalContentItemBadge } from "./ProfessionalContentItemBadge";
 
 interface PanelContentItemProps {
+  professional: LocalProfessionals;
   handleDisplayDetail: (display: string, service: ServiceProps) => void;
 }
 
 export function PanelContentItem({
+  professional,
   handleDisplayDetail,
 }: PanelContentItemProps) {
-  const { services } = useServices();
+  const { professionals } = useProfessionals();
   const dimension = useBreakpointValue(
     {
       base: "base",
@@ -75,16 +78,14 @@ export function PanelContentItem({
         <Image
           h={"120px"}
           w={"full"}
-          src={
-            "https://images.unsplash.com/photo-1612865547334-09cb8cb455da?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80"
-          }
+          src={"https://imageipsum.com/634x951"}
           objectFit="cover"
-          alt="#"
+          alt="background image of professional card"
         />
         <Flex justify={"center"} mt={-12}>
           <Avatar
             size={"xl"}
-            src={"https://i.pravatar.cc/300"}
+            src={professional?.image}
             css={{
               border: "2px solid white",
             }}
@@ -92,47 +93,34 @@ export function PanelContentItem({
         </Flex>
         <Box p={6} textAlign="center" w="full">
           <Heading fontSize={"2xl"} fontFamily={"body"}>
-            Lindsey James
+            {professional?.name}
           </Heading>
-          <Text fontWeight={600} color={"gray.500"} mb={4}>
-            @lindsey_jam3s
-          </Text>
+          <VStack spacing={0} m={0} p={0}>
+            <Text fontWeight="600" color={"gray.500"} m={0}>
+              {professional.email}
+            </Text>
+            <Text fontWeight="400" color={"gray.500"} mb={4}>
+              {professional.org?.name}
+            </Text>
+          </VStack>
+
           <Text
             textAlign={"center"}
             color={useColorModeValue("gray.700", "gray.400")}
             px={3}
           >
-            Actress, musician, songwriter and artist. PM for work inquires...
+            {professional.bio?.substring(0, 80)}...
+            {/* {professional.services?.map((service) => service.name)} */}
+            {/* Actress, musician, songwriter and artist. PM for work inquires... */}
           </Text>
 
           <Stack align={"center"} justify={"center"} direction={"row"} mt={6}>
-            <Badge
-              px={2}
-              py={1}
-              // bg={useColorModeValue("gray.50", "gray.800")}
-              fontWeight={"400"}
-              colorScheme="purple"
-            >
-              #art
-            </Badge>
-            <Badge
-              px={2}
-              py={1}
-              // bg={useColorModeValue("gray.50", "gray.800")}
-              fontWeight={"400"}
-              colorScheme="purple"
-            >
-              #photography
-            </Badge>
-            <Badge
-              px={2}
-              py={1}
-              // bg={useColorModeValue("gray.50", "gray.800")}
-              fontWeight={"400"}
-              colorScheme="purple"
-            >
-              #music
-            </Badge>
+            {professional.localServices?.map((service) => (
+              <ProfessionalContentItemBadge
+                key={service._id}
+                name={service.name as string}
+              />
+            ))}
           </Stack>
           <Stack
             mt={4}
@@ -152,7 +140,9 @@ export function PanelContentItem({
                 aria-label="Edit Professional"
                 colorScheme="teal"
               />
-              <Button w="full">Visualizar</Button>
+              <Button disabled={true} w="full">
+                Visualizar
+              </Button>
               <IconButton
                 icon={<TbTrash />}
                 aria-label="Delete Professional"

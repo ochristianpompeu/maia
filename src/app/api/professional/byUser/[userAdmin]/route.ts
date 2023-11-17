@@ -1,4 +1,4 @@
-import { OrgProps, ProfessionalProps, ServiceProps } from "@/lib/interfaces";
+import { LocalProfessionals } from "@/lib/interfaces";
 import { connectMongoDB } from "@/lib/mongodb";
 import { Organization } from "@/models/organization";
 import { Professional } from "@/models/professional";
@@ -15,15 +15,7 @@ export async function GET(
     };
   }
 ) {
-  interface LocalServices extends ServiceProps {
-    userAdmin: string;
-    org: OrgProps;
-  }
-  interface LocalProfessionals extends ProfessionalProps {
-    org: OrgProps;
-    localServices: LocalServices[];
-  }
-
+    
   const { userAdmin } = params;
 
   await connectMongoDB();
