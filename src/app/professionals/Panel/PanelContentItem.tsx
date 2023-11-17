@@ -1,5 +1,4 @@
 "use client";
-import { useProfessionals } from "@/app/hooks/useProfessionals";
 import { LocalProfessionals, ServiceProps } from "@/lib/interfaces";
 import {
   Avatar,
@@ -18,7 +17,8 @@ import {
   useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
-import { TbEdit, TbTrash } from "react-icons/tb";
+import { TbTrash } from "react-icons/tb";
+import { EditDrawerContent } from "./EditDrawerContent";
 import { ProfessionalContentItemBadge } from "./ProfessionalContentItemBadge";
 
 interface PanelContentItemProps {
@@ -30,7 +30,6 @@ export function PanelContentItem({
   professional,
   handleDisplayDetail,
 }: PanelContentItemProps) {
-  const { professionals } = useProfessionals();
   const dimension = useBreakpointValue(
     {
       base: "base",
@@ -63,7 +62,7 @@ export function PanelContentItem({
   }
 
   return (
-    <WrapItem>
+    <WrapItem mx={{ base: "auto", md: "0" }}>
       <Box
         maxW={"320px"}
         minW={"320px"}
@@ -135,11 +134,12 @@ export function PanelContentItem({
               isAttached
               colorScheme="purple"
             >
-              <IconButton
+              {/* <IconButton
                 icon={<TbEdit />}
                 aria-label="Edit Professional"
                 colorScheme="teal"
-              />
+              /> */}
+              <EditDrawerContent {...professional} />
               <Button disabled={true} w="full">
                 Visualizar
               </Button>

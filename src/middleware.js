@@ -6,7 +6,7 @@ export const config = {
     "/dashboard",
     "/checkout",
     "/organization",
-    "/professional",
+    "/professionals",
     "/services",
     "/panel",
     "/hours",

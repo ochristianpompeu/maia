@@ -13,7 +13,7 @@ export function PanelContent({ handleDisplayDetail }: PanelContentProps) {
 
   if (professionals) {
     return (
-      <Wrap spacing="4">
+      <Wrap spacing="4" w="full">
         {professionals.map((professional) => (
           <PanelContentItem
             key={professional._id}
