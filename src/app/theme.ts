@@ -5,6 +5,8 @@ const config = {
     heading: `'Bayon', sans-serif`,
     body: `'Poppins', sans-serif`,
   },
+  initialColorMode: 'dark',
+  useSystemColorMode: false,
 };
 const theme = extendTheme({
   config,

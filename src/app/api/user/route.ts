@@ -17,3 +17,10 @@ export async function POST(request: Request) {
     { status: 201 }
   );
 }
+
+export async function GET() {
+  await connectMongoDB();
+  const users = await User.find();
+
+  return NextResponse.json({ users });
+}

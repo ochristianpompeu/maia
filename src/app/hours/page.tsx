@@ -4,10 +4,9 @@ import { applicationConfig } from "@/lib/config";
 import { ServiceProps } from "@/lib/interfaces";
 import { Flex, Stack, useColorModeValue } from "@chakra-ui/react";
 import { Fragment, useState } from "react";
-import { DataPanel } from "./DataPanel/DataPanel";
 import { Panel } from "./Panel/Panel";
 
-export default function Professionals() {
+export default function Hours() {
   const bgBoxColor = useColorModeValue("gray.100", "gray.800");
   const [displayDetail, setDisplayDetail] = useState("none");
   const [detailService, setDetailService] = useState<ServiceProps>();
@@ -38,12 +37,6 @@ export default function Professionals() {
               height={{ base: "auto", md: applicationConfig.staticHeightPanel }}
             >
               <Panel handleDisplayDetail={handleDisplayDetail} shadow="none" />
-              <DataPanel
-                display={displayDetail}
-                handleDisplayDetail={handleDisplayDetail}
-                service={detailService}
-                shadow="none"
-              />
             </Stack>
           </Flex>
         </Stack>
