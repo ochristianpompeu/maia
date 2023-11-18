@@ -2,12 +2,10 @@ import { useOrgs } from "@/app/hooks/useOrgs";
 import { useProfessionals } from "@/app/hooks/useProfessionals";
 import { useServices } from "@/app/hooks/useServices";
 import { OrgProps, ProfessionalProps, ServiceProps } from "@/lib/interfaces";
-import { AddIcon } from "@chakra-ui/icons";
+import { AddIcon, MinusIcon } from "@chakra-ui/icons";
 import {
   Button,
   ButtonGroup,
-  Checkbox,
-  CheckboxGroup,
   Drawer,
   DrawerBody,
   DrawerCloseButton,
@@ -16,11 +14,12 @@ import {
   DrawerHeader,
   DrawerOverlay,
   FormLabel,
+  HStack,
   IconButton,
   Input,
+  InputGroup,
   Select,
-  Stack,
-  Textarea,
+  VStack,
   useColorModeValue,
   useDisclosure,
   useToast,
@@ -30,28 +29,35 @@ import { ChangeEvent, Fragment, useRef, useState } from "react";
 import { Ri24HoursLine, RiSaveLine } from "react-icons/ri";
 import { TbReload } from "react-icons/tb";
 
-export function AddDrawerContent(props: ProfessionalProps) {
+export function AddDrawerContent() {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const firstField = useRef() as any;
   const { orgs } = useOrgs();
   const { services } = useServices();
-  const [formServices, setFormServices] = useState(
-    services.filter((service) => service.org?._id === orgs[0]._id)
+  const { professionals, updateProfessionals } = useProfessionals();
+  const initialProfessionals = professionals?.filter(
+    (professional: ProfessionalProps) => professional.org?._id === orgs[0]?._id
   );
-  const { updateProfessionals } = useProfessionals();
-  const [formValues, setFormValues] = useState({
-    name: "",
-    email: "",
-    image: "",
-    bio: "",
-    func: "",
-    orgId: orgs[0]?._id,
-    services: [] as string[],
-    completeServices: [{}],
-  });
 
+  const [formValues, setFormValues] = useState({
+    orgId: "",
+    day: "",
+    professionalId: "initialProfessionals[0]?._id",
+    professionals: [] as ProfessionalProps[],
+    servicesId: "",
+    services: [] as ServiceProps[],
+  });
+  const [professional, setProfessional] = useState<ProfessionalProps>(
+    {} as ProfessionalProps
+  );
+  const [service, setService] = useState<ServiceProps>({} as ServiceProps);
+  const [day, setDay] = useState("");
+  const [interval, setInterval] = useState([{ start: "00:00", end: "00:00" }]);
+  // const
+  const [intervalGroup, setIntervalGroup] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const firstField = useRef() as any;
   const toast = useToast();
   const router = useRouter();
 
@@ -63,166 +69,241 @@ export function AddDrawerContent(props: ProfessionalProps) {
     router.refresh();
   }
 
-  function getProfessionalServices() {
-    const completeServices = [];
-    for (let i = 0; i < formValues.services.length; i++) {
-      completeServices.push(
-        ...services.filter((service) => service._id === formValues.services[i])
-      );
+  // function getProfessionalServices() {
+  //   const completeServices = [];
+  //   for (let i = 0; i < formValues.services.length; i++) {
+  //     completeServices.push(
+  //       ...services.filter((service) => service._id === formValues.services[i])
+  //     );
+  //   }
+  //   return completeServices;
+  // }
+
+  // function handleChangeInput(event: ChangeEvent<HTMLInputElement>) {
+  //   const { name, value } = event.target;
+  //   setFormValues({
+  //     ...formValues,
+  //     [name]: value,
+  //   });
+  // }
+
+  // function handleChangeTextArea(event: ChangeEvent<HTMLTextAreaElement>) {
+  //   const newBio = event.target.value;
+  //   setFormValues({
+  //     ...formValues,
+  //     bio: newBio,
+  //   });
+  // }
+  function handleAddInterval() {
+    setIntervalGroup(intervalGroup + 1);
+  }
+
+  function handleMinusInterval() {
+    if (intervalGroup === 0) {
+      return;
     }
-    return completeServices;
+    const localInterval: { start: string; end: string }[] = interval;
+    localInterval.pop();
+    setIntervalGroup(intervalGroup - 1);
+    setInterval(localInterval);
   }
 
-  function handleChangeInput(event: ChangeEvent<HTMLInputElement>) {
-    const { name, value } = event.target;
-    setFormValues({
-      ...formValues,
-      [name]: value,
-    });
-  }
-
-  function handleChangeTextArea(event: ChangeEvent<HTMLTextAreaElement>) {
-    const newBio = event.target.value;
-    setFormValues({
-      ...formValues,
-      bio: newBio,
-    });
-  }
-
-  function handleChangeSelect(event: ChangeEvent<HTMLSelectElement>) {
+  function handleChangeOrg(event: ChangeEvent<HTMLSelectElement>) {
     const localOrgId = event.target.value;
+    const localProfessionals = professionals.filter(
+      (professional: ProfessionalProps) => professional.org?._id === localOrgId
+    );
     const localServices = services.filter(
-      (service) => service.org?._id === localOrgId
+      (service: ServiceProps) => service.org?._id === localOrgId
     );
 
     setFormValues({
       ...formValues,
       orgId: localOrgId,
+      servicesId: localServices[0]?._id!,
+      services: localServices,
+      professionalId: localProfessionals[0]?._id,
+      professionals: localProfessionals,
     });
-
-    setFormServices(localServices);
   }
 
-  function handleChangeCheckBox(event: ChangeEvent<HTMLInputElement>) {
-    const localServices = formValues.services;
-    // const localCompleteServices = formValues.completeServices;
+  function handleChangeProfessional(event: ChangeEvent<HTMLSelectElement>) {
+    const localProfessionals = professionals.filter(
+      (professional: ProfessionalProps) =>
+        professional._id === event.target.value
+    );
+    const localServices = localProfessionals[0]?.completeServices;
 
-    const newArray = [] as string[];
-    // const newServiceArray = [{}];
-
-    const value = event.target.value;
-    const checked = event.target.checked;
-
-    if (checked && localServices.indexOf(value) < 0) {
-      localServices.push(value);
-    }
-
-    if (!checked && localServices.indexOf(value) >= 0) {
-      for (let i = 0; i < localServices.length; i++) {
-        if (localServices[i] !== value) {
-          newArray.push(localServices[i]);
-        }
-      }
-
-      setFormValues({
-        ...formValues,
-        services: newArray,
-      });
-      return;
-    }
     setFormValues({
       ...formValues,
-      services: localServices,
+      professionalId: localProfessionals[0]?._id,
+      services: localServices || ([{}] as ServiceProps[]),
     });
+
+    setProfessional(localProfessionals[0]);
+  }
+
+  function handleChangeService(event: ChangeEvent<HTMLSelectElement>) {
+    const localServices = services.filter(
+      (service: ServiceProps) => service._id === event.target.value
+    );
+
+    setFormValues({
+      ...formValues,
+      servicesId: localServices[0]?._id!,
+    });
+    setService(localServices[0]);
+  }
+
+  function handleInterval(event: ChangeEvent<HTMLInputElement>, key: number) {
+    const { name, value, id } = event.target;
+    const localInterval: { start: string; end: string }[] = interval;
+
+    if (name === "start") {
+      const localhour = { ...localInterval[key], start: value };
+      localInterval[key] = localhour;
+      console.log(name, value, id, key);
+    }
+    if (name === "end") {
+      const localhour = { ...localInterval[key], end: value };
+      localInterval[key] = localhour;
+      console.log(name, value, id, key);
+    }
+
+    setInterval(localInterval);
+
+    console.log("interval: ", interval);
   }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    return;
 
-    if (!formValues.name) {
-      setError("O campo nome não pode ficar em branco");
-      toast({
-        title: "Ocorreu um erro",
-        description: error,
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-        position: "top",
-      });
-      return;
-    }
+    // if (!formValues.name) {
+    //   setError("O campo nome não pode ficar em branco");
+    //   toast({
+    //     title: "Ocorreu um erro",
+    //     description: error,
+    //     status: "error",
+    //     duration: 3000,
+    //     isClosable: true,
+    //     position: "top",
+    //   });
+    //   return;
+    // }
 
-    try {
-      setLoading(true);
-      const professionalServices = getProfessionalServices();
-      // console.log("professionalServices: ", professionalServices);
-      setFormValues({
-        ...formValues,
-        completeServices: professionalServices,
-      });
+    // try {
+    //   setLoading(true);
+    //   const professionalServices = getProfessionalServices();
+    //   // console.log("professionalServices: ", professionalServices);
+    //   setFormValues({
+    //     ...formValues,
+    //     completeServices: professionalServices,
+    //   });
 
-      // console.log("formValues: ", formValues);
+    //   // console.log("formValues: ", formValues);
 
-      const responseCreate = await fetch("/api/professional/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ...formValues,
-        }),
-      });
+    //   const responseCreate = await fetch("/api/professional/", {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify({
+    //       ...formValues,
+    //     }),
+    //   });
 
-      setLoading(false);
+    //   setLoading(false);
 
-      if (responseCreate.ok) {
-        // setFormValues({
-        //   name: "",
-        //   email: "",
-        //   image: "",
-        //   bio: "",
-        //   func: "",
-        //   orgId: orgs[0]._id,
-        //   services: [] as string[],
-        //   completeServices: [{}],
-        // });
+    //   if (responseCreate.ok) {
+    //     // setFormValues({
+    //     //   name: "",
+    //     //   email: "",
+    //     //   image: "",
+    //     //   bio: "",
+    //     //   func: "",
+    //     //   orgId: orgs[0]._id,
+    //     //   services: [] as string[],
+    //     //   completeServices: [{}],
+    //     // });
 
-        toast({
-          title: "Sucesso",
-          description: "Serviço cadastrado com sucesso",
-          status: "success",
-          duration: 3000,
-          isClosable: true,
-          position: "top",
-        });
+    //     toast({
+    //       title: "Sucesso",
+    //       description: "Serviço cadastrado com sucesso",
+    //       status: "success",
+    //       duration: 3000,
+    //       isClosable: true,
+    //       position: "top",
+    //     });
 
-        handleRouter();
-      } else {
-        const responseError = await responseCreate.json();
-        setError(responseError);
-        toast({
-          title: "Ocorreu um erro",
-          description: error,
-          status: "error",
-          duration: 3000,
-          isClosable: true,
-          position: "top",
-        });
-        handleRouter();
-      }
-    } catch (erro: any) {
-      setLoading(false);
-      setError(erro);
-      toast({
-        title: "Ocorreu um erro",
-        description: error,
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-        position: "top",
-      });
-      handleRouter();
-    }
+    //     handleRouter();
+    //   } else {
+    //     const responseError = await responseCreate.json();
+    //     setError(responseError);
+    //     toast({
+    //       title: "Ocorreu um erro",
+    //       description: error,
+    //       status: "error",
+    //       duration: 3000,
+    //       isClosable: true,
+    //       position: "top",
+    //     });
+    //     handleRouter();
+    //   }
+    // } catch (erro: any) {
+    //   setLoading(false);
+    //   setError(erro);
+    //   toast({
+    //     title: "Ocorreu um erro",
+    //     description: error,
+    //     status: "error",
+    //     duration: 3000,
+    //     isClosable: true,
+    //     position: "top",
+    //   });
+    //   handleRouter();
+    // }
+  }
+
+  const rows = [];
+  for (let i = 0; i < intervalGroup; i++) {
+    // note: we are adding a key prop here to allow react to uniquely identify each
+    // element in this array. see: https://reactjs.org/docs/lists-and-keys.html
+    rows.push(
+      <InputGroup
+        key={i}
+        borderRadius="md"
+        p="2"
+        bg="gray.800"
+        id="interval"
+        alignItems="center"
+      >
+        <FormLabel textColor={mainColor} htmlFor="start">
+          Inicio
+        </FormLabel>
+        <Input
+          placeholder="Hora inicial"
+          size="md"
+          type="time"
+          id="start"
+          name="start"
+          mr="2"
+          onChange={(e) => handleInterval(e, i)}
+        />
+        <FormLabel textColor={mainColor} htmlFor="end">
+          Fim
+        </FormLabel>
+        <Input
+          placeholder="Hora final"
+          size="md"
+          type="time"
+          id="end"
+          name="end"
+          key={1}
+          onChange={(e) => handleInterval(e, i)}
+        />
+      </InputGroup>
+    );
   }
 
   return (
@@ -233,11 +314,7 @@ export function AddDrawerContent(props: ProfessionalProps) {
         colorScheme="purple"
         isAttached
       >
-        <IconButton
-          aria-label="Add Hour"
-          onClick={onOpen}
-          icon={<AddIcon />}
-        />
+        <IconButton aria-label="Add Hour" onClick={onOpen} icon={<AddIcon />} />
         <IconButton
           // onClick={updateHours}
           aria-label="Refresh"
@@ -274,105 +351,103 @@ export function AddDrawerContent(props: ProfessionalProps) {
         <DrawerContent bg={bgColorDrawer}>
           <DrawerCloseButton />
           <DrawerHeader textColor={mainColor} borderBottomWidth="1px">
-            Cadastrar Profissional
+            Cadastrar Horário
           </DrawerHeader>
 
           <DrawerBody>
             <form id="createForm" onSubmit={handleSubmit}>
               <FormLabel textColor={mainColor} htmlFor="orgId">
-                Selecione a Empresa
+                Empresa
               </FormLabel>
               <Select
                 id="orgId"
                 name="orgId"
                 value={formValues.orgId}
-                onChange={handleChangeSelect}
+                onChange={handleChangeOrg}
                 focusBorderColor={mainColor}
               >
+                <option value="#">Nenhum</option>
                 {orgs?.map((org: OrgProps) => (
                   <option key={org._id!} value={org._id!}>
                     {org.name!}
                   </option>
                 ))}
               </Select>
-              <FormLabel textColor={mainColor} pt="4" htmlFor="name">
-                Nome
-              </FormLabel>
-              <Input
-                ref={props.initialRef}
-                id="name"
-                name="name"
-                placeholder="Nome do Profissional..."
-                focusBorderColor={mainColor}
-                onChange={handleChangeInput}
-                value={formValues.name}
-                type="text"
-              />
-              <FormLabel textColor={mainColor} pt="4" htmlFor="email">
-                E-mail
-              </FormLabel>
-              <Input
-                id="email"
-                name="email"
-                placeholder="E-mail..."
-                focusBorderColor={mainColor}
-                onChange={handleChangeInput}
-                value={formValues.email}
-                type="email"
-              />
-              <FormLabel textColor={mainColor} pt="4" htmlFor="func">
-                Função
-              </FormLabel>
-              <Input
-                id="func"
-                name="func"
-                placeholder="Função..."
-                focusBorderColor={mainColor}
-                onChange={handleChangeInput}
-                value={formValues.func}
-                type="text"
-              />
-              <FormLabel textColor={mainColor} pt="4" htmlFor="image">
-                URL da Imagem
-              </FormLabel>
-              <Input
-                id="image"
-                name="image"
-                placeholder="preencha com a url da imagem"
-                focusBorderColor={mainColor}
-                onChange={handleChangeInput}
-                value={formValues.image}
-                type="url"
-              />
 
-              <FormLabel textColor={mainColor} pt="4" htmlFor="bio">
-                Sobre
+              <FormLabel textColor={mainColor} htmlFor="professionalId">
+                Profissional
               </FormLabel>
-              <Textarea
-                id="bio"
-                name="bio"
-                placeholder="Fale um pouco sobre o profissional..."
+              <Select
+                id="professionalId"
+                name="professionalId"
+                value={formValues.professionalId}
+                onChange={handleChangeProfessional}
                 focusBorderColor={mainColor}
-                value={formValues.bio}
-                size="md"
-                onChange={handleChangeTextArea}
-              />
-              <FormLabel textColor={mainColor} pt="4" htmlFor="services">
-                Selecione os Serviços
+              >
+                <option value="#">Nenhum</option>
+                {formValues.professionals?.map(
+                  (professional: ProfessionalProps) => (
+                    <option key={professional._id!} value={professional._id!}>
+                      {professional.name!}
+                    </option>
+                  )
+                )}
+              </Select>
+
+              <FormLabel textColor={mainColor} htmlFor="serviceId">
+                Serviço
               </FormLabel>
-              <CheckboxGroup colorScheme="purple">
-                <Stack spacing={[1, 5]} direction={["column", "row"]}>
-                  {formServices.map((service: ServiceProps) => (
-                    <Checkbox
-                      key={service._id}
-                      value={service._id}
-                      onChange={handleChangeCheckBox}
-                    >
-                      {service.name}
-                    </Checkbox>
-                  ))}
-                </Stack>
-              </CheckboxGroup>
+              <Select
+                id="serviceId"
+                name="serviceId"
+                value={formValues.servicesId}
+                onChange={handleChangeService}
+                focusBorderColor={mainColor}
+              >
+                <option value="#">Nenhum</option>
+                {formValues.services.map((service: ServiceProps) => (
+                  <option key={service._id!} value={service._id!}>
+                    {service.name!}
+                  </option>
+                ))}
+              </Select>
+
+              <FormLabel textColor={mainColor} htmlFor="day">
+                Dia
+              </FormLabel>
+              <Input
+                name="day"
+                id="day"
+                placeholder="Selecione o dia"
+                size="md"
+                type="date"
+              />
+              <VStack mt="2">
+                <HStack justifyContent="space-between" w="full">
+                  <FormLabel textColor={mainColor} htmlFor="interval">
+                    Intervalos
+                  </FormLabel>
+                  <ButtonGroup isAttached size="sm" variant="outline">
+                    <IconButton
+                      aria-label="add interval"
+                      icon={<AddIcon />}
+                      onClick={handleAddInterval}
+                      name="add"
+                      id="add"
+                    />
+                    <IconButton
+                      aria-label="minus interval"
+                      icon={<MinusIcon />}
+                      onClick={handleMinusInterval}
+                      name="minus"
+                      id="minus"
+                    />
+                  </ButtonGroup>
+                </HStack>
+                <VStack borderRadius="md" border="1px" w="full" p="2">
+                  {rows}
+                </VStack>
+              </VStack>
             </form>
           </DrawerBody>
 

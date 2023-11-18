@@ -1,5 +1,5 @@
 export interface UserProps {
-  _id?: string;
+  _id: string;
   email?: string;
   name?: string;
   user?: string;
@@ -9,7 +9,7 @@ export interface UserProps {
   __v?: 0;
 }
 export interface OrgProps {
-  _id?: string | undefined;
+  _id: string | undefined;
   name?: string;
   description?: string;
   createdAt?: Date;
@@ -29,7 +29,7 @@ export interface OrgEditDrawerContentProps {
 export interface OrgAddDrawerContentProps extends OrgEditDrawerContentProps {}
 
 export interface ServiceProps {
-  _id?: string;
+  _id: string;
   name?: string;
   description?: string;
   orgId?: string;
@@ -42,7 +42,7 @@ export interface ServiceProps {
 }
 
 export interface ProfessionalProps {
-  _id?: string;
+  _id: string;
   orgId?: string;
   org?: OrgProps;
   name?: string;
@@ -52,7 +52,7 @@ export interface ProfessionalProps {
   image?: string;
   services?: string[];
   localServices?: ServiceProps[];
-  completeServices?: ServiceProps[];
+  completeServices: ServiceProps[];
   createdAt?: Date;
   updatedAt?: Date;
   initialRef?: React.LegacyRef<HTMLInputElement> | undefined;

@@ -15,7 +15,7 @@ import {
 } from "@chakra-ui/react";
 import { ReactNode } from "react";
 import { AddDrawerContent } from "./AddDrawerContent";
-import { PanelAccordion } from "./PanelAccordion";
+import { PanelAccordionItem } from "./PanelAccordionItem";
 import { PanelContent } from "./PanelContent";
 interface DataPanelProps extends CardProps {
   children?: ReactNode;
@@ -57,9 +57,9 @@ export function Panel({
           allowMultiple
         >
           {orgs.map((org: OrgProps) => (
-            <PanelAccordion key={org._id} org={org}>
+            <PanelAccordionItem key={org._id} org={org}>
               <PanelContent />
-            </PanelAccordion>
+            </PanelAccordionItem>
           ))}
         </Accordion>
       </CardBody>

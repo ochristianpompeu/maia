@@ -1,19 +1,17 @@
 import { ObjectId } from "mongodb";
 import mongoose, { Schema, models } from "mongoose";
 
+const HourIntervalSchema = new Schema({
+  start: { type: Date, required: false },
+  end: { type: Date, required: false },
+});
+
 const hourSchema = new Schema({
   day: {
     type: Date,
     required: true,
   },
-  startTime: {
-    type: Date,
-    required: true,
-  },
-  endTime: {
-    type: Date,
-    required: true,
-  },
+  interval: [HourIntervalSchema],
   orgId: {
     type: ObjectId,
     required: false,

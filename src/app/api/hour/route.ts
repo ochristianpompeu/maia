@@ -5,8 +5,7 @@ import { NextResponse } from "next/server";
 export async function POST(request: Request) {
   const {
     day,
-    startTime,
-    endTime,
+    interval,
     orgId,
     org,
     serviceId,
@@ -20,10 +19,9 @@ export async function POST(request: Request) {
 
   await connectMongoDB();
 
-  const hour = await Hour.create({
+  const newHour = {
     day: day,
-    startTime: startTime,
-    endTime: endTime,
+    interval: interval,
     orgId: orgId,
     org: org,
     serviceId: serviceId,
@@ -33,7 +31,9 @@ export async function POST(request: Request) {
     status: status,
     clientId: clientId,
     client: client,
-  });
+  };
+
+  const hour = await Hour.create(newHour);
 
   return NextResponse.json(
     {
