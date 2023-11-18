@@ -1,11 +1,8 @@
+import { useOrgs } from "@/app/hooks/useOrgs";
 import { PanelAndMenuIcons } from "@/lib/Links";
+import { OrgProps } from "@/lib/interfaces";
 import {
   Accordion,
-  AccordionButton,
-  AccordionIcon,
-  AccordionItem,
-  AccordionPanel,
-  Box,
   Card,
   CardBody,
   CardHeader,
@@ -32,6 +29,7 @@ export function Panel({
   handleDisplayDetail,
   ...rest
 }: DataPanelProps) {
+  const { orgs } = useOrgs();
   const bgCargHeader = useColorModeValue("gray.50", "whiteAlpha.100");
 
   return (
@@ -54,27 +52,15 @@ export function Panel({
       <Divider />
 
       <CardBody borderRadius="md" overflowY="auto">
-        <Accordion defaultIndex={[0]} allowMultiple>
-          <PanelAccordion>
-            <PanelContent />
-          </PanelAccordion>
-
-          <AccordionItem>
-            <h2>
-              <AccordionButton>
-                <Box as="span" flex="1" textAlign="left">
-                  Section 2 title
-                </Box>
-                <AccordionIcon />
-              </AccordionButton>
-            </h2>
-            <AccordionPanel pb={4}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat.
-            </AccordionPanel>
-          </AccordionItem>
+        <Accordion
+          defaultIndex={[0]}
+          allowMultiple
+        >
+          {orgs.map((org: OrgProps) => (
+            <PanelAccordion key={org._id} org={org}>
+              <PanelContent />
+            </PanelAccordion>
+          ))}
         </Accordion>
       </CardBody>
     </Card>
