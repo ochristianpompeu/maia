@@ -1,7 +1,7 @@
 import { useOrgs } from "@/app/hooks/useOrgs";
 import { useProfessionals } from "@/app/hooks/useProfessionals";
 import { useServices } from "@/app/hooks/useServices";
-import { OrgProps, ProfessionalProps, ServiceProps } from "@/lib/interfaces";
+import { OrgProps, ServiceProps } from "@/lib/interfaces";
 import { AddIcon } from "@chakra-ui/icons";
 import {
   Button,
@@ -31,7 +31,7 @@ import { BsPersonBadge } from "react-icons/bs";
 import { RiSaveLine } from "react-icons/ri";
 import { TbReload } from "react-icons/tb";
 
-export function AddDrawerContent(props: ProfessionalProps) {
+export function AddDrawerContent() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const firstField = useRef() as any;
   const { orgs } = useOrgs();
@@ -301,7 +301,7 @@ export function AddDrawerContent(props: ProfessionalProps) {
                 Nome
               </FormLabel>
               <Input
-                ref={props.initialRef}
+                ref={firstField}
                 id="name"
                 name="name"
                 placeholder="Nome do Profissional..."

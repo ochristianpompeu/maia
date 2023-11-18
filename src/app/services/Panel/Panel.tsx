@@ -2,27 +2,20 @@ import { useServices } from "@/app/hooks/useServices";
 import { PanelAndMenuIcons } from "@/lib/Links";
 import { AddIcon } from "@chakra-ui/icons";
 import {
-  Button,
-  ButtonGroup,
   Card,
   CardBody,
   CardHeader,
   CardProps,
   Divider,
-  Drawer,
-  DrawerContent,
-  DrawerOverlay,
   HStack,
   Heading,
   Icon,
   IconButton,
   useColorModeValue,
-  useDisclosure,
+  useDisclosure
 } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { ReactNode, useRef } from "react";
-import { RiServiceLine } from "react-icons/ri";
-import { TbReload } from "react-icons/tb";
 import { AddDrawerContent } from "./AddDrawerContent";
 import { PanelContent } from "./PanelContent";
 interface DataPanelProps extends CardProps {
@@ -51,7 +44,7 @@ export function Panel({
   function handleOnAddClose() {
     updateServices();
     onCloseAdd;
-    router.refresh()
+    router.refresh();
   }
 
   return (
@@ -76,42 +69,11 @@ export function Panel({
             variant="outline"
             icon={<AddIcon />}
           />
-          <ButtonGroup
-            variant="outline"
-            colorScheme="purple"
-            display={{ base: "none", md: "inline-flex" }}
-            isAttached
-            size="sm"
-          >
-            <IconButton
-              onClick={onOpenAdd}
-              aria-label="Add Service"
-              icon={<RiServiceLine />}
-            />
-            <Button onClick={onOpenAdd}>Adicionar</Button>
-            <IconButton
-              onClick={updateServices}
-              aria-label="Refresh"
-              icon={<TbReload />}
-            />
-          </ButtonGroup>
+          <AddDrawerContent />
         </HStack>
       </CardHeader>
+
       <Divider />
-      <Drawer
-        size={{ base: "full", md: "sm" }}
-        isOpen={isOpenAdd}
-        onClose={onCloseAdd}
-        initialFocusRef={firstField}
-      >
-        <DrawerOverlay />
-        <DrawerContent>
-          <AddDrawerContent
-            initialRef={firstField}
-            onClose={handleOnAddClose}
-          />
-        </DrawerContent>
-      </Drawer>
 
       <CardBody borderRadius="md">
         <PanelContent handleDisplayDetail={handleDisplayDetail} />

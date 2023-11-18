@@ -1,32 +1,37 @@
 import { useOrgs } from "@/app/hooks/useOrgs";
 import { useServices } from "@/app/hooks/useServices";
-import { OrgProps, ServiceProps } from "@/lib/interfaces";
+import { OrgProps } from "@/lib/interfaces";
 import {
   Button,
   ButtonGroup,
+  Drawer,
   DrawerBody,
   DrawerCloseButton,
+  DrawerContent,
   DrawerFooter,
   DrawerHeader,
+  DrawerOverlay,
   FormLabel,
   IconButton,
   Input,
   Select,
   Textarea,
   useColorModeValue,
+  useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { ChangeEvent, Fragment, useState } from "react";
-import { RiSaveLine } from "react-icons/ri";
+import { ChangeEvent, Fragment, useRef, useState } from "react";
+import { RiSaveLine, RiServiceLine } from "react-icons/ri";
+import { TbReload } from "react-icons/tb";
 
-export function AddDrawerContent(props: ServiceProps) {
-  const { data: session } = useSession();
+export function AddDrawerContent() {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   const { orgs } = useOrgs();
-  const [name, setName] = useState(props.name);
-  const [description, setDescription] = useState(props.description);
-  const [orgId, setOrgId] = useState(orgs[0]._id);
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [orgId, setOrgId] = useState(orgs[0]?._id);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const toast = useToast();
@@ -34,6 +39,7 @@ export function AddDrawerContent(props: ServiceProps) {
   const { updateServices } = useServices();
 
   const mainColor = useColorModeValue("purple.600", "purple.200");
+  const firstField = useRef() as any;
 
   function handleRouter() {
     updateServices();
@@ -112,6 +118,7 @@ export function AddDrawerContent(props: ServiceProps) {
           isClosable: true,
           position: "top",
         });
+        handleRouter();
       }
     } catch (erro: any) {
       setLoading(false);
@@ -124,85 +131,115 @@ export function AddDrawerContent(props: ServiceProps) {
         isClosable: true,
         position: "top",
       });
+      handleRouter();
     }
   }
 
   return (
     <Fragment>
-      <DrawerCloseButton />
-      <DrawerHeader textColor={mainColor} borderBottomWidth="1px">
-        Cadastrar Serviço
-      </DrawerHeader>
+      <ButtonGroup
+        variant="outline"
+        colorScheme="purple"
+        display={{ base: "none", md: "inline-flex" }}
+        isAttached
+        size="sm"
+      >
+        <IconButton
+          onClick={onOpen}
+          aria-label="Add Service"
+          icon={<RiServiceLine />}
+        />
+        <Button onClick={onOpen}>Adicionar</Button>
+        <IconButton
+          onClick={updateServices}
+          aria-label="Refresh"
+          icon={<TbReload />}
+        />
+      </ButtonGroup>
+      <Drawer
+        size={{ base: "full", md: "sm" }}
+        isOpen={isOpen}
+        onClose={onClose}
+        initialFocusRef={firstField}
+      >
+        <DrawerOverlay />
+        <DrawerContent>
+          <DrawerCloseButton />
+          <DrawerHeader textColor={mainColor} borderBottomWidth="1px">
+            Cadastrar Serviço
+          </DrawerHeader>
 
-      <DrawerBody>
-        <form id="createServiceForm" onSubmit={handleSubmit}>
-          <FormLabel textColor={mainColor} htmlFor="orgId">
-            Selecione a Empresa
-          </FormLabel>
-          <Select
-            id="orgId"
-            name="orgId"
-            value={orgId}
-            onChange={handleChangeSelect}
-            focusBorderColor={mainColor}
-          >
-            {orgs?.map((org: OrgProps) => (
-              <option key={org._id!} value={org._id!}>
-                {org.name!}
-              </option>
-            ))}
-          </Select>
-          <FormLabel textColor={mainColor} pt="4" htmlFor="name">
-            Nome do Serviço
-          </FormLabel>
-          <Input
-            ref={props.initialRef}
-            id="name"
-            name="name"
-            placeholder="Nome do Serviço..."
-            focusBorderColor={mainColor}
-            onChange={handleChangeInput}
-            value={name!}
-          />
-          <FormLabel textColor={mainColor} pt="4" htmlFor="description">
-            Descrição
-          </FormLabel>
-          <Textarea
-            id="description"
-            name="description"
-            placeholder="Digite uma descrição para seu serviço..."
-            focusBorderColor={mainColor}
-            value={description!}
-            size="md"
-            onChange={handleChangeTextArea}
-          />
-        </form>
-      </DrawerBody>
+          <DrawerBody>
+            <form id="createServiceForm" onSubmit={handleSubmit}>
+              <FormLabel textColor={mainColor} htmlFor="orgId">
+                Selecione a Empresa
+              </FormLabel>
+              <Select
+                id="orgId"
+                name="orgId"
+                value={orgId}
+                onChange={handleChangeSelect}
+                focusBorderColor={mainColor}
+              >
+                {orgs?.map((org: OrgProps) => (
+                  <option key={org._id!} value={org._id!}>
+                    {org.name!}
+                  </option>
+                ))}
+              </Select>
+              <FormLabel textColor={mainColor} pt="4" htmlFor="name">
+                Nome do Serviço
+              </FormLabel>
+              <Input
+                ref={firstField}
+                id="name"
+                name="name"
+                placeholder="Nome do Serviço..."
+                focusBorderColor={mainColor}
+                onChange={handleChangeInput}
+                value={name!}
+              />
+              <FormLabel textColor={mainColor} pt="4" htmlFor="description">
+                Descrição
+              </FormLabel>
+              <Textarea
+                id="description"
+                name="description"
+                placeholder="Digite uma descrição para seu serviço..."
+                focusBorderColor={mainColor}
+                value={description!}
+                size="md"
+                onChange={handleChangeTextArea}
+              />
+            </form>
+          </DrawerBody>
 
-      <DrawerFooter borderTopWidth="1px">
-        <ButtonGroup
-          colorScheme="purple"
-          variant="outline"
-          onClick={props.onClose}
-          isAttached
-        >
-          <IconButton
-            type="submit"
-            form="createServiceForm"
-            aria-label="Add Service"
-            icon={<RiSaveLine />}
-            // onClick={props.onClose}
-          />
-          <Button
-            type="submit"
-            form="createServiceForm"
-            // onClick={props.onClose}
-            isLoading={loading}
-          >
-            Salvar
-          </Button>
-        </ButtonGroup>
-      </DrawerFooter>
+          <DrawerFooter borderTopWidth="1px">
+            <ButtonGroup
+              colorScheme="purple"
+              variant="outline"
+              onClick={onClose}
+              isAttached
+            >
+              <IconButton
+                type="submit"
+                form="createServiceForm"
+                aria-label="Add Service"
+                icon={<RiSaveLine />}
+                onClick={onClose}
+              />
+              <Button
+                type="submit"
+                form="createServiceForm"
+                onClick={onClose}
+                isLoading={loading}
+              >
+                Salvar
+              </Button>
+            </ButtonGroup>
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
     </Fragment>
   );
 }

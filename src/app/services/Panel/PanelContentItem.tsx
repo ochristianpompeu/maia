@@ -7,6 +7,7 @@ import {
   Td,
   Tr,
   useBreakpointValue,
+  useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
 import { Fragment } from "react";
@@ -28,6 +29,8 @@ export function PanelContentItem({
     },
     { fallback: "md" }
   );
+
+  const bgHoverColor = useColorModeValue("purple.100", "purple.700");
 
   const {
     isOpen: isOpenView,
@@ -58,12 +61,12 @@ export function PanelContentItem({
         <Tr
           key={service._id}
           _hover={{
-            bg: "purple.100",
+            bg: bgHoverColor,
           }}
           borderRadius="sm"
           p={0}
           m={0}
-        > 
+        >
           <Td
             _hover={{
               cursor: "pointer",
