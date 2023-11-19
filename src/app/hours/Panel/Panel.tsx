@@ -14,7 +14,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { ReactNode } from "react";
-import { AddDrawerContent } from "./AddDrawerContent";
+import { AddDrawer } from "./AddDrawer";
 import { PanelAccordionItem } from "./PanelAccordionItem";
 import { PanelContent } from "./PanelContent";
 interface DataPanelProps extends CardProps {
@@ -46,7 +46,7 @@ export function Panel({
             <Icon fontSize="2xl" as={PanelAndMenuIcons.hours} />
             <Heading size="md">Horários</Heading>
           </HStack>
-          <AddDrawerContent />
+          <AddDrawer />
         </HStack>
       </CardHeader>
       <Divider />

@@ -24,12 +24,12 @@ import { useRouter } from "next/navigation";
 import React, { Fragment, useState } from "react";
 import { TbTrash } from "react-icons/tb";
 
-export function DeleteDrawerContent(props: ProfessionalProps) {
+export function DeleteDrawer(props: ProfessionalProps) {
   const { isOpen, onClose, onOpen } = useDisclosure();
   const { updateProfessionals } = useProfessionals();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const mainColor = "red.600";
+  const mainColor = "purple.600";
   const bgColorDrawer = useColorModeValue("whiteAlpha.900", "blackAlpha.900");
   const toast = useToast();
   const router = useRouter();
@@ -96,13 +96,9 @@ export function DeleteDrawerContent(props: ProfessionalProps) {
         colorScheme="red"
         onClick={onOpen}
       />
-      <Drawer
-        size={{ base: "full", md: "sm" }}
-        isOpen={isOpen}
-        onClose={onClose}
-      >
+      <Drawer size={{ base: "xs", md: "sm" }} isOpen={isOpen} onClose={onClose}>
         <DrawerOverlay />
-        <DrawerContent bg={bgColorDrawer}>
+        <DrawerContent bg={bgColorDrawer} h="auto" overflowY="auto">
           <DrawerCloseButton color="white" />
           <DrawerHeader
             bgColor={mainColor}

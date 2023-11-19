@@ -29,7 +29,7 @@ import { ChangeEvent, Fragment, useRef, useState } from "react";
 import { Ri24HoursLine, RiSaveLine } from "react-icons/ri";
 import { TbReload } from "react-icons/tb";
 
-export function AddDrawerContent() {
+export function AddDrawer() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { orgs } = useOrgs();
   const { services } = useServices();
@@ -342,13 +342,13 @@ export function AddDrawerContent() {
         />
       </ButtonGroup>
       <Drawer
-        size={{ base: "full", md: "sm" }}
+        size={{ base: "xs", md: "sm" }}
         isOpen={isOpen}
         onClose={onClose}
         initialFocusRef={firstField}
       >
         <DrawerOverlay />
-        <DrawerContent bg={bgColorDrawer}>
+        <DrawerContent bg={bgColorDrawer} h="auto" overflowY="auto">
           <DrawerCloseButton />
           <DrawerHeader textColor={mainColor} borderBottomWidth="1px">
             Cadastrar Horário

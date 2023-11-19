@@ -48,7 +48,7 @@ export function EditDrawer(props: ProfessionalProps) {
   const toast = useToast();
   const router = useRouter();
   const mainColor = useColorModeValue("purple.600", "purple.300");
-  const bgColorDrawer = useColorModeValue("whiteAlpha.900", "blackAlpha.800");
+  const bgColorDrawer = useColorModeValue("whiteAlpha.900", "blackAlpha.900");
 
   const [formValues, setFormValues] = useState({
     name: props.name,

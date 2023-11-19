@@ -15,8 +15,8 @@ import {
   WrapItem,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { DeleteDrawerContent } from "./DeleteDrawerContent";
-import { EditDrawerContent } from "./EditDrawerContent";
+import { DeleteDrawer } from "./DeleteDrawer";
+import { EditDrawer } from "./EditDrawer";
 import { ProfessionalContentItemBadge } from "./ProfessionalContentItemBadge";
 
 interface PanelContentItemProps {
@@ -96,11 +96,11 @@ export function PanelContentItem({ professional }: PanelContentItemProps) {
               isAttached
               colorScheme="purple"
             >
-              <EditDrawerContent {...professional} />
+              <EditDrawer {...professional} />
               <Button disabled={true} w="full">
                 Visualizar
               </Button>
-              <DeleteDrawerContent {...professional} />
+              <DeleteDrawer {...professional} />
               {/* <IconButton
                 icon={<TbTrash />}
                 aria-label="Delete Professional"
