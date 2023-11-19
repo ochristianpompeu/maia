@@ -1,7 +1,6 @@
 "use client";
 import { useOrgs } from "@/app/hooks/useOrgs";
-import { useUser } from "@/app/hooks/useUser";
-import { AddIcon } from "@chakra-ui/icons";
+import { OrgEditDrawerContentProps } from "@/lib/interfaces";
 import {
   Button,
   ButtonGroup,
@@ -21,33 +20,31 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
-import { ChangeEvent, Fragment, useRef, useState } from "react";
-import { BsBuildingAdd, BsBuildingFillAdd } from "react-icons/bs";
-import { TbReload } from "react-icons/tb";
+import React, { ChangeEvent, Fragment, useState } from "react";
+import { TbEdit, TbRefresh } from "react-icons/tb";
 
-export function AddDrawerContent() {
+export function EditDrawer(props: OrgEditDrawerContentProps) {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [loading, setLoading] = useState(false);
+  const { updateOrgs } = useOrgs();
+  const [name, setName] = useState(props.name);
+  const [description, setDescription] = useState(props.description);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const firstField = React.useRef() as any;
+  const toast = useToast();
+  const router = useRouter();
   const mainColor = useColorModeValue("purple.600", "purple.200");
   const bgColorDrawer = useColorModeValue("whiteAlpha.900", "blackAlpha.900");
   const borderColor = "purple.600";
-  const { user } = useUser();
-  const { updateOrgs } = useOrgs();
-  const router = useRouter();
-  const toast = useToast();
-  const firstField = useRef() as any;
-
-  function handleChangeInput(event: ChangeEvent<HTMLInputElement>) {
-    const name = event.target.value;
-    setName(name);
-  }
 
   function handleRouter() {
     updateOrgs();
     router.refresh();
+  }
+
+  function handleChangeInput(event: ChangeEvent<HTMLInputElement>) {
+    const name = event.target.value;
+    setName(name);
   }
 
   function handleChangeTextArea(event: ChangeEvent<HTMLTextAreaElement>) {
@@ -57,9 +54,8 @@ export function AddDrawerContent() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const userAdmin = user._id;
-    setLoading(true);
-
+    const newName = name;
+    const newDescription = description;
     if (!name) {
       setError("O campo nome não pode ficar em branco");
       toast({
@@ -75,36 +71,32 @@ export function AddDrawerContent() {
 
     try {
       setLoading(true);
-
-      const responseCreateOrg = await fetch("/api/organization/", {
-        method: "POST",
+      const response = await fetch("/api/organization/" + props.id, {
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          name,
-          description,
-          userAdmin,
+          newName,
+          newDescription,
         }),
       });
 
       setLoading(false);
 
-      if (responseCreateOrg.ok) {
-        setName("");
-        setDescription("");
+      if (response.ok) {
         toast({
           title: "Sucesso",
-          description: "Empresa cadastrada com sucesso",
+          description: "Dados atualizados com sucesso",
           status: "success",
           duration: 3000,
           isClosable: true,
           position: "top",
         });
-        // router.push("/organization");
+
         handleRouter();
       } else {
-        const responseError = await responseCreateOrg.json();
+        const responseError = await response.json();
         setError(responseError);
         toast({
           title: "Ocorreu um erro",
@@ -114,6 +106,7 @@ export function AddDrawerContent() {
           isClosable: true,
           position: "top",
         });
+        handleRouter();
       }
     } catch (erro: any) {
       setLoading(false);
@@ -126,44 +119,18 @@ export function AddDrawerContent() {
         isClosable: true,
         position: "top",
       });
+      handleRouter();
     }
   }
 
   return (
     <Fragment>
-      <ButtonGroup
+      <IconButton
         colorScheme="purple"
-        variant="outline"
-        display={{ md: "none" }}
-        isAttached
-        size="sm"
-      >
-        <IconButton aria-label="Add" onClick={onOpen} icon={<AddIcon />} />
-        <IconButton
-          onClick={updateOrgs}
-          aria-label="Refresh"
-          icon={<TbReload />}
-        />
-      </ButtonGroup>
-      <ButtonGroup
-        variant="outline"
-        colorScheme="purple"
-        display={{ base: "none", md: "inline-flex" }}
-        isAttached
-        size="sm"
-      >
-        <IconButton
-          onClick={onOpen}
-          aria-label="Add"
-          icon={<BsBuildingAdd />}
-        />
-        <Button onClick={onOpen}>Adicionar</Button>
-        <IconButton
-          onClick={updateOrgs}
-          aria-label="Refresh"
-          icon={<TbReload />}
-        />
-      </ButtonGroup>
+        aria-label="Edit"
+        onClick={onOpen}
+        icon={<TbEdit />}
+      />
       <Drawer
         size={{ base: "xs", md: "sm" }}
         isOpen={isOpen}
@@ -171,15 +138,15 @@ export function AddDrawerContent() {
         initialFocusRef={firstField}
       >
         <DrawerOverlay />
-        <DrawerContent bg={bgColorDrawer} height="auto">
+        <DrawerContent bg={bgColorDrawer} height="auto" overflowY="auto">
           <DrawerCloseButton />
           <DrawerHeader textColor={mainColor} borderBottomWidth="1px">
-            Cadastre sua empresa
+            Edição do cadastro da empresa
           </DrawerHeader>
 
           <DrawerBody>
-            <form id="create" onSubmit={handleSubmit}>
-              <FormLabel textColor={mainColor} pt="4" htmlFor="name">
+            <form id="alter" onSubmit={handleSubmit}>
+              <FormLabel pt="4" htmlFor="name" textColor={mainColor}>
                 Nome da Empresa
               </FormLabel>
               <Input
@@ -187,18 +154,18 @@ export function AddDrawerContent() {
                 id="name"
                 name="name"
                 placeholder="Nome da Empresa..."
-                focusBorderColor={borderColor}
-                onChange={handleChangeInput}
+                focusBorderColor={mainColor}
                 value={name}
+                onChange={handleChangeInput}
               />
-              <FormLabel textColor={mainColor} pt="4" htmlFor="description">
+              <FormLabel pt="4" htmlFor="description" textColor={mainColor}>
                 Descrição
               </FormLabel>
               <Textarea
                 id="description"
                 name="description"
                 placeholder="Digite uma descrição para a sua empresa..."
-                focusBorderColor={borderColor}
+                focusBorderColor={mainColor}
                 value={description}
                 size="md"
                 onChange={handleChangeTextArea}
@@ -207,26 +174,22 @@ export function AddDrawerContent() {
           </DrawerBody>
 
           <DrawerFooter borderTopWidth="1px">
-            <ButtonGroup
-              colorScheme="purple"
-              variant="outline"
-              onClick={onClose}
-              isAttached
-            >
+            <ButtonGroup colorScheme="purple" variant="outline" isAttached>
               <IconButton
+                aria-label="alter service"
                 type="submit"
-                form="create"
-                aria-label="Save Org"
-                icon={<BsBuildingFillAdd />}
+                form="alter"
                 onClick={onClose}
+                isLoading={loading}
+                icon={<TbRefresh />}
               />
               <Button
                 type="submit"
-                form="create"
+                form="alter"
                 onClick={onClose}
                 isLoading={loading}
               >
-                Salvar
+                Atualizar
               </Button>
             </ButtonGroup>
           </DrawerFooter>

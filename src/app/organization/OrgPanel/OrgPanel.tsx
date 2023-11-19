@@ -11,7 +11,7 @@ import {
   Icon,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { AddDrawerContent } from "./AddDrawerContent";
+import { AddDrawer } from "./AddDrawer";
 import { OrgPanelContent } from "./OrgPanelContent";
 interface OrgDataPanelProps extends CardProps {}
 export function OrgPanel({ overflowY, ...rest }: OrgDataPanelProps) {
@@ -30,7 +30,7 @@ export function OrgPanel({ overflowY, ...rest }: OrgDataPanelProps) {
             <Icon fontSize="2xl" as={PanelAndMenuIcons.org} />
             <Heading size="md">Empresa</Heading>
           </HStack>
-          <AddDrawerContent />
+          <AddDrawer />
         </HStack>
       </CardHeader>
       <Divider />
