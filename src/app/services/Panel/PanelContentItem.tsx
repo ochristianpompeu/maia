@@ -80,6 +80,7 @@ export function PanelContentItem({
               cursor: "pointer",
             }}
             onClick={() => handdleLineClick("block", service)}
+            display={{ base: "none", md: "inline-flex" }}
           >
             {service.org?.name}
           </Td>

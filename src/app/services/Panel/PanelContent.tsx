@@ -27,7 +27,7 @@ export function PanelContent({ handleDisplayDetail }: PanelContentProps) {
         <Thead>
           <Tr>
             <Th>Nome</Th>
-            <Th>Empresa</Th>
+            <Th display={{ base: "none", md: "inline-flex" }}>Empresa</Th>
             <Th textAlign="right">{""}</Th>
           </Tr>
         </Thead>
@@ -36,8 +36,8 @@ export function PanelContent({ handleDisplayDetail }: PanelContentProps) {
         </Tbody>
         <Tfoot>
           <Tr>
-            <Th>Empresa</Th>
             <Th>Nome</Th>
+            <Th display={{ base: "none", md: "inline-flex" }}>Empresa</Th>
             <Th textAlign="right">{""}</Th>
           </Tr>
         </Tfoot>
