@@ -35,7 +35,7 @@ export function AddDrawer() {
         onClose={onClose}
       >
         <DrawerOverlay />
-        <DrawerContent>
+        <DrawerContent height="auto">
           <DrawerCloseButton />
           <DrawerHeader borderBottomWidth="1px">
             Create a new account
