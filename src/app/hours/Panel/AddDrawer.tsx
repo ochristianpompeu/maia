@@ -37,63 +37,47 @@ export function AddDrawer() {
   const initialProfessionals = professionals?.filter(
     (professional: ProfessionalProps) => professional.org?._id === orgs[0]?._id
   );
+  const [orgId, setOrgId] = useState("");
+  const [org, setOrg] = useState<OrgProps>(orgs[0] as OrgProps);
+  const [professionalId, setProfessionalId] = useState("");
+  const [professional, setProfessional] = useState<ProfessionalProps>(
+    {} as ProfessionalProps
+  );
+  const [serviceId, setServiceId] = useState("");
+  const [service, setService] = useState<ServiceProps>({} as ServiceProps);
+  const [day, setDay] = useState("");
+  const [interval, setInterval] = useState([
+    { start: "00:00", end: "00:00", status: "free" },
+  ]);
+  const [intervalGroup, setIntervalGroup] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const [formValues, setFormValues] = useState({
     orgId: "",
     day: "",
-    professionalId: "initialProfessionals[0]?._id",
+    interval: [],
+    professionalId: "",
     professionals: [] as ProfessionalProps[],
     servicesId: "",
     services: [] as ServiceProps[],
   });
-  const [professional, setProfessional] = useState<ProfessionalProps>(
-    {} as ProfessionalProps
-  );
-  const [service, setService] = useState<ServiceProps>({} as ServiceProps);
-  const [day, setDay] = useState("");
-  const [interval, setInterval] = useState([{ start: "00:00", end: "00:00" }]);
-  // const
-  const [intervalGroup, setIntervalGroup] = useState(1);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
 
   const firstField = useRef() as any;
   const toast = useToast();
   const router = useRouter();
 
+  const focusBorderColor = useColorModeValue("purple.600", "purple.600");
   const mainColor = useColorModeValue("purple.600", "purple.200");
   const bgColorDrawer = useColorModeValue("whiteAlpha.900", "blackAlpha.900");
+  const intervalColor = useColorModeValue("gray.200", "gray.800");
+  const intervalInputBorderColor = useColorModeValue("gray.400", "gray.200");
 
   function handleRouter() {
-    updateProfessionals();
+    // updateProfessionals();
     router.refresh();
   }
 
-  // function getProfessionalServices() {
-  //   const completeServices = [];
-  //   for (let i = 0; i < formValues.services.length; i++) {
-  //     completeServices.push(
-  //       ...services.filter((service) => service._id === formValues.services[i])
-  //     );
-  //   }
-  //   return completeServices;
-  // }
-
-  // function handleChangeInput(event: ChangeEvent<HTMLInputElement>) {
-  //   const { name, value } = event.target;
-  //   setFormValues({
-  //     ...formValues,
-  //     [name]: value,
-  //   });
-  // }
-
-  // function handleChangeTextArea(event: ChangeEvent<HTMLTextAreaElement>) {
-  //   const newBio = event.target.value;
-  //   setFormValues({
-  //     ...formValues,
-  //     bio: newBio,
-  //   });
-  // }
   function handleAddInterval() {
     setIntervalGroup(intervalGroup + 1);
   }
@@ -102,7 +86,8 @@ export function AddDrawer() {
     if (intervalGroup === 0) {
       return;
     }
-    const localInterval: { start: string; end: string }[] = interval;
+    const localInterval: { start: string; end: string; status: string }[] =
+      interval;
     localInterval.pop();
     setIntervalGroup(intervalGroup - 1);
     setInterval(localInterval);
@@ -110,159 +95,189 @@ export function AddDrawer() {
 
   function handleChangeOrg(event: ChangeEvent<HTMLSelectElement>) {
     const localOrgId = event.target.value;
+    const localOrg = orgs.find((org) => org._id === localOrgId) as OrgProps;
     const localProfessionals = professionals.filter(
       (professional: ProfessionalProps) => professional.org?._id === localOrgId
     );
-    const localServices = services.filter(
-      (service: ServiceProps) => service.org?._id === localOrgId
-    );
-
+    setOrgId(localOrgId);
+    setOrg(localOrg);
     setFormValues({
       ...formValues,
-      orgId: localOrgId,
-      servicesId: localServices[0]?._id!,
-      services: localServices,
-      professionalId: localProfessionals[0]?._id,
-      professionals: localProfessionals,
+      orgId: orgId,
+      professionals: localProfessionals || ([{}] as ProfessionalProps[]),
     });
   }
 
   function handleChangeProfessional(event: ChangeEvent<HTMLSelectElement>) {
+    const localProfessionalId = event.target.value;
     const localProfessionals = professionals.filter(
       (professional: ProfessionalProps) =>
-        professional._id === event.target.value
+        professional._id === localProfessionalId
     );
+    const localProfessional = localProfessionals[0];
     const localServices = localProfessionals[0]?.completeServices;
+
+    setProfessionalId(localProfessionalId);
+    setProfessional(localProfessional);
 
     setFormValues({
       ...formValues,
-      professionalId: localProfessionals[0]?._id,
-      services: localServices || ([{}] as ServiceProps[]),
+      professionalId: localProfessionalId,
+      services:
+        localProfessionalId !== "#"
+          ? localServices || ([{}] as ServiceProps[])
+          : ([] as ServiceProps[]),
     });
-
-    setProfessional(localProfessionals[0]);
   }
 
   function handleChangeService(event: ChangeEvent<HTMLSelectElement>) {
     const localServices = services.filter(
       (service: ServiceProps) => service._id === event.target.value
     );
+    const localServiceId = localServices[0]?._id!;
 
+    setService(localServices[0]);
+    setServiceId(localServiceId);
     setFormValues({
       ...formValues,
-      servicesId: localServices[0]?._id!,
+      servicesId: localServiceId,
     });
-    setService(localServices[0]);
+  }
+
+  function handleChangeDay(event: ChangeEvent<HTMLInputElement>) {
+    const { name, value, id } = event.target;
+    const localDay = value;
+
+    setDay(localDay);
+    setFormValues({
+      ...formValues,
+      day: localDay,
+    });
+    return;
   }
 
   function handleInterval(event: ChangeEvent<HTMLInputElement>, key: number) {
-    const { name, value, id } = event.target;
-    const localInterval: { start: string; end: string }[] = interval;
+    const { name, value } = event.target;
+    const localInterval: { start: string; end: string; status: string }[] =
+      interval;
 
     if (name === "start") {
-      const localhour = { ...localInterval[key], start: value };
+      const localhour = {
+        ...localInterval[key],
+        start: day + "T" + value,
+        status: "free",
+      };
       localInterval[key] = localhour;
-      console.log(name, value, id, key);
     }
     if (name === "end") {
-      const localhour = { ...localInterval[key], end: value };
+      const localhour = {
+        ...localInterval[key],
+        end: day + "T" + value,
+        status: "free",
+      };
       localInterval[key] = localhour;
-      console.log(name, value, id, key);
     }
 
     setInterval(localInterval);
-
-    console.log("interval: ", interval);
   }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    return;
+    const newHour = {
+      day: day,
+      interval: interval,
+      orgId: orgId,
+      org: org,
+      serviceId: serviceId,
+      service: service,
+      professionalId: professionalId,
+      professional: professional,
+    };
 
-    // if (!formValues.name) {
-    //   setError("O campo nome não pode ficar em branco");
-    //   toast({
-    //     title: "Ocorreu um erro",
-    //     description: error,
-    //     status: "error",
-    //     duration: 3000,
-    //     isClosable: true,
-    //     position: "top",
-    //   });
-    //   return;
-    // }
+    console.log(newHour);
 
-    // try {
-    //   setLoading(true);
-    //   const professionalServices = getProfessionalServices();
-    //   // console.log("professionalServices: ", professionalServices);
-    //   setFormValues({
-    //     ...formValues,
-    //     completeServices: professionalServices,
-    //   });
+    if (
+      !newHour.day ||
+      !newHour.orgId ||
+      !newHour.serviceId ||
+      !newHour.professionalId ||
+      !newHour.day ||
+      !newHour.interval
+    ) {
+      setError("Todos os campos são obrigatórios  ");
+      toast({
+        title: "Campos obrigatórios não informados",
+        description: error,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+        position: "top",
+      });
+      return;
+    }
 
-    //   // console.log("formValues: ", formValues);
+    try {
+      setLoading(true);
 
-    //   const responseCreate = await fetch("/api/professional/", {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify({
-    //       ...formValues,
-    //     }),
-    //   });
+      const response = await fetch("/api/hour/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...newHour,
+        }),
+      });
 
-    //   setLoading(false);
+      setLoading(false);
 
-    //   if (responseCreate.ok) {
-    //     // setFormValues({
-    //     //   name: "",
-    //     //   email: "",
-    //     //   image: "",
-    //     //   bio: "",
-    //     //   func: "",
-    //     //   orgId: orgs[0]._id,
-    //     //   services: [] as string[],
-    //     //   completeServices: [{}],
-    //     // });
+      if (response.ok) {
+        setFormValues({
+          orgId: "",
+          day: "",
+          interval: [],
+          professionalId: "",
+          professionals: [] as ProfessionalProps[],
+          servicesId: "",
+          services: [] as ServiceProps[],
+        });
 
-    //     toast({
-    //       title: "Sucesso",
-    //       description: "Serviço cadastrado com sucesso",
-    //       status: "success",
-    //       duration: 3000,
-    //       isClosable: true,
-    //       position: "top",
-    //     });
+        toast({
+          title: "Sucesso",
+          description: "Horário cadastrado com sucesso",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+          position: "top",
+        });
 
-    //     handleRouter();
-    //   } else {
-    //     const responseError = await responseCreate.json();
-    //     setError(responseError);
-    //     toast({
-    //       title: "Ocorreu um erro",
-    //       description: error,
-    //       status: "error",
-    //       duration: 3000,
-    //       isClosable: true,
-    //       position: "top",
-    //     });
-    //     handleRouter();
-    //   }
-    // } catch (erro: any) {
-    //   setLoading(false);
-    //   setError(erro);
-    //   toast({
-    //     title: "Ocorreu um erro",
-    //     description: error,
-    //     status: "error",
-    //     duration: 3000,
-    //     isClosable: true,
-    //     position: "top",
-    //   });
-    //   handleRouter();
-    // }
+        handleRouter();
+      } else {
+        const responseError = await response.json();
+        setError(responseError);
+        toast({
+          title: "Ocorreu um erro",
+          description: error,
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+          position: "top",
+        });
+        handleRouter();
+      }
+    } catch (erro: any) {
+      setLoading(false);
+      setError(erro);
+      toast({
+        title: "Ocorreu um erro",
+        description: error,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+        position: "top",
+      });
+      handleRouter();
+    }
   }
 
   const rows = [];
@@ -274,7 +289,7 @@ export function AddDrawer() {
         key={i}
         borderRadius="md"
         p="2"
-        bg="gray.800"
+        bg={intervalColor}
         id="interval"
         alignItems="center"
       >
@@ -289,6 +304,8 @@ export function AddDrawer() {
           name="start"
           mr="2"
           onChange={(e) => handleInterval(e, i)}
+          borderColor={intervalInputBorderColor}
+          focusBorderColor={focusBorderColor}
         />
         <FormLabel textColor={mainColor} htmlFor="end">
           Fim
@@ -301,6 +318,8 @@ export function AddDrawer() {
           name="end"
           key={1}
           onChange={(e) => handleInterval(e, i)}
+          borderColor={intervalInputBorderColor}
+          focusBorderColor={focusBorderColor}
         />
       </InputGroup>
     );
@@ -362,14 +381,14 @@ export function AddDrawer() {
               <Select
                 id="orgId"
                 name="orgId"
-                value={formValues.orgId}
+                value={orgId}
                 onChange={handleChangeOrg}
-                focusBorderColor={mainColor}
+                focusBorderColor={focusBorderColor}
               >
                 <option value="#">Nenhum</option>
-                {orgs?.map((org: OrgProps) => (
-                  <option key={org._id!} value={org._id!}>
-                    {org.name!}
+                {orgs.map((org: OrgProps) => (
+                  <option key={org._id} value={org._id!}>
+                    {org.name}
                   </option>
                 ))}
               </Select>
@@ -380,9 +399,9 @@ export function AddDrawer() {
               <Select
                 id="professionalId"
                 name="professionalId"
-                value={formValues.professionalId}
+                value={professionalId}
                 onChange={handleChangeProfessional}
-                focusBorderColor={mainColor}
+                focusBorderColor={focusBorderColor}
               >
                 <option value="#">Nenhum</option>
                 {formValues.professionals?.map(
@@ -400,12 +419,12 @@ export function AddDrawer() {
               <Select
                 id="serviceId"
                 name="serviceId"
-                value={formValues.servicesId}
+                value={serviceId}
                 onChange={handleChangeService}
-                focusBorderColor={mainColor}
+                focusBorderColor={focusBorderColor}
               >
                 <option value="#">Nenhum</option>
-                {formValues.services.map((service: ServiceProps) => (
+                {formValues.services?.map((service: ServiceProps) => (
                   <option key={service._id!} value={service._id!}>
                     {service.name!}
                   </option>
@@ -421,6 +440,8 @@ export function AddDrawer() {
                 placeholder="Selecione o dia"
                 size="md"
                 type="date"
+                focusBorderColor={focusBorderColor}
+                onChange={handleChangeDay}
               />
               <VStack mt="2">
                 <HStack justifyContent="space-between" w="full">
@@ -444,7 +465,13 @@ export function AddDrawer() {
                     />
                   </ButtonGroup>
                 </HStack>
-                <VStack borderRadius="md" border="1px" w="full" p="2">
+                <VStack
+                  borderRadius="md"
+                  border="1px"
+                  w="full"
+                  p="2"
+                  borderColor={intervalColor}
+                >
                   {rows}
                 </VStack>
               </VStack>
@@ -463,13 +490,14 @@ export function AddDrawer() {
                 form="createForm"
                 aria-label="Add"
                 icon={<RiSaveLine />}
-                onClick={onClose}
+                // onClick={onClose}
               />
               <Button
                 type="submit"
                 form="createForm"
                 onClick={onClose}
                 isLoading={loading}
+                // onClick={onClose}
               >
                 Salvar
               </Button>

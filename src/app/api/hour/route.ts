@@ -12,9 +12,6 @@ export async function POST(request: Request) {
     service,
     professionalId,
     professional,
-    status,
-    clientId,
-    client,
   } = await request.json();
 
   await connectMongoDB();
@@ -28,9 +25,6 @@ export async function POST(request: Request) {
     service: service,
     professionalId: professionalId,
     professional: professional,
-    status: status,
-    clientId: clientId,
-    client: client,
   };
 
   const hour = await Hour.create(newHour);
@@ -47,12 +41,6 @@ export async function GET() {
   await connectMongoDB();
 
   const hours = await Hour.find();
-
-  //   if (!hours) {
-  //     return NextResponse.json({
-  //       hours: [{}],
-  //     });
-  //   }
 
   return NextResponse.json({
     hours,

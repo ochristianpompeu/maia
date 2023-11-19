@@ -1,6 +1,5 @@
 import { useOrgs } from "@/app/hooks/useOrgs";
 import { PanelAndMenuIcons } from "@/lib/Links";
-import { OrgProps } from "@/lib/interfaces";
 import {
   Accordion,
   Card,
@@ -15,8 +14,6 @@ import {
 } from "@chakra-ui/react";
 import { ReactNode } from "react";
 import { AddDrawer } from "./AddDrawer";
-import { PanelAccordionItem } from "./PanelAccordionItem";
-import { PanelContent } from "./PanelContent";
 interface DataPanelProps extends CardProps {
   children?: ReactNode;
   handleDisplayDetail: (display: string) => void;
@@ -56,11 +53,11 @@ export function Panel({
           defaultIndex={[0]}
           allowMultiple
         >
-          {orgs.map((org: OrgProps) => (
+          {/* {orgs.map((org: OrgProps) => (
             <PanelAccordionItem key={org._id} org={org}>
               <PanelContent />
             </PanelAccordionItem>
-          ))}
+          ))} */}
         </Accordion>
       </CardBody>
     </Card>

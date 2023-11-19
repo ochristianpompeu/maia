@@ -37,7 +37,7 @@ export function AddDrawer() {
   const { orgs } = useOrgs();
   const { services } = useServices();
   const [formServices, setFormServices] = useState(
-    services.filter((service) => service.org?._id === orgs[0]._id)
+    services.filter((service) => service.org?._id === orgs[0]?._id)
   );
   const [checkboxDefaultValue, setCheckboxDefaultValue] = useState(
     [] as string[]
