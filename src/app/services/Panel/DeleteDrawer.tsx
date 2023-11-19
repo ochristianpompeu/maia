@@ -1,6 +1,6 @@
 "use client";
-import { useOrgs } from "@/app/hooks/useOrgs";
-import { OrgEditDrawerContentProps } from "@/lib/interfaces";
+import { useServices } from "@/app/hooks/useServices";
+import { ServiceProps } from "@/lib/interfaces";
 import {
   Button,
   ButtonGroup,
@@ -14,6 +14,7 @@ import {
   FormLabel,
   IconButton,
   Input,
+  Select,
   Textarea,
   useColorModeValue,
   useDisclosure,
@@ -23,24 +24,23 @@ import { useRouter } from "next/navigation";
 import React, { Fragment, useState } from "react";
 import { TbTrash } from "react-icons/tb";
 
-interface OrgDeleteDrawerContent extends OrgEditDrawerContentProps {}
-
-export function DeleteDrawer(props: OrgDeleteDrawerContent) {
+export function DeleteDrawer(props: ServiceProps) {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { updateOrgs } = useOrgs();
+  const firstField = React.useRef() as any;
   const name = props.name;
   const description = props.description;
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const firstField = React.useRef() as any;
-  const toast = useToast();
-  const router = useRouter();
   // const mainColor = useColorModeValue("purple.600", "purple.200");
   const mainColor = "purple.600";
   const bgColorDrawer = useColorModeValue("whiteAlpha.900", "blackAlpha.900");
+  const toast = useToast();
+  const router = useRouter();
+  const { updateServices } = useServices();
 
-  function handleRouter() {
-    updateOrgs();
+  function handleServices() {
+    updateServices();
+    onClose();
     router.refresh();
   }
 
@@ -49,9 +49,8 @@ export function DeleteDrawer(props: OrgDeleteDrawerContent) {
 
     try {
       setLoading(true);
-      console.log("ID org: ", props.id);
-      const responseDeleteOrg = await fetch(
-        `/api/organization/?id=${props.id}`,
+      const responseDeleteService = await fetch(
+        `/api/service/?id=${props._id}`,
         {
           method: "DELETE",
         }
@@ -59,29 +58,28 @@ export function DeleteDrawer(props: OrgDeleteDrawerContent) {
 
       setLoading(false);
 
-      if (responseDeleteOrg.ok) {
+      if (responseDeleteService.ok) {
         toast({
           title: "Sucesso",
           description: "Registro removido com sucesso",
           status: "warning",
-          duration: 9000,
+          duration: 3000,
           isClosable: true,
           position: "top",
         });
-
-        handleRouter();
+        handleServices();
       } else {
-        const responseError = await responseDeleteOrg.json();
+        const responseError = await responseDeleteService.json();
         setError(responseError);
         toast({
           title: "Ocorreu um erro",
           description: error,
           status: "error",
-          duration: 9000,
+          duration: 3000,
           isClosable: true,
           position: "top",
         });
-        handleRouter();
+        handleServices();
       }
     } catch (erro: any) {
       setLoading(false);
@@ -90,11 +88,11 @@ export function DeleteDrawer(props: OrgDeleteDrawerContent) {
         title: "Ocorreu um erro",
         description: error,
         status: "error",
-        duration: 9000,
+        duration: 3000,
         isClosable: true,
         position: "top",
       });
-      handleRouter();
+      handleServices();
     }
   }
 
@@ -120,13 +118,25 @@ export function DeleteDrawer(props: OrgDeleteDrawerContent) {
             textColor="white"
             borderBottomWidth="1px"
           >
-            Deletar Empresa?
+            Deletar Serviço?
           </DrawerHeader>
 
           <DrawerBody>
             <form id="delete" onSubmit={handleSubmit}>
-              <FormLabel pt="4" htmlFor="name">
-                Nome da Empresa
+              <FormLabel textColor={mainColor} htmlFor="orgId">
+                Empresa
+              </FormLabel>
+              <Select
+                id="orgId"
+                name="orgId"
+                textColor={mainColor}
+                value={props.orgId}
+                disabled
+              >
+                <option value={props.orgId}>{props.org?.name}</option>
+              </Select>
+              <FormLabel textColor={mainColor} pt="4" htmlFor="name">
+                Nome do Serviço
               </FormLabel>
               <Input
                 ref={firstField}
@@ -138,7 +148,7 @@ export function DeleteDrawer(props: OrgDeleteDrawerContent) {
                 borderColor={mainColor}
                 variant="filled"
               />
-              <FormLabel pt="4" htmlFor="description">
+              <FormLabel textColor={mainColor} pt="4" htmlFor="description">
                 Descrição
               </FormLabel>
               <Textarea
@@ -157,17 +167,17 @@ export function DeleteDrawer(props: OrgDeleteDrawerContent) {
           <DrawerFooter borderTopWidth="1px" borderTopColor={mainColor}>
             <ButtonGroup colorScheme="red" variant="outline" isAttached>
               <IconButton
-                aria-label="delete org"
+                aria-label="delete service"
                 form="delete"
                 type="submit"
-                onClick={onClose}
+                // onClick={onClose}
                 isLoading={loading}
                 icon={<TbTrash />}
               />
               <Button
                 type="submit"
                 form="delete"
-                onClick={onClose}
+                // onClick={onClose}
                 isLoading={loading}
               >
                 Deletar

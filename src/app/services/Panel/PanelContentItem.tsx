@@ -47,10 +47,6 @@ export function PanelContentItem({
     }
   }
 
-  function handleOnOpen() {
-    onOpenView;
-  }
-
   function handleOnClose() {
     onCloseView;
   }
@@ -80,7 +76,7 @@ export function PanelContentItem({
               cursor: "pointer",
             }}
             onClick={() => handdleLineClick("block", service)}
-            display={{ base: "none", md: "inline-flex" }}
+            display={{ base: "none", md: "table-cell" }}
           >
             {service.org?.name}
           </Td>

@@ -44,6 +44,7 @@ export function AddDrawer() {
 
   function handleRouter() {
     updateServices();
+    onClose();
     router.refresh();
   }
 
@@ -64,7 +65,18 @@ export function AddDrawer() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-
+    if (orgId === "#") {
+      setError("Selecione a empresa");
+      toast({
+        title: "Empresa não selecionada",
+        description: "Selecione a empresa",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+        position: "top",
+      });
+      return;
+    }
     if (!name) {
       setError("O campo nome não pode ficar em branco");
       toast({
@@ -238,7 +250,7 @@ export function AddDrawer() {
             <ButtonGroup
               colorScheme="purple"
               variant="outline"
-              onClick={onClose}
+              // onClick={onClose}
               isAttached
             >
               <IconButton
@@ -246,12 +258,12 @@ export function AddDrawer() {
                 form="create"
                 aria-label="Add Service"
                 icon={<RiSaveLine />}
-                onClick={onClose}
+                // onClick={onClose}
               />
               <Button
                 type="submit"
                 form="create"
-                onClick={onClose}
+                // onClick={onClose}
                 isLoading={loading}
               >
                 Salvar

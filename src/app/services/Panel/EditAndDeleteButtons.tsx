@@ -8,8 +8,8 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import React, { Fragment } from "react";
-import { TbEdit, TbTrash } from "react-icons/tb";
-import { DeleteDrawerContent } from "./DeleteDrawerContent";
+import { TbEdit } from "react-icons/tb";
+import { DeleteDrawer } from "./DeleteDrawer";
 import { EditDrawerContent } from "./EditDrawerContent";
 
 interface EditAndDeleteButtonsProps {
@@ -46,11 +46,11 @@ export function EditAndDeleteButtons(props: EditAndDeleteButtonsProps) {
           onClick={onEditOpen}
           icon={<TbEdit />}
         />
-        <IconButton
-          colorScheme="orange"
-          aria-label="Delete"
-          onClick={onDeleteOpen}
-          icon={<TbTrash />}
+        <DeleteDrawer
+          name={props.service.name}
+          description={props.service.description}
+          _id={props.service._id as string}
+          org={props.service.org}
         />
       </ButtonGroup>
       <Drawer
@@ -67,24 +67,6 @@ export function EditAndDeleteButtons(props: EditAndDeleteButtonsProps) {
             _id={props.service._id as string}
             initialRef={firstField}
             onClose={handleCloseEditDrawer}
-            org={props.service.org}
-          />
-        </DrawerContent>
-      </Drawer>
-      <Drawer
-        size={{ base: "xs", md: "sm" }}
-        isOpen={isDeleteOpen}
-        onClose={onDeleteClose}
-        initialFocusRef={firstField}
-      >
-        <DrawerOverlay />
-        <DrawerContent>
-          <DeleteDrawerContent
-            name={props.service.name}
-            description={props.service.description}
-            _id={props.service._id as string}
-            initialRef={firstField}
-            onClose={handleCloseDeleteDrawer}
             org={props.service.org}
           />
         </DrawerContent>

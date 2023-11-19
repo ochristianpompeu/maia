@@ -8,16 +8,12 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/react";
-import { useState } from "react";
 import { PanelContentItem } from "./PanelContentItem";
-// import { OrgPanelContentItem } from "./ServicesPanelContentItem";
 interface PanelContentProps {
   handleDisplayDetail: (display: string) => void;
 }
 
 export function PanelContent({ handleDisplayDetail }: PanelContentProps) {
-  const [displayDetail, setDisplayDetail] = useState("block");
-
   return (
     <TableContainer borderRadius="md" overflowY="auto">
       <Table size="sm" overflowY="auto">
