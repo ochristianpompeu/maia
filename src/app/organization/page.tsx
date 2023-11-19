@@ -7,7 +7,6 @@ import { useState } from "react";
 import { UserContext } from "../contexts/userContext";
 import { useUser } from "../hooks/useUser";
 import { OrgPanel } from "./OrgPanel/OrgPanel";
-import { OrgPanelContent } from "./OrgPanel/OrgPanelContent";
 
 export default function Organization() {
   const bgBoxColor = useColorModeValue("gray.100", "gray.800");
@@ -26,7 +25,6 @@ export default function Organization() {
     if (displayDetail === "block") {
       setDisplayDetail("none");
     }
-    // setDisplayDetail(!displayDeta);
     return;
   }
 
@@ -49,10 +47,7 @@ export default function Organization() {
               maxW="full"
               height={{ base: "auto", md: applicationConfig.staticHeightPanel }}
             >
-              <OrgPanel shadow="none">
-                <OrgPanelContent />
-              </OrgPanel>
-              {/* <OrgDataPanel display={displayDetail} shadow="none" /> */}
+              <OrgPanel shadow="none" />
             </Stack>
           </Flex>
         </Stack>
