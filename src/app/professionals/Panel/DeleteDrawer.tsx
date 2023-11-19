@@ -24,18 +24,19 @@ import { useRouter } from "next/navigation";
 import React, { Fragment, useState } from "react";
 import { TbTrash } from "react-icons/tb";
 
-export function DeleteDrawerContent(props: ProfessionalProps) {
+export function DeleteDrawer(props: ProfessionalProps) {
   const { isOpen, onClose, onOpen } = useDisclosure();
   const { updateProfessionals } = useProfessionals();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const mainColor = "red.600";
-  const bgColorDrawer = useColorModeValue("whiteAlpha.900", "blackAlpha.900");
+  const mainColor = "purple.600"
+  const bgColorDrawer = useColorModeValue("whiteAlpha.900", "blackAlpha.800");
   const toast = useToast();
   const router = useRouter();
 
   function handleRouter() {
     updateProfessionals();
+    onClose();
     router.refresh();
   }
 
@@ -97,12 +98,12 @@ export function DeleteDrawerContent(props: ProfessionalProps) {
         onClick={onOpen}
       />
       <Drawer
-        size={{ base: "full", md: "sm" }}
+        size={{ base: "xs", md: "sm" }}
         isOpen={isOpen}
         onClose={onClose}
       >
         <DrawerOverlay />
-        <DrawerContent bg={bgColorDrawer}>
+        <DrawerContent bg={bgColorDrawer} h="auto" overflowY="auto">
           <DrawerCloseButton color="white" />
           <DrawerHeader
             bgColor={mainColor}
@@ -200,14 +201,14 @@ export function DeleteDrawerContent(props: ProfessionalProps) {
                 aria-label="delete service"
                 form="deleteForm"
                 type="submit"
-                onClick={onClose}
+                // onClick={onClose}
                 isLoading={loading}
                 icon={<TbTrash />}
               />
               <Button
                 type="submit"
                 form="deleteForm"
-                onClick={onClose}
+                // onClick={onClose}
                 isLoading={loading}
               >
                 Deletar

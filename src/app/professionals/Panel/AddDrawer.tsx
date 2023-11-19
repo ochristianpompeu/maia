@@ -31,13 +31,16 @@ import { BsPersonBadge } from "react-icons/bs";
 import { RiSaveLine } from "react-icons/ri";
 import { TbReload } from "react-icons/tb";
 
-export function AddDrawerContent() {
+export function AddDrawer() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const firstField = useRef() as any;
   const { orgs } = useOrgs();
   const { services } = useServices();
   const [formServices, setFormServices] = useState(
     services.filter((service) => service.org?._id === orgs[0]._id)
+  );
+  const [checkboxDefaultValue, setCheckboxDefaultValue] = useState(
+    [] as string[]
   );
   const { updateProfessionals } = useProfessionals();
   const [formValues, setFormValues] = useState({
@@ -61,12 +64,12 @@ export function AddDrawerContent() {
 
   function handleRouter() {
     updateProfessionals();
+    onClose();
     router.refresh();
   }
 
   function getProfessionalServices() {
     const completeServices = [];
-    // const
     for (let i = 0; i < formValues.services.length; i++) {
       completeServices.push(
         ...services.filter((service) => service._id === formValues.services[i])
@@ -106,23 +109,25 @@ export function AddDrawerContent() {
   }
 
   function handleChangeCheckBox(event: ChangeEvent<HTMLInputElement>) {
-    const localServices = formValues.services;
-    // const localCompleteServices = formValues.completeServices;
+    const localServices = formValues.services!;
 
     const newArray = [] as string[];
-    // const newServiceArray = [{}];
 
     const value = event.target.value;
     const checked = event.target.checked;
 
-    if (checked && localServices.indexOf(value) < 0) {
+    if (checked && formValues.services!.indexOf(value) < 0) {
       localServices.push(value);
     }
 
-    if (!checked && localServices.indexOf(value) >= 0) {
-      for (let i = 0; i < localServices.length; i++) {
+    if (checked && checkboxDefaultValue!.indexOf(value) < 0) {
+      localServices.push(value);
+    }
+
+    if (!checked && formValues.services!.indexOf(value) >= 0) {
+      for (let i = 0; i < formValues.services!.length; i++) {
         if (localServices[i] !== value) {
-          newArray.push(localServices[i]);
+          newArray.push(formValues.services![i]);
         }
       }
 
@@ -130,8 +135,25 @@ export function AddDrawerContent() {
         ...formValues,
         services: newArray,
       });
+      setCheckboxDefaultValue(newArray);
       return;
     }
+
+    if (!checked && checkboxDefaultValue!.indexOf(value) >= 0) {
+      for (let i = 0; i < checkboxDefaultValue!.length; i++) {
+        if (localServices[i] !== value) {
+          newArray.push(checkboxDefaultValue![i]);
+        }
+      }
+
+      setFormValues({
+        ...formValues,
+        services: newArray,
+      });
+      setCheckboxDefaultValue(newArray);
+      return;
+    }
+
     setFormValues({
       ...formValues,
       services: localServices,
@@ -140,6 +162,18 @@ export function AddDrawerContent() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (formValues.orgId === "#") {
+      setError("Selecione a empresa");
+      toast({
+        title: "Empresa não selecionada",
+        description: "Selecione a empresa",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+        position: "top",
+      });
+      return;
+    }
 
     if (!formValues.name) {
       setError("O campo nome não pode ficar em branco");
@@ -157,13 +191,10 @@ export function AddDrawerContent() {
     try {
       setLoading(true);
       const professionalServices = getProfessionalServices();
-      // console.log("professionalServices: ", professionalServices);
       setFormValues({
         ...formValues,
         completeServices: professionalServices,
       });
-
-      // console.log("formValues: ", formValues);
 
       const responseCreate = await fetch("/api/professional/", {
         method: "POST",
@@ -178,16 +209,16 @@ export function AddDrawerContent() {
       setLoading(false);
 
       if (responseCreate.ok) {
-        // setFormValues({
-        //   name: "",
-        //   email: "",
-        //   image: "",
-        //   bio: "",
-        //   func: "",
-        //   orgId: orgs[0]._id,
-        //   services: [] as string[],
-        //   completeServices: [{}],
-        // });
+        setFormValues({
+          name: "",
+          email: "",
+          image: "",
+          bio: "",
+          func: "",
+          orgId: orgs[0]._id,
+          services: [] as string[],
+          completeServices: [{}],
+        });
 
         toast({
           title: "Sucesso",
@@ -267,7 +298,7 @@ export function AddDrawerContent() {
         />
       </ButtonGroup>
       <Drawer
-        size={{ base: "full", md: "sm" }}
+        size={{ base: "xs", md: "sm" }}
         isOpen={isOpen}
         onClose={onClose}
         initialFocusRef={firstField}
@@ -291,6 +322,7 @@ export function AddDrawerContent() {
                 onChange={handleChangeSelect}
                 focusBorderColor={mainColor}
               >
+                <option value="#">Nenhum</option>
                 {orgs?.map((org: OrgProps) => (
                   <option key={org._id!} value={org._id!}>
                     {org.name!}
@@ -390,12 +422,12 @@ export function AddDrawerContent() {
                 form="createForm"
                 aria-label="Add"
                 icon={<RiSaveLine />}
-                onClick={onClose}
+                // onClick={onClose}
               />
               <Button
                 type="submit"
                 form="createForm"
-                onClick={onClose}
+                // onClick={onClose}
                 isLoading={loading}
               >
                 Salvar

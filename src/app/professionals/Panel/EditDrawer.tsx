@@ -29,7 +29,7 @@ import { useRouter } from "next/navigation";
 import React, { ChangeEvent, Fragment, useRef, useState } from "react";
 import { TbEdit, TbRefresh } from "react-icons/tb";
 
-export function EditDrawerContent(props: ProfessionalProps) {
+export function EditDrawer(props: ProfessionalProps) {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -63,6 +63,7 @@ export function EditDrawerContent(props: ProfessionalProps) {
 
   function handleRouter() {
     updateProfessionals();
+    onClose();
     router.refresh();
   }
 
@@ -249,13 +250,13 @@ export function EditDrawerContent(props: ProfessionalProps) {
         onClick={onOpen}
       />
       <Drawer
-        size={{ base: "full", md: "sm" }}
+        size={{ base: "xs", md: "sm" }}
         isOpen={isOpen}
         onClose={onClose}
         initialFocusRef={initialRef}
       >
         <DrawerOverlay />
-        <DrawerContent bg={bgColorDrawer}>
+        <DrawerContent bg={bgColorDrawer} h="auto" overflowY="auto">
           <DrawerCloseButton />
           <DrawerHeader textColor={mainColor} borderBottomWidth="1px">
             Edição do Cadastro do Profissional
@@ -369,14 +370,14 @@ export function EditDrawerContent(props: ProfessionalProps) {
                 aria-label="alter"
                 type="submit"
                 form="alterForm"
-                onClick={onClose}
+                // onClick={onClose}
                 isLoading={loading}
                 icon={<TbRefresh />}
               />
               <Button
                 type="submit"
                 form="alterForm"
-                onClick={onClose}
+                // onClick={onClose}
                 isLoading={loading}
               >
                 Atualizar

@@ -15,8 +15,8 @@ import {
   WrapItem,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { DeleteDrawerContent } from "./DeleteDrawerContent";
-import { EditDrawerContent } from "./EditDrawerContent";
+import { DeleteDrawer } from "./DeleteDrawer";
+import { EditDrawer } from "./EditDrawer";
 import { ProfessionalContentItemBadge } from "./ProfessionalContentItemBadge";
 
 interface PanelContentItemProps {
@@ -46,7 +46,7 @@ export function PanelContentItem({ professional }: PanelContentItemProps) {
         <Flex justify={"center"} mt={-12}>
           <Avatar
             size={"xl"}
-            src={professional?.image}
+            src={professional?.image || "https://i.pravatar.cc/300"}
             css={{
               border: "2px solid white",
             }}
@@ -96,16 +96,11 @@ export function PanelContentItem({ professional }: PanelContentItemProps) {
               isAttached
               colorScheme="purple"
             >
-              <EditDrawerContent {...professional} />
-              <Button disabled={true} w="full">
+              <EditDrawer {...professional} />
+              <Button disabled w="full">
                 Visualizar
               </Button>
-              <DeleteDrawerContent {...professional} />
-              {/* <IconButton
-                icon={<TbTrash />}
-                aria-label="Delete Professional"
-                colorScheme="red"
-              /> */}
+              <DeleteDrawer {...professional} />
             </ButtonGroup>
           </Stack>
         </Box>

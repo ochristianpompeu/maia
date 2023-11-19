@@ -11,7 +11,7 @@ import {
   useColorModeValue
 } from "@chakra-ui/react";
 import { ReactNode } from "react";
-import { AddDrawerContent } from "./AddDrawerContent";
+import { AddDrawer } from "./AddDrawer";
 import { PanelContent } from "./PanelContent";
 interface DataPanelProps extends CardProps {
   children?: ReactNode;
@@ -32,7 +32,6 @@ export function Panel({
       w="full"
       {...rest}
       m={0}
-      // height={{ base: "auto", md: applicationConfig.staticHeightPanel }}
       borderRadius="md"
     >
       <CardHeader borderRadius="md" w="full" p="2" bg={bgCargHeader}>
@@ -41,7 +40,7 @@ export function Panel({
             <Icon fontSize="2xl" as={PanelAndMenuIcons.professionals} />
             <Heading size="md">Profissionais</Heading>
           </HStack>
-          <AddDrawerContent />
+          <AddDrawer />
         </HStack>
       </CardHeader>
       <Divider />
