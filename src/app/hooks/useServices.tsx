@@ -1,5 +1,4 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useOrgs } from "@/app/hooks/useOrgs";
 import { useUser } from "@/app/hooks/useUser";
 import { ServiceProps } from "@/lib/interfaces";
 import { useSession } from "next-auth/react";
@@ -27,82 +26,34 @@ const ServicesContext = createContext<ServicesContextData>(
 export function ServicesProvider({ children }: ServicesProviderProps) {
   const { data: session } = useSession();
   const { user } = useUser();
-  const { orgs } = useOrgs();
   const [services, setServices] = useState([]);
 
   useEffect(() => {
     async function fetchApi() {
-      if (user === undefined) {
-        const res = await fetch(
-          `/api/service/byUser/6543f7feb31c7cbd35d04ab4`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        const data = await res.json();
-        setServices(data?.localServices);
-      }
-      if (orgs) {
-        try {
-          const res = await fetch(`/api/service/byUser/${user?._id}`, {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
-          const data = await res.json();
-          setServices(data?.localServices);
-        } catch (error) {
-          return;
-        }
-      }
+      const res = await fetch(`/api/service/byUser/${user?._id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
+      setServices(data?.localServices);
     }
-    try {
-      fetchApi();
-    } catch (error) {
-      console.log("Error ao realizar fetch:", error);
-    }
+    session?.user && fetchApi();
   }, [user]);
 
   function updateServices() {
     async function fetchApi() {
-      if (user === undefined) {
-        const res = await fetch(
-          `/api/service/byUser/6543f7feb31c7cbd35d04ab4`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        const data = await res.json();
-        setServices(data?.localServices);
-      }
-
-      if (user) {
-        try {
-          const res = await fetch(`/api/service/byUser/${user?._id}`, {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
-          const data = await res.json();
-          setServices(data?.localServices);
-        } catch (error) {
-          return;
-        }
-      }
+      const res = await fetch(`/api/service/byUser/${user?._id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
+      setServices(data?.localServices);
     }
-    try {
-      fetchApi();
-    } catch (error) {
-      console.log("Error ao realizar fetch:", error);
-    }
+    session?.user && fetchApi();
   }
 
   return (

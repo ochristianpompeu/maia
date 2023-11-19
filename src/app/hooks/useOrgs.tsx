@@ -28,78 +28,31 @@ export function OrgsProvider({ children }: OrgProviderProps) {
 
   useEffect(() => {
     async function fetchApi() {
-      if (user === undefined) {
-        const res = await fetch(
-          `/api/organization/byUser/6543f7feb31c7cbd35d04ab4`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        const data = await res.json();
-        setOrgs(data?.orgs);
-      }
-
-      if (user) {
-        try {
-          const res = await fetch(`/api/organization/byUser/${user?._id}`, {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
-          const data = await res.json();
-          setOrgs(data?.orgs);
-        } catch (error) {
-          return;
-        }
-      }
+      const res = await fetch(`/api/organization/byUser/${user?._id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res?.json();
+      setOrgs(data.orgs);
     }
-    try {
-      fetchApi();
-    } catch (error) {
-      console.log("Error ao realizar fetch:", error);
-    }
+    session?.user && fetchApi();
   }, [user]);
 
   function updateOrgs() {
     async function fetchApi() {
-      if (user === undefined) {
-        const res = await fetch(
-          `/api/organization/byUser/6543f7feb31c7cbd35d04ab4`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        const data = await res.json();
-        setOrgs(data?.orgs);
-      }
+      const res = await fetch(`/api/organization/byUser/${user?._id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res?.json();
+      setOrgs(data.orgs);
+    }
 
-      if (user) {
-        try {
-          const res = await fetch(`/api/organization/byUser/${user?._id}`, {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
-          const data = await res.json();
-          setOrgs(data?.orgs);
-        } catch (error) {
-          return;
-        }
-      }
-    }
-    try {
-      fetchApi();
-    } catch (error) {
-      console.log("Error ao realizar fetch:", error);
-    }
+    session?.user && fetchApi();
   }
 
   return (

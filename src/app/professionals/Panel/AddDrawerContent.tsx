@@ -273,7 +273,7 @@ export function AddDrawerContent() {
         initialFocusRef={firstField}
       >
         <DrawerOverlay />
-        <DrawerContent bg={bgColorDrawer} height="auto">
+        <DrawerContent bg={bgColorDrawer} height="auto" overflowY="auto">
           <DrawerCloseButton />
           <DrawerHeader textColor={mainColor} borderBottomWidth="1px">
             Cadastrar Profissional

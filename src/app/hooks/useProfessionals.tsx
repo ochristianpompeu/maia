@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useUser } from "@/app/hooks/useUser";
 import { ProfessionalProps } from "@/lib/interfaces";
+import { useSession } from "next-auth/react";
 import {
   ReactNode,
   createContext,
@@ -25,82 +26,35 @@ const ProfessionalsContext = createContext<ProfessionalsContextData>(
 export function ProfessionalsProvider({
   children,
 }: ProfessionalsProviderProps) {
+  const { data: session } = useSession();
   const { user } = useUser();
   const [professionals, setProfessionals] = useState<ProfessionalProps[]>([]);
-
   useEffect(() => {
     async function fetchApi() {
-      if (user === undefined) {
-        const res = await fetch(
-          `/api/professional/byUser/6543f7feb31c7cbd35d04ab4`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        const data = await res.json();
-        setProfessionals(data?.localProfessionals);
-      }
-      if (user) {
-        try {
-          const res = await fetch(`/api/professional/byUser/${user?._id}`, {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
-          const data = await res.json();
-          setProfessionals(data?.localProfessionals);
-        } catch (error) {
-          return;
-        }
-      }
+      const res = await fetch(`/api/professional/byUser/${user?._id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
+      setProfessionals(data?.localProfessionals);
     }
-    try {
-      fetchApi();
-    } catch (error) {
-      console.log("Error ao realizar fetch:", error);
-    }
+    session?.user && fetchApi();
   }, [user]);
 
   function updateProfessionals() {
     async function fetchApi() {
-      // if (user === undefined) {
-      //   const res = await fetch(
-      //     `/api/service/professional/6543f7feb31c7cbd35d04ab4`,
-      //     {
-      //       method: "GET",
-      //       headers: {
-      //         "Content-Type": "application/json",
-      //       },
-      //     }
-      //   );
-      //   const data = await res.json();
-      //   setProfessionals(data?.localProfessionals);
-      // }
-
-      if (user) {
-        try {
-          const res = await fetch(`/api/professional/byUser/${user?._id}`, {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
-          const data = await res.json();
-          setProfessionals(data?.localProfessionals);
-        } catch (error) {
-          return;
-        }
-      }
+      const res = await fetch(`/api/professional/byUser/${user?._id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
+      setProfessionals(data?.localProfessionals);
     }
-    try {
-      fetchApi();
-    } catch (error) {
-      console.log("Error ao realizar fetch:", error);
-    }
+    session?.user && fetchApi();
   }
 
   return (

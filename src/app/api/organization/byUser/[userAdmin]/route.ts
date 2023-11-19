@@ -12,9 +12,7 @@ export async function GET(
 ) {
   const { userAdmin } = params;
   await connectMongoDB();
-  // if (userAdmin === undefined) {
-  //   return NextResponse.json({ orgs: {} }, { status: 200 });
-  // }
+
   const orgs = await Organization.find({
     userAdmin: userAdmin,
   });
