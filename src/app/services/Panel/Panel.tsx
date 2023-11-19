@@ -1,6 +1,5 @@
 import { useServices } from "@/app/hooks/useServices";
 import { PanelAndMenuIcons } from "@/lib/Links";
-import { AddIcon } from "@chakra-ui/icons";
 import {
   Card,
   CardBody,
@@ -10,13 +9,12 @@ import {
   HStack,
   Heading,
   Icon,
-  IconButton,
   useColorModeValue,
   useDisclosure
 } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
-import { ReactNode, useRef } from "react";
-import { AddDrawerContent } from "./AddDrawerContent";
+import { ReactNode } from "react";
+import { AddDrawer } from "./AddDrawer";
 import { PanelContent } from "./PanelContent";
 interface DataPanelProps extends CardProps {
   children?: ReactNode;
@@ -36,7 +34,6 @@ export function Panel({
     onClose: onCloseAdd,
   } = useDisclosure();
 
-  const firstField = useRef() as any;
   const bgCargHeader = useColorModeValue("gray.50", "whiteAlpha.100");
   const { updateServices } = useServices();
   const router = useRouter();
@@ -61,15 +58,7 @@ export function Panel({
             <Icon fontSize="2xl" as={PanelAndMenuIcons.services} />
             <Heading size="md">Serviços</Heading>
           </HStack>
-          <IconButton
-            display={{ md: "none" }}
-            aria-label="Add Service"
-            colorScheme="purple"
-            onClick={onOpenAdd}
-            variant="outline"
-            icon={<AddIcon />}
-          />
-          <AddDrawerContent />
+          <AddDrawer />
         </HStack>
       </CardHeader>
 

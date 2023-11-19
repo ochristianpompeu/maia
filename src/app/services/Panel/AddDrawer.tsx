@@ -1,6 +1,7 @@
 import { useOrgs } from "@/app/hooks/useOrgs";
 import { useServices } from "@/app/hooks/useServices";
 import { OrgProps } from "@/lib/interfaces";
+import { AddIcon } from "@chakra-ui/icons";
 import {
   Button,
   ButtonGroup,
@@ -25,9 +26,8 @@ import { ChangeEvent, Fragment, useRef, useState } from "react";
 import { RiSaveLine, RiServiceLine } from "react-icons/ri";
 import { TbReload } from "react-icons/tb";
 
-export function AddDrawerContent() {
+export function AddDrawer() {
   const { isOpen, onOpen, onClose } = useDisclosure();
-
   const { orgs } = useOrgs();
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -39,6 +39,7 @@ export function AddDrawerContent() {
   const { updateServices } = useServices();
 
   const mainColor = useColorModeValue("purple.600", "purple.200");
+  const bgColorDrawer = useColorModeValue("whiteAlpha.900", "blackAlpha.900");
   const firstField = useRef() as any;
 
   function handleRouter() {
@@ -156,21 +157,39 @@ export function AddDrawerContent() {
           icon={<TbReload />}
         />
       </ButtonGroup>
+      <ButtonGroup
+        variant="outline"
+        colorScheme="purple"
+        display={{ md: "none" }}
+        isAttached
+        size="sm"
+      >
+        <IconButton
+          onClick={onOpen}
+          aria-label="Add Service"
+          icon={<AddIcon />}
+        />
+        <IconButton
+          onClick={updateServices}
+          aria-label="Refresh"
+          icon={<TbReload />}
+        />
+      </ButtonGroup>
       <Drawer
-        size={{ base: "full", md: "sm" }}
+        size={{ base: "xs", md: "sm" }}
         isOpen={isOpen}
         onClose={onClose}
         initialFocusRef={firstField}
       >
         <DrawerOverlay />
-        <DrawerContent>
+        <DrawerContent bg={bgColorDrawer} height="auto" overflowY="auto">
           <DrawerCloseButton />
           <DrawerHeader textColor={mainColor} borderBottomWidth="1px">
             Cadastrar Serviço
           </DrawerHeader>
 
           <DrawerBody>
-            <form id="createServiceForm" onSubmit={handleSubmit}>
+            <form id="create" onSubmit={handleSubmit}>
               <FormLabel textColor={mainColor} htmlFor="orgId">
                 Selecione a Empresa
               </FormLabel>
@@ -223,14 +242,14 @@ export function AddDrawerContent() {
             >
               <IconButton
                 type="submit"
-                form="createServiceForm"
+                form="create"
                 aria-label="Add Service"
                 icon={<RiSaveLine />}
                 onClick={onClose}
               />
               <Button
                 type="submit"
-                form="createServiceForm"
+                form="create"
                 onClick={onClose}
                 isLoading={loading}
               >
