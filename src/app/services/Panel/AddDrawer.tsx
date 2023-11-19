@@ -200,6 +200,7 @@ export function AddDrawer() {
                 onChange={handleChangeSelect}
                 focusBorderColor={mainColor}
               >
+                <option value="#">Nenhum</option>
                 {orgs?.map((org: OrgProps) => (
                   <option key={org._id!} value={org._id!}>
                     {org.name!}

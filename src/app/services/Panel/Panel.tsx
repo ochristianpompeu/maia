@@ -38,18 +38,11 @@ export function Panel({
   const { updateServices } = useServices();
   const router = useRouter();
 
-  function handleOnAddClose() {
-    updateServices();
-    onCloseAdd;
-    router.refresh();
-  }
-
   return (
     <Card
       w="full"
       {...rest}
       m={0}
-      // height={{ base: "auto", md: applicationConfig.staticHeightPanel }}
       borderRadius="md"
     >
       <CardHeader borderRadius="md" w="full" p="2" bg={bgCargHeader}>
@@ -64,7 +57,7 @@ export function Panel({
 
       <Divider />
 
-      <CardBody borderRadius="md">
+      <CardBody borderRadius="md" p="2">
         <PanelContent handleDisplayDetail={handleDisplayDetail} />
       </CardBody>
     </Card>
