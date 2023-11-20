@@ -48,7 +48,7 @@ export function EditDrawer(props: HourProps) {
   const { orgs } = useOrgs();
   const { services } = useServices();
   const { professionals } = useProfessionals();
-  const { updateHours } = useHours();
+  const { hours, updateHours } = useHours();
   const { user } = useUser();
 
   const [orgId, setOrgId] = useState(props.orgId);
@@ -211,24 +211,24 @@ export function EditDrawer(props: HourProps) {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     const newHour = {
-      day: day,
-      interval: interval,
-      orgId: orgId,
-      org: org,
-      serviceId: serviceId,
-      service: service,
-      professionalId: professionalId,
-      professional: professional,
-      userAdmin: user._id,
+      newDay: day,
+      newInterval: interval,
+      newOrgId: orgId,
+      newOrg: org,
+      newServiceId: serviceId,
+      newService: service,
+      newProfessionalId: professionalId,
+      newProfessional: professional,
+      newUserAdmin: user._id,
     };
 
     if (
-      !newHour.day ||
-      !newHour.orgId ||
-      !newHour.serviceId ||
-      !newHour.professionalId ||
-      !newHour.day ||
-      !newHour.interval
+      !newHour.newDay ||
+      !newHour.newOrgId ||
+      !newHour.newServiceId ||
+      !newHour.newProfessionalId ||
+      !newHour.newDay ||
+      !newHour.newInterval
     ) {
       setError("Todos os campos são obrigatórios  ");
       toast({
@@ -245,7 +245,7 @@ export function EditDrawer(props: HourProps) {
     try {
       setLoading(true);
 
-      const response = await fetch("/api/hour/", {
+      const response = await fetch(`/api/hour/${props._id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -271,7 +271,7 @@ export function EditDrawer(props: HourProps) {
 
         toast({
           title: "Sucesso",
-          description: "Horário cadastrado com sucesso",
+          description: "Horário atualizado com sucesso",
           status: "success",
           duration: 3000,
           isClosable: true,
@@ -311,6 +311,14 @@ export function EditDrawer(props: HourProps) {
   for (let i = 0; i < intervalGroup; i++) {
     // note: we are adding a key prop here to allow react to uniquely identify each
     // element in this array. see: https://reactjs.org/docs/lists-and-keys.html
+    const formatedStart = new Date(interval[i]?.start! as Date);
+    const formatedEnd = new Date(interval[i]?.end! as Date);
+    formatedStart.toLocaleTimeString("pt-BR", {
+      timeZone: "UTC",
+    });
+    formatedEnd.toLocaleTimeString("pt-BR", {
+      timeZone: "UTC",
+    });
     rows.push(
       <InputGroup
         key={i}
@@ -333,6 +341,9 @@ export function EditDrawer(props: HourProps) {
           onChange={(e) => handleInterval(e, i)}
           borderColor={intervalInputBorderColor}
           focusBorderColor={focusBorderColor}
+          value={formatedStart.toLocaleTimeString("pt-BR", {
+            timeZone: "UTC",
+          })}
         />
         <FormLabel textColor={mainColor} htmlFor="end">
           Fim
@@ -347,6 +358,9 @@ export function EditDrawer(props: HourProps) {
           onChange={(e) => handleInterval(e, i)}
           borderColor={intervalInputBorderColor}
           focusBorderColor={focusBorderColor}
+          value={formatedEnd.toLocaleTimeString("pt-BR", {
+            timeZone: "UTC",
+          })}
         />
       </InputGroup>
     );
