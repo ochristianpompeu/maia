@@ -1,20 +1,7 @@
 import type { Metadata } from "next";
-import { Poppins, Roboto } from "next/font/google";
+import { poppins } from "./fonts";
 import { Providers } from "./providers";
 
-const roboto = Roboto({
-  weight: ["300", "400", "500", "700"],
-  style: ["normal", "italic"],
-  subsets: ["latin"],
-  display: "swap",
-});
-
-const poppins = Poppins({
-  weight: ["300", "400", "500", "700"],
-  style: ["normal", "italic"],
-  subsets: ["latin"],
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   title: "Maia",
@@ -28,7 +15,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-br">
-      <body>
+      <body className={poppins.className}>
         <Providers>{children}</Providers>
       </body>
     </html>

@@ -71,6 +71,7 @@ export const Routes = {
   dashboard: { text: "Dashboard", link: "/panel" },
   blog: { text: "Blog", link: "/blog" },
   login: { text: "Login", link: "/login" as string },
+  signin: { text: "SignIn", link: "/signin" as string },
   user: {
     create: {
       text: "create",

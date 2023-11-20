@@ -24,7 +24,6 @@ const user: UserProps = {
 
 export function Providers({ children }: Props) {
   return (
-    // <ErrorBoundary>
     <SessionProvider>
       <UserProvider>
         <OrgsProvider>
@@ -40,6 +39,5 @@ export function Providers({ children }: Props) {
         </OrgsProvider>
       </UserProvider>
     </SessionProvider>
-    // </ErrorBoundary>
   );
 }

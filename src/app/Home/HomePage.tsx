@@ -1,11 +1,13 @@
 "use client";
 
-import Footer from "@/components/Footer/Footer";
 import NavBar from "@/components/NavBar/NavBar";
 import { applicationConfig } from "@/lib/config";
 import { Container, Flex } from "@chakra-ui/react";
-import HomeImageSide from "./HomeImageSide";
-import HomeSignInForm from "./HomeSignInForm";
+import SimpleThreeColumns from "../Features/SimpleThreeColumns";
+import { CallToActionWithAnnotation } from "../Heros/CtaWithAnotation";
+import CallToActionWithVideo from "../Heros/CtaWithVideo";
+import SplitScreen from "../Heros/SplitScreen";
+import WithBackgroundImage from "../Heros/WithBackgroundImage";
 
 export default function HomePage() {
   return (
@@ -30,10 +32,62 @@ export default function HomePage() {
             md: "row",
           }}
         >
-          <HomeSignInForm />
-          <HomeImageSide />
+          <CallToActionWithAnnotation />
         </Flex>
-        <Footer />
+        <Flex
+          w="full"
+          h={{
+            base: "auto",
+            md: applicationConfig.staticHeight,
+          }}
+          direction={{
+            base: "column-reverse",
+            md: "row",
+          }}
+        >
+          <SplitScreen />
+        </Flex>
+        <Flex
+          w="full"
+          h={{
+            base: "auto",
+            md: applicationConfig.staticHeight,
+          }}
+          direction={{
+            base: "column-reverse",
+            md: "row",
+          }}
+        >
+          <CallToActionWithVideo />
+        </Flex>
+        <Flex
+          w="full"
+          h={{
+            base: "auto",
+            md: applicationConfig.staticHeight,
+          }}
+          direction={{
+            base: "column-reverse",
+            md: "row",
+          }}
+        >
+          <SimpleThreeColumns />
+        </Flex>
+        <Flex
+          w="full"
+          h={{
+            base: "auto",
+            md: applicationConfig.staticHeight,
+          }}
+          direction={{
+            base: "column-reverse",
+            md: "row",
+          }}
+        >
+          <WithBackgroundImage />
+        </Flex>
+
+        {/* <Footer /> */}
       </Flex>
     </Container>
   );

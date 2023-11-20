@@ -16,6 +16,7 @@
     "@emotion/styled": "^11.11.0",
     "@fontsource/anton": "^5.0.17",
     "@fontsource/bayon": "^5.0.17",
+    "@fontsource/open-sans": "^5.0.17",
     "@fontsource/poppins": "^5.0.8",
     "@fontsource/roboto": "^5.0.8",
     "@mui/icons-material": "^5.14.11",

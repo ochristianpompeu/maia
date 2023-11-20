@@ -28,7 +28,7 @@ import { FcGoogle } from "react-icons/fc";
 import { TiUserAddOutline } from "react-icons/ti";
 import { Routes } from "../../lib/Links";
 
-export default function HomeSignInForm() {
+export default function SignInForm() {
   const [formValues, setFormValues] = useState({
     name: "",
     email: "",
