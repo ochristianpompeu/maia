@@ -2,19 +2,19 @@
 
 import { Routes } from "@/lib/Links";
 import {
-    Box,
-    Button,
-    Container,
-    Flex,
-    Heading,
-    Icon,
-    IconButton,
-    IconProps,
-    Image,
-    Stack,
-    Text,
-    createIcon,
-    useColorModeValue,
+  Box,
+  Button,
+  Container,
+  Flex,
+  Heading,
+  Icon,
+  IconButton,
+  IconProps,
+  Image,
+  Stack,
+  Text,
+  createIcon,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { poppins } from "../fonts";
@@ -87,6 +87,8 @@ export default function CallToActionWithVideo() {
               px={6}
               leftIcon={<PlayIcon h={4} w={4} color={"gray.300"} />}
               disabled
+              as="a"
+              href="https://www.youtube.com/watch?v=dZ4Ly2rm8f0&t=18s"
             >
               Como isso funciona?
             </Button>
