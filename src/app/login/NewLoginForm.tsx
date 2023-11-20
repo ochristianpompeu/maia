@@ -176,7 +176,7 @@ export default function NewLoginForm() {
                 px={0}
                 py="2"
               >
-                <Checkbox colorScheme="purple">Remember me</Checkbox>
+                <Checkbox colorScheme="purple">Lembre de mim 🎶</Checkbox>
                 <Text color={mainColor}>Esqueceu sua senha?</Text>
               </Stack>
               <ButtonGroup
@@ -200,7 +200,7 @@ export default function NewLoginForm() {
             </Stack>
             <Text textAlign="right" w="full" py="2">
               Não possui cadastro?{" "}
-              <Link color={mainColor} as={NextLink} href="/">
+              <Link color={mainColor} as={NextLink} href={Routes.signin.link}>
                 Clique aqui
               </Link>
             </Text>

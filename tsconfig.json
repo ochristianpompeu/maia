@@ -22,6 +22,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/components/Logo/Logo.js", "src/middleware.js", "middleware.js", "src/error/ErrorBoundary.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/components/Logo/Logo.js", "src/middleware.js", "middleware.js", "src/error/ErrorBoundary.tsx", "src/app/hours-services/not-found.js"],
   "exclude": ["node_modules"]
 }
