@@ -88,6 +88,20 @@ export function Interval({
           {professional?.name}
         </Text>
       </HStack>
+      <HStack justifyContent="flex-start" w="full">
+        <Text fontWeight="600" color={"gray.500"}>
+          Status
+        </Text>
+        <Text
+          fontWeight="600"
+          bgColor="green.400"
+          textColor="white"
+          px="1"
+          borderRadius="md"
+        >
+          {interval?.status}
+        </Text>
+      </HStack>
     </VStack>
   );
 }
