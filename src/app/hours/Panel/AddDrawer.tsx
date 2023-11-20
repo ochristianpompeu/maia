@@ -1,6 +1,8 @@
+import { useHours } from "@/app/hooks/useHours";
 import { useOrgs } from "@/app/hooks/useOrgs";
 import { useProfessionals } from "@/app/hooks/useProfessionals";
 import { useServices } from "@/app/hooks/useServices";
+import { useUser } from "@/app/hooks/useUser";
 import { OrgProps, ProfessionalProps, ServiceProps } from "@/lib/interfaces";
 import { AddIcon, MinusIcon } from "@chakra-ui/icons";
 import {
@@ -34,9 +36,9 @@ export function AddDrawer() {
   const { orgs } = useOrgs();
   const { services } = useServices();
   const { professionals, updateProfessionals } = useProfessionals();
-  const initialProfessionals = professionals?.filter(
-    (professional: ProfessionalProps) => professional.org?._id === orgs[0]?._id
-  );
+  const { updateHours } = useHours();
+  const { user } = useUser();
+
   const [orgId, setOrgId] = useState("");
   const [org, setOrg] = useState<OrgProps>(orgs[0] as OrgProps);
   const [professionalId, setProfessionalId] = useState("");
@@ -61,6 +63,7 @@ export function AddDrawer() {
     professionals: [] as ProfessionalProps[],
     servicesId: "",
     services: [] as ServiceProps[],
+    userAdmin: "",
   });
 
   const firstField = useRef() as any;
@@ -74,7 +77,7 @@ export function AddDrawer() {
   const intervalInputBorderColor = useColorModeValue("gray.400", "gray.200");
 
   function handleRouter() {
-    // updateProfessionals();
+    updateHours();
     router.refresh();
   }
 
@@ -192,6 +195,7 @@ export function AddDrawer() {
       service: service,
       professionalId: professionalId,
       professional: professional,
+      userAdmin: user._id,
     };
 
     console.log(newHour);
@@ -240,6 +244,7 @@ export function AddDrawer() {
           professionals: [] as ProfessionalProps[],
           servicesId: "",
           services: [] as ServiceProps[],
+          userAdmin: "",
         });
 
         toast({

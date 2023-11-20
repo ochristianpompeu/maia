@@ -12,6 +12,7 @@ export async function POST(request: Request) {
     service,
     professionalId,
     professional,
+    userAdmin,
   } = await request.json();
 
   await connectMongoDB();
@@ -25,6 +26,7 @@ export async function POST(request: Request) {
     service: service,
     professionalId: professionalId,
     professional: professional,
+    userAdmin: userAdmin,
   };
 
   const hour = await Hour.create(newHour);

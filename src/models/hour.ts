@@ -1,6 +1,6 @@
 import { ObjectId } from "mongodb";
 import mongoose, { Schema, models } from "mongoose";
- 
+
 const HourIntervalSchema = new Schema({
   start: { type: Date, required: false },
   end: { type: Date, required: false },
@@ -64,6 +64,11 @@ const hourSchema = new Schema(
     professional: {
       type: Object,
       required: false,
+    },
+    userAdmin: {
+      type: ObjectId,
+      required: true,
+      ref: "User",
     },
   },
   {
