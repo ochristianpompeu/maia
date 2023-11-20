@@ -68,14 +68,18 @@ export interface LocalProfessionals extends ProfessionalProps {
   localServices: ServiceProps[];
 }
 
+export interface IntervalProps {
+  start?: Date;
+  end?: Date;
+  status?: string;
+  clientId?: string;
+  client?: UserProps;
+  _id: string;
+}
 export interface HourProps {
   _id?: string;
   day?: Date;
-  interval?: {
-    start?: Date;
-    end?: Date;
-    status?: string;
-  }[];
+  interval?: IntervalProps[];
   orgId?: string;
   org?: OrgProps;
   serviceId?: string;

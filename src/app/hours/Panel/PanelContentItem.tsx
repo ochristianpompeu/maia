@@ -1,115 +1,89 @@
 "use client";
-import { ProfessionalProps } from "@/lib/interfaces";
+import { HourProps } from "@/lib/interfaces";
 import {
-  Avatar,
   Box,
-  Button,
   ButtonGroup,
-  Flex,
+  HStack,
   Heading,
+  IconButton,
   Image,
-  Stack,
-  Text,
   VStack,
-  Wrap,
-  WrapItem,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { DeleteDrawer } from "./DeleteDrawer";
-import { EditDrawer } from "./EditDrawer";
-import { ProfessionalContentItemBadge } from "./ProfessionalContentItemBadge";
+import { TbEdit, TbTrash } from "react-icons/tb";
+import { Interval } from "./Interval";
 
 interface PanelContentItemProps {
-  professional: ProfessionalProps;
+  hour: HourProps;
 }
-export function PanelContentItem({ professional }: PanelContentItemProps) {
+export function PanelContentItem({ hour }: PanelContentItemProps) {
+  const formatedDay = new Date(hour.day as Date);
+
   return (
-    <WrapItem mx={{ base: "auto", md: "0" }}>
-      <Box
-        maxW={"320px"}
-        minW={"320px"}
+    <Box
+      maxW={"320px"}
+      minW={"320px"}
+      w={"full"}
+      bg={useColorModeValue("white", "gray.800")}
+      boxShadow={"lg"}
+      rounded={"md"}
+      borderColor="purple.400"
+      border="1px"
+      overflowY="auto"
+      maxH={{ base: "auto", md: "480" }}
+      minH={{ base: "auto", md: "480" }}
+    >
+      <Image
+        h={"80px"}
         w={"full"}
-        bg={useColorModeValue("white", "gray.800")}
-        boxShadow={"lg"}
-        rounded={"md"}
-        overflow={"hidden"}
-        borderColor="purple.400"
-        border="1px"
-      >
-        <Image
-          h={"120px"}
-          w={"full"}
-          src={"https://imageipsum.com/634x951"}
-          objectFit="cover"
-          alt="background image of professional card"
-        />
-        <Flex justify={"center"} mt={-12}>
-          <Avatar
-            size={"xl"}
-            src={professional?.image}
-            css={{
-              border: "2px solid white",
-            }}
-          />
-        </Flex>
-        <Box p={6} textAlign="center" w="full">
+        src={"https://imageipsum.com/634x951"}
+        objectFit="cover"
+        alt="background image of professional card"
+      />
+      <Box p={2} textAlign="left" w="full">
+        <HStack w="full" justifyContent="space-between" mb="2">
           <Heading fontSize={"2xl"} fontFamily={"body"}>
-            {professional?.name}
+            {formatedDay.toLocaleDateString("pt-BR", {
+              timeZone: "UTC",
+            })}
           </Heading>
-          <VStack spacing={0} m={0} p={0}>
-            <Text fontWeight="600" color={"gray.500"} m={0}>
-              {professional.email}
-            </Text>
-            <Text fontWeight="400" color={"gray.500"} mb={4}>
-              {professional.org?.name}
-            </Text>
-          </VStack>
+          <ButtonGroup variant="outline" isAttached colorScheme="purple">
+            {/* <EditDrawer {...professional} /> */}
+            <IconButton
+              icon={<TbEdit />}
+              aria-label="Edit Professional"
+              colorScheme="teal"
+              // onClick={onOpen}
+            />
 
-          <Text
-            textAlign={"center"}
-            color={useColorModeValue("gray.700", "gray.400")}
-            px={3}
-          >
-            {professional.bio?.substring(0, 80)}...
-          </Text>
+            {/* <DeleteDrawer {...professional} /> */}
+            <IconButton
+              icon={<TbTrash />}
+              aria-label="Delete Professional"
+              colorScheme="red"
+              // onClick={onOpen}
+            />
+          </ButtonGroup>
+        </HStack>
 
-          <Stack align={"center"} justify={"center"} direction={"row"} mt={6}>
-            <Wrap>
-              {professional.completeServices?.map((service) => (
-                <ProfessionalContentItemBadge
-                  key={service._id}
-                  name={service.name as string}
-                />
-              ))}
-            </Wrap>
-          </Stack>
-          <Stack
-            mt={4}
-            direction={"row"}
-            spacing={4}
-            w="full"
-            justifyContent="center"
-          >
-            <ButtonGroup
-              w="full"
-              variant="outline"
-              isAttached
-              colorScheme="purple"
-            >
-              <EditDrawer {...professional} />
-              <Button disabled={true} w="full">
-                Visualizar
-              </Button>
-              <DeleteDrawer {...professional} />
-              {/* <IconButton
-                icon={<TbTrash />}
-                aria-label="Delete Professional"
-                colorScheme="red"
-              /> */}
-            </ButtonGroup>
-          </Stack>
-        </Box>
+        <VStack
+          w="full"
+          spacing="2"
+          overflowY="auto"
+          _first={{
+            marginTop: "2",
+          }}
+        >
+          {hour?.interval?.map((interval) => (
+            <Interval
+              key={interval._id}
+              interval={interval}
+              serviceName={hour.service?.name}
+              professional={hour.professional}
+            />
+          ))}
+        </VStack>
       </Box>
-    </WrapItem>
+    </Box>
   );
 }

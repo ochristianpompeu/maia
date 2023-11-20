@@ -27,6 +27,7 @@ export function PanelAccordionItem({ children, org }: PanelAccordionProps) {
         borderBottom: "1px",
         borderBottomColor: "gray.100",
       }}
+      overflowX="auto"
     >
       <h2>
         <AccordionButton

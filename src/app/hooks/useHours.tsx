@@ -9,9 +9,8 @@ import {
   useEffect,
   useState,
 } from "react";
-import { useOrgs } from "./useOrgs";
 
-interface ProfessionalsProviderProps {
+interface HoursProviderProps {
   children: ReactNode;
 }
 
@@ -22,10 +21,9 @@ interface HoursContextData {
 
 const HoursContext = createContext<HoursContextData>({} as HoursContextData);
 
-export function HoursProvider({ children }: ProfessionalsProviderProps) {
+export function HoursProvider({ children }: HoursProviderProps) {
   const { data: session } = useSession();
   const { user } = useUser();
-  const { orgs } = useOrgs();
   const [hours, setHours] = useState<HourProps[]>([]);
 
   useEffect(() => {

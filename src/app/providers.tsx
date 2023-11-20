@@ -4,6 +4,7 @@ import { UserProps } from "@/lib/interfaces";
 import { CacheProvider } from "@chakra-ui/next-js";
 import { ChakraProvider } from "@chakra-ui/react";
 import { SessionProvider } from "next-auth/react";
+import { HoursProvider } from "./hooks/useHours";
 import { OrgsProvider } from "./hooks/useOrgs";
 import { ProfessionalsProvider } from "./hooks/useProfessionals";
 import { ServicesProvider } from "./hooks/useServices";
@@ -29,9 +30,11 @@ export function Providers({ children }: Props) {
         <OrgsProvider>
           <ServicesProvider>
             <ProfessionalsProvider>
-              <CacheProvider>
-                <ChakraProvider theme={theme}>{children}</ChakraProvider>
-              </CacheProvider>
+              <HoursProvider>
+                <CacheProvider>
+                  <ChakraProvider theme={theme}>{children}</ChakraProvider>
+                </CacheProvider>
+              </HoursProvider>
             </ProfessionalsProvider>
           </ServicesProvider>
         </OrgsProvider>

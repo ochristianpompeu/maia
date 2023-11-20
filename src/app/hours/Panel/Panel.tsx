@@ -37,7 +37,6 @@ export function Panel({
       w="full"
       {...rest}
       m={0}
-      // height={{ base: "auto", md: applicationConfig.staticHeightPanel }}
       borderRadius="md"
     >
       <CardHeader borderRadius="md" w="full" p="2" bg={bgCargHeader}>
@@ -57,8 +56,8 @@ export function Panel({
           allowMultiple
         >
           {orgs.map((org: OrgProps) => (
-            <PanelAccordionItem key={org._id} org={org}>
-              <PanelContent />
+            <PanelAccordionItem key={org._id} org={org} >
+              <PanelContent orgId={org._id} />
             </PanelAccordionItem>
           ))}
         </Accordion>

@@ -1,28 +1,30 @@
-import { useProfessionals } from "@/app/hooks/useProfessionals";
-import { ProfessionalProps } from "@/lib/interfaces";
-import { Skeleton, SkeletonCircle, SkeletonText, Wrap } from "@chakra-ui/react";
+import { useHours } from "@/app/hooks/useHours";
+import { HourProps } from "@/lib/interfaces";
+import { HStack, Skeleton, Wrap } from "@chakra-ui/react";
 import { PanelContentItem } from "./PanelContentItem";
 
-export function PanelContent() {
-  const { professionals } = useProfessionals();
+interface PanelContentProps {
+  orgId?: string;
+}
+export function PanelContent({ orgId }: PanelContentProps) {
+  const { hours } = useHours();
 
-  if (professionals) {
+  if (hours) {
     return (
-      <Wrap spacing="4" w="full">
-        {professionals.map((professional: ProfessionalProps) => (
-          <PanelContentItem
-            key={professional._id}
-            professional={professional}
-          />
-        ))}
-      </Wrap>
+      <HStack overflowX="auto" spacing="0">
+        {hours
+          ?.filter((hour) => hour?.orgId === orgId)
+          .map((hour: HourProps) => (
+            <PanelContentItem key={hour?._id} hour={hour} />
+          ))}
+      </HStack>
     );
   } else {
     return (
       <Wrap>
-        <SkeletonCircle />
-        <Skeleton />
-        <SkeletonText />
+        <Skeleton height="20" />
+        <Skeleton height="20" />
+        <Skeleton height="20" />
       </Wrap>
     );
   }

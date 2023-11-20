@@ -340,7 +340,7 @@ export function AddDrawer() {
       >
         <IconButton aria-label="Add Hour" onClick={onOpen} icon={<AddIcon />} />
         <IconButton
-          // onClick={updateHours}
+          onClick={updateHours}
           aria-label="Refresh"
           icon={<TbReload />}
         />
