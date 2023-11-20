@@ -198,8 +198,6 @@ export function AddDrawer() {
       userAdmin: user._id,
     };
 
-    console.log(newHour);
-
     if (
       !newHour.day ||
       !newHour.orgId ||
