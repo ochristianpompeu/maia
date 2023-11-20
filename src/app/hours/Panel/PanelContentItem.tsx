@@ -5,13 +5,12 @@ import {
   ButtonGroup,
   HStack,
   Heading,
-  IconButton,
   Image,
   VStack,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { TbEdit } from "react-icons/tb";
 import { DeleteDrawer } from "./DeleteDrawer";
+import { EditDrawer } from "./EditDrawer";
 import { Interval } from "./Interval";
 
 interface PanelContentItemProps {
@@ -49,14 +48,7 @@ export function PanelContentItem({ hour }: PanelContentItemProps) {
             })}
           </Heading>
           <ButtonGroup variant="outline" isAttached colorScheme="purple">
-            {/* <EditDrawer {...professional} /> */}
-            <IconButton
-              icon={<TbEdit />}
-              aria-label="Edit Professional"
-              colorScheme="teal"
-              // onClick={onOpen}
-            />
-
+            <EditDrawer {...hour} />
             <DeleteDrawer {...hour} />
           </ButtonGroup>
         </HStack>

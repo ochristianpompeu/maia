@@ -1,13 +1,20 @@
 "use client";
+import { useHours } from "@/app/hooks/useHours";
 import { useOrgs } from "@/app/hooks/useOrgs";
 import { useProfessionals } from "@/app/hooks/useProfessionals";
 import { useServices } from "@/app/hooks/useServices";
-import { OrgProps, ProfessionalProps, ServiceProps } from "@/lib/interfaces";
+import { useUser } from "@/app/hooks/useUser";
+import {
+  HourProps,
+  IntervalProps,
+  OrgProps,
+  ProfessionalProps,
+  ServiceProps,
+} from "@/lib/interfaces";
+import { AddIcon, MinusIcon } from "@chakra-ui/icons";
 import {
   Button,
   ButtonGroup,
-  Checkbox,
-  CheckboxGroup,
   Drawer,
   DrawerBody,
   DrawerCloseButton,
@@ -16,171 +23,216 @@ import {
   DrawerHeader,
   DrawerOverlay,
   FormLabel,
+  HStack,
   IconButton,
   Input,
+  InputGroup,
   Select,
-  Stack,
-  Textarea,
+  VStack,
   useColorModeValue,
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import React, { ChangeEvent, Fragment, useRef, useState } from "react";
-import { TbEdit, TbRefresh } from "react-icons/tb";
+import { RiSaveLine } from "react-icons/ri";
+import { TbEdit } from "react-icons/tb";
 
-export function EditDrawer(props: ProfessionalProps) {
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-
-  const { updateProfessionals } = useProfessionals();
+export function EditDrawer(props: HourProps) {
+  let formatedDay = new Date(props?.day as Date);
+  const formatedFormDay = formatDate(formatedDay);
+  const stringDay = formatedDay.toLocaleDateString("pt-BR", {
+    timeZone: "UTC",
+  });
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const { orgs } = useOrgs();
   const { services } = useServices();
-  const [formServices, setFormServices] = useState(
-    services.filter((service) => service.org?._id === props.org?._id)
-  );
-  const [checkboxDefaultValue, setCheckboxDefaultValue] = useState(
-    props.services
-  );
-  const { isOpen, onClose, onOpen } = useDisclosure();
+  const { professionals } = useProfessionals();
+  const { updateHours } = useHours();
+  const { user } = useUser();
 
-  const initialRef = useRef() as any;
-  const toast = useToast();
-  const router = useRouter();
-  const mainColor = useColorModeValue("purple.600", "purple.300");
-  const bgColorDrawer = useColorModeValue("whiteAlpha.900", "blackAlpha.800");
+  const [orgId, setOrgId] = useState(props.orgId);
+  const [org, setOrg] = useState<OrgProps>(props?.org as OrgProps);
+  const [professionalId, setProfessionalId] = useState(props.professionalId);
+  const [professional, setProfessional] = useState<ProfessionalProps>(
+    props.professional as ProfessionalProps
+  );
+  const [serviceId, setServiceId] = useState(props.serviceId);
+  const [service, setService] = useState<ServiceProps>(
+    props?.service as ServiceProps
+  );
+  const [day, setDay] = useState(formatedFormDay);
+  const [interval, setInterval] = useState(props.interval as IntervalProps[]);
+  const [intervalGroup, setIntervalGroup] = useState(props?.interval?.length!);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const [formValues, setFormValues] = useState({
-    name: props.name,
-    email: props.email,
-    image: props.image,
-    bio: props.bio,
-    func: props.function,
-    orgId: props.orgId,
-    services: props.services,
-    completeServices: props.completeServices,
+    orgId: props?.orgId,
+    day: formatedDay,
+    interval: props?.interval,
+    professionalId: props?.professionalId,
+    professionals: professionals.filter(
+      (professional) => professional.org?._id === props?.orgId
+    ),
+    servicesId: props?.serviceId,
+    services: professionals.filter(
+      (professional) => professional._id === props.professionalId
+    )[0]?.completeServices,
+    userAdmin: props.userAdmin,
   });
 
+  const firstField = useRef() as any;
+  const toast = useToast();
+  const router = useRouter();
+
+  const focusBorderColor = useColorModeValue("purple.600", "purple.600");
+  const mainColor = useColorModeValue("purple.600", "purple.200");
+  const bgColorDrawer = useColorModeValue("whiteAlpha.900", "blackAlpha.900");
+  const intervalColor = useColorModeValue("gray.200", "gray.800");
+  const intervalInputBorderColor = useColorModeValue("gray.400", "gray.200");
+
+  function formatDate(date: Date) {
+    var d = new Date(date),
+      month = "" + (d.getMonth() + 1),
+      day = "" + d.getDate(),
+      year = d.getFullYear();
+
+    if (month.length < 2) month = "0" + month;
+    if (day.length < 2) day = "0" + day;
+
+    return [year, month, day].join("-");
+  }
+
   function handleRouter() {
-    updateProfessionals();
-    onClose();
+    updateHours();
     router.refresh();
   }
 
-  function getProfessionalServices() {
-    const completeServices = [];
-    for (let i = 0; i < formValues.services!.length; i++) {
-      completeServices.push(
-        ...services.filter((service) => service._id === formValues.services![i])
-      );
+  function handleAddInterval() {
+    setIntervalGroup(intervalGroup + 1);
+  }
+
+  function handleMinusInterval() {
+    if (intervalGroup === 0) {
+      return;
     }
-    return completeServices;
+    const localInterval: IntervalProps[] = interval as IntervalProps[];
+    localInterval.pop();
+    setIntervalGroup(intervalGroup - 1);
+    setInterval(localInterval);
   }
 
-  function handleChangeInput(event: ChangeEvent<HTMLInputElement>) {
-    const { name, value } = event.target;
-    setFormValues({
-      ...formValues,
-      [name]: value,
-    });
-  }
-
-  function handleChangeTextArea(event: ChangeEvent<HTMLTextAreaElement>) {
-    const newBio = event.target.value;
-    setFormValues({
-      ...formValues,
-      bio: newBio,
-    });
-  }
-
-  function handleChangeSelect(event: ChangeEvent<HTMLSelectElement>) {
-    const newOrgId = event.target.value;
-    const localServices = services.filter(
-      (service) => service.org?._id === newOrgId
+  function handleChangeOrg(event: ChangeEvent<HTMLSelectElement>) {
+    const localOrgId = event.target.value;
+    const localOrg = orgs.find((org) => org._id === localOrgId) as OrgProps;
+    const localProfessionals = professionals.filter(
+      (professional: ProfessionalProps) => professional.org?._id === localOrgId
     );
-
+    setOrgId(localOrgId);
+    setOrg(localOrg);
     setFormValues({
       ...formValues,
-      orgId: newOrgId,
+      orgId: orgId,
+      professionals: localProfessionals || ([{}] as ProfessionalProps[]),
     });
-
-    setFormServices(localServices);
   }
 
-  function handleChangeCheckBox(event: ChangeEvent<HTMLInputElement>) {
-    const localServices = formValues.services!;
+  function handleChangeProfessional(event: ChangeEvent<HTMLSelectElement>) {
+    const localProfessionalId = event.target.value;
+    const localProfessionals = professionals.filter(
+      (professional: ProfessionalProps) =>
+        professional._id === localProfessionalId
+    );
+    const localProfessional = localProfessionals[0];
+    const localServices = localProfessionals[0]?.completeServices;
 
-    const newArray = [] as string[];
-
-    const value = event.target.value;
-    const checked = event.target.checked;
-
-    if (checked && formValues.services!.indexOf(value) < 0) {
-      localServices.push(value);
-    }
-
-    if (checked && checkboxDefaultValue!.indexOf(value) < 0) {
-      localServices.push(value);
-    }
-
-    if (!checked && formValues.services!.indexOf(value) >= 0) {
-      for (let i = 0; i < formValues.services!.length; i++) {
-        if (localServices[i] !== value) {
-          newArray.push(formValues.services![i]);
-        }
-      }
-
-      setFormValues({
-        ...formValues,
-        services: newArray,
-      });
-      setCheckboxDefaultValue(newArray);
-      return;
-    }
-
-    if (!checked && checkboxDefaultValue!.indexOf(value) >= 0) {
-      for (let i = 0; i < checkboxDefaultValue!.length; i++) {
-        if (localServices[i] !== value) {
-          newArray.push(checkboxDefaultValue![i]);
-        }
-      }
-
-      setFormValues({
-        ...formValues,
-        services: newArray,
-      });
-      setCheckboxDefaultValue(newArray);
-      return;
-    }
+    setProfessionalId(localProfessionalId);
+    setProfessional(localProfessional);
 
     setFormValues({
       ...formValues,
-      services: localServices,
+      professionalId: localProfessionalId,
+      services:
+        localProfessionalId !== "#"
+          ? localServices || ([{}] as ServiceProps[])
+          : ([] as ServiceProps[]),
     });
+  }
+
+  function handleChangeService(event: ChangeEvent<HTMLSelectElement>) {
+    const localServices = services.filter(
+      (service: ServiceProps) => service._id === event.target.value
+    );
+    const localServiceId = localServices[0]?._id!;
+
+    setService(localServices[0]);
+    setServiceId(localServiceId);
+    setFormValues({
+      ...formValues,
+      servicesId: localServiceId,
+    });
+  }
+
+  function handleChangeDay(event: ChangeEvent<HTMLInputElement>) {
+    const { name, value, id } = event.target;
+    const localDay = new Date(value);
+
+    setDay(formatDate(localDay));
+    setFormValues({
+      ...formValues,
+      day: localDay,
+    });
+    return;
+  }
+
+  function handleInterval(event: ChangeEvent<HTMLInputElement>, key: number) {
+    const { name, value } = event.target;
+    const localInterval: IntervalProps[] = interval as IntervalProps[];
+
+    if (name === "start") {
+      const localhour = {
+        ...localInterval[key],
+        start: day + "T" + value,
+      };
+      localInterval[key] = localhour as any;
+    }
+    if (name === "end") {
+      const localhour = {
+        ...localInterval[key],
+        end: day + "T" + value,
+      };
+      localInterval[key] = localhour as any;
+    }
+
+    setInterval(localInterval);
   }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const professionalServices = getProfessionalServices();
-    setFormValues({
-      ...formValues,
-      completeServices: professionalServices,
-    });
-
-    const updateProfessional = {
-      newName: formValues.name,
-      newEmail: formValues.email,
-      newImage: formValues.image,
-      newBio: formValues.bio,
-      newFunc: formValues.func,
-      newOrgId: formValues.orgId,
-      newServices: formValues.services,
-      newCompleteServices: professionalServices,
+    const newHour = {
+      day: day,
+      interval: interval,
+      orgId: orgId,
+      org: org,
+      serviceId: serviceId,
+      service: service,
+      professionalId: professionalId,
+      professional: professional,
+      userAdmin: user._id,
     };
-    if (!updateProfessional.newName) {
-      setError("O campo nome não pode ficar em branco");
+
+    if (
+      !newHour.day ||
+      !newHour.orgId ||
+      !newHour.serviceId ||
+      !newHour.professionalId ||
+      !newHour.day ||
+      !newHour.interval
+    ) {
+      setError("Todos os campos são obrigatórios  ");
       toast({
-        title: "Ocorreu um erro",
+        title: "Campos obrigatórios não informados",
         description: error,
         status: "error",
         duration: 3000,
@@ -192,22 +244,34 @@ export function EditDrawer(props: ProfessionalProps) {
 
     try {
       setLoading(true);
-      const responseUpdate = await fetch("/api/professional/" + props._id, {
-        method: "PUT",
+
+      const response = await fetch("/api/hour/", {
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          ...updateProfessional,
+          ...newHour,
         }),
       });
 
       setLoading(false);
 
-      if (responseUpdate.ok) {
+      if (response.ok) {
+        setFormValues({
+          orgId: "",
+          day: new Date(),
+          interval: [],
+          professionalId: "",
+          professionals: [] as ProfessionalProps[],
+          servicesId: "",
+          services: [] as ServiceProps[],
+          userAdmin: "",
+        });
+
         toast({
           title: "Sucesso",
-          description: "Dados atualizados com sucesso",
+          description: "Horário cadastrado com sucesso",
           status: "success",
           duration: 3000,
           isClosable: true,
@@ -216,7 +280,7 @@ export function EditDrawer(props: ProfessionalProps) {
 
         handleRouter();
       } else {
-        const responseError = await responseUpdate.json();
+        const responseError = await response.json();
         setError(responseError);
         toast({
           title: "Ocorreu um erro",
@@ -226,6 +290,7 @@ export function EditDrawer(props: ProfessionalProps) {
           isClosable: true,
           position: "top",
         });
+        handleRouter();
       }
     } catch (erro: any) {
       setLoading(false);
@@ -238,7 +303,53 @@ export function EditDrawer(props: ProfessionalProps) {
         isClosable: true,
         position: "top",
       });
+      handleRouter();
     }
+  }
+
+  const rows = [];
+  for (let i = 0; i < intervalGroup; i++) {
+    // note: we are adding a key prop here to allow react to uniquely identify each
+    // element in this array. see: https://reactjs.org/docs/lists-and-keys.html
+    rows.push(
+      <InputGroup
+        key={i}
+        borderRadius="md"
+        p="2"
+        bg={intervalColor}
+        id="interval"
+        alignItems="center"
+      >
+        <FormLabel textColor={mainColor} htmlFor="start">
+          Inicio
+        </FormLabel>
+        <Input
+          placeholder="Hora inicial"
+          size="md"
+          type="time"
+          id="start"
+          name="start"
+          mr="2"
+          onChange={(e) => handleInterval(e, i)}
+          borderColor={intervalInputBorderColor}
+          focusBorderColor={focusBorderColor}
+        />
+        <FormLabel textColor={mainColor} htmlFor="end">
+          Fim
+        </FormLabel>
+        <Input
+          placeholder="Hora final"
+          size="md"
+          type="time"
+          id="end"
+          name="end"
+          key={1}
+          onChange={(e) => handleInterval(e, i)}
+          borderColor={intervalInputBorderColor}
+          focusBorderColor={focusBorderColor}
+        />
+      </InputGroup>
+    );
   }
 
   return (
@@ -253,134 +364,149 @@ export function EditDrawer(props: ProfessionalProps) {
         size={{ base: "xs", md: "sm" }}
         isOpen={isOpen}
         onClose={onClose}
-        initialFocusRef={initialRef}
+        initialFocusRef={firstField}
       >
         <DrawerOverlay />
         <DrawerContent bg={bgColorDrawer} h="auto" overflowY="auto">
           <DrawerCloseButton />
           <DrawerHeader textColor={mainColor} borderBottomWidth="1px">
-            Edição do Cadastro do Profissional
+            Cadastrar Horário
           </DrawerHeader>
 
           <DrawerBody>
-            <form id="alterForm" onSubmit={handleSubmit}>
+            <form id="createForm" onSubmit={handleSubmit}>
               <FormLabel textColor={mainColor} htmlFor="orgId">
-                Selecione a Empresa
+                Empresa
               </FormLabel>
               <Select
                 id="orgId"
                 name="orgId"
-                value={formValues.orgId}
-                onChange={handleChangeSelect}
-                focusBorderColor={mainColor}
+                value={orgId}
+                onChange={handleChangeOrg}
+                focusBorderColor={focusBorderColor}
               >
-                {orgs?.map((org: OrgProps) => (
-                  <option key={org._id!} value={org._id!}>
-                    {org.name!}
+                <option value="#">Nenhum</option>
+                {orgs.map((org: OrgProps) => (
+                  <option key={org._id} value={org._id!}>
+                    {org.name}
                   </option>
                 ))}
               </Select>
-              <FormLabel textColor={mainColor} pt="4" htmlFor="name">
-                Nome
-              </FormLabel>
-              <Input
-                ref={props.initialRef}
-                id="name"
-                name="name"
-                placeholder="Nome do Profissional..."
-                focusBorderColor={mainColor}
-                onChange={handleChangeInput}
-                value={formValues?.name}
-                type="text"
-              />
-              <FormLabel textColor={mainColor} pt="4" htmlFor="email">
-                E-mail
-              </FormLabel>
-              <Input
-                id="email"
-                name="email"
-                placeholder="E-mail..."
-                focusBorderColor={mainColor}
-                onChange={handleChangeInput}
-                value={formValues?.email}
-                type="email"
-              />
-              <FormLabel textColor={mainColor} pt="4" htmlFor="func">
-                Função
-              </FormLabel>
-              <Input
-                id="func"
-                name="func"
-                placeholder="Função..."
-                focusBorderColor={mainColor}
-                onChange={handleChangeInput}
-                value={formValues?.func}
-                type="text"
-              />
-              <FormLabel textColor={mainColor} pt="4" htmlFor="image">
-                URL da Imagem
-              </FormLabel>
-              <Input
-                id="image"
-                name="image"
-                placeholder="preencha com a url da imagem"
-                focusBorderColor={mainColor}
-                onChange={handleChangeInput}
-                value={formValues?.image}
-                type="url"
-              />
 
-              <FormLabel textColor={mainColor} pt="4" htmlFor="bio">
-                Sobre
+              <FormLabel textColor={mainColor} htmlFor="professionalId">
+                Profissional
               </FormLabel>
-              <Textarea
-                id="bio"
-                name="bio"
-                placeholder="Fale um pouco sobre o profissional..."
-                focusBorderColor={mainColor}
-                value={formValues?.bio}
-                size="md"
-                onChange={handleChangeTextArea}
-              />
-              <FormLabel textColor={mainColor} pt="4" htmlFor="services">
-                Selecione os Serviços
-              </FormLabel>
-              <CheckboxGroup
-                colorScheme="purple"
-                defaultValue={checkboxDefaultValue}
+              <Select
+                id="professionalId"
+                name="professionalId"
+                value={professionalId}
+                onChange={handleChangeProfessional}
+                focusBorderColor={focusBorderColor}
               >
-                <Stack spacing={[1, 5]} direction={["column", "row"]}>
-                  {formServices.map((service: ServiceProps) => (
-                    <Checkbox
-                      key={service._id}
-                      value={service._id}
-                      onChange={handleChangeCheckBox}
-                    >
-                      {service.name}
-                    </Checkbox>
+                <option value="#">Nenhum</option>
+                {professionals
+                  ?.filter((professional) => professional.org?._id === org._id)
+                  .map((professional: ProfessionalProps) => (
+                    <option key={professional._id!} value={professional._id!}>
+                      {professional.name!}
+                    </option>
                   ))}
-                </Stack>
-              </CheckboxGroup>
+              </Select>
+
+              <FormLabel textColor={mainColor} htmlFor="serviceId">
+                Serviço
+              </FormLabel>
+              <Select
+                id="serviceId"
+                name="serviceId"
+                value={serviceId}
+                onChange={handleChangeService}
+                focusBorderColor={focusBorderColor}
+              >
+                <option value="#">Nenhum</option>
+                {professionals
+                  ?.filter((professional) => professional.org?._id === org._id)
+                  .filter(
+                    (professional) =>
+                      professional._id === formValues.professionalId
+                  )[0]
+                  ?.completeServices?.map((service: ServiceProps) => (
+                    <option key={service._id!} value={service._id!}>
+                      {service.name!}
+                    </option>
+                  ))}
+              </Select>
+
+              <FormLabel textColor={mainColor} htmlFor="day">
+                Dia
+              </FormLabel>
+              <Input
+                name="day"
+                id="day"
+                placeholder="Selecione o dia"
+                size="md"
+                type="date"
+                focusBorderColor={focusBorderColor}
+                onChange={handleChangeDay}
+                value={formatedFormDay}
+              />
+              <VStack mt="2">
+                <HStack justifyContent="space-between" w="full">
+                  <FormLabel textColor={mainColor} htmlFor="interval">
+                    Intervalos
+                  </FormLabel>
+                  <ButtonGroup isAttached size="sm" variant="outline">
+                    <IconButton
+                      aria-label="add interval"
+                      icon={<AddIcon />}
+                      onClick={handleAddInterval}
+                      name="add"
+                      id="add"
+                    />
+                    <IconButton
+                      aria-label="minus interval"
+                      icon={<MinusIcon />}
+                      onClick={handleMinusInterval}
+                      name="minus"
+                      id="minus"
+                    />
+                  </ButtonGroup>
+                </HStack>
+                <VStack
+                  borderRadius="md"
+                  border="1px"
+                  w="full"
+                  p="2"
+                  borderColor={intervalColor}
+                >
+                  {rows}
+                </VStack>
+              </VStack>
             </form>
           </DrawerBody>
 
           <DrawerFooter borderTopWidth="1px">
-            <ButtonGroup colorScheme="purple" variant="outline" isAttached>
+            <ButtonGroup
+              colorScheme="purple"
+              variant="outline"
+              // onClick={onClose}
+              isAttached
+            >
               <IconButton
-                aria-label="alter"
                 type="submit"
-                form="alterForm"
+                form="createForm"
+                aria-label="Add"
+                icon={<RiSaveLine />}
                 // onClick={onClose}
-                isLoading={loading}
-                icon={<TbRefresh />}
               />
               <Button
                 type="submit"
-                form="alterForm"
-                // onClick={onClose}
+                form="createForm"
+                onClick={onClose}
                 isLoading={loading}
+                // onClick={onClose}
               >
-                Atualizar
+                Salvar
               </Button>
             </ButtonGroup>
           </DrawerFooter>
