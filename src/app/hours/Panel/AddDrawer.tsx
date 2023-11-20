@@ -35,7 +35,7 @@ export function AddDrawer() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { orgs } = useOrgs();
   const { services } = useServices();
-  const { professionals, updateProfessionals } = useProfessionals();
+  const { professionals } = useProfessionals();
   const { updateHours } = useHours();
   const { user } = useUser();
 
