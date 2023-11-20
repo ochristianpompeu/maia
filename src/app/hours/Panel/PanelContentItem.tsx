@@ -10,7 +10,8 @@ import {
   VStack,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { TbEdit, TbTrash } from "react-icons/tb";
+import { TbEdit } from "react-icons/tb";
+import { DeleteDrawer } from "./DeleteDrawer";
 import { Interval } from "./Interval";
 
 interface PanelContentItemProps {
@@ -56,13 +57,7 @@ export function PanelContentItem({ hour }: PanelContentItemProps) {
               // onClick={onOpen}
             />
 
-            {/* <DeleteDrawer {...professional} /> */}
-            <IconButton
-              icon={<TbTrash />}
-              aria-label="Delete Professional"
-              colorScheme="red"
-              // onClick={onOpen}
-            />
+            <DeleteDrawer {...hour} />
           </ButtonGroup>
         </HStack>
 

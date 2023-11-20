@@ -1,6 +1,6 @@
 "use client";
-import { useProfessionals } from "@/app/hooks/useProfessionals";
-import { ProfessionalProps } from "@/lib/interfaces";
+import { useHours } from "@/app/hooks/useHours";
+import { HourProps } from "@/lib/interfaces";
 import {
   Button,
   ButtonGroup,
@@ -12,10 +12,12 @@ import {
   DrawerHeader,
   DrawerOverlay,
   FormLabel,
+  HStack,
   IconButton,
   Input,
+  InputGroup,
   Select,
-  Textarea,
+  VStack,
   useColorModeValue,
   useDisclosure,
   useToast,
@@ -24,18 +26,30 @@ import { useRouter } from "next/navigation";
 import React, { Fragment, useState } from "react";
 import { TbTrash } from "react-icons/tb";
 
-export function DeleteDrawer(props: ProfessionalProps) {
+export function DeleteDrawer(props: HourProps) {
+  const formatedDay = new Date(props.day as Date);
+
   const { isOpen, onClose, onOpen } = useDisclosure();
-  const { updateProfessionals } = useProfessionals();
+  const { updateHours } = useHours();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const mainColor = "purple.600";
   const bgColorDrawer = useColorModeValue("whiteAlpha.900", "blackAlpha.900");
+  const intervalColor = useColorModeValue("gray.200", "gray.800");
+  const intervalInputBorderColor = useColorModeValue("gray.400", "gray.200");
+
   const toast = useToast();
   const router = useRouter();
 
+  function formatedDate(date: any) {
+    const formatedDate = new Date(date as Date);
+    return formatedDate.toLocaleTimeString("pt-BR", {
+      timeZone: "UTC",
+    });
+  }
+
   function handleRouter() {
-    updateProfessionals();
+    updateHours();
     router.refresh();
   }
 
@@ -44,7 +58,7 @@ export function DeleteDrawer(props: ProfessionalProps) {
 
     try {
       setLoading(true);
-      const responseDelete = await fetch(`/api/professional/?id=${props._id}`, {
+      const responseDelete = await fetch(`/api/hour/?id=${props._id}`, {
         method: "DELETE",
       });
 
@@ -92,7 +106,7 @@ export function DeleteDrawer(props: ProfessionalProps) {
     <Fragment>
       <IconButton
         icon={<TbTrash />}
-        aria-label="Delete Professional"
+        aria-label="Delete Hour"
         colorScheme="red"
         onClick={onOpen}
       />
@@ -122,71 +136,105 @@ export function DeleteDrawer(props: ProfessionalProps) {
               >
                 <option value={props.orgId}>{props.org?.name}</option>
               </Select>
-              <FormLabel textColor={mainColor} pt="4" htmlFor="name">
-                Nome
+
+              <FormLabel textColor={mainColor} pt="4" htmlFor="professionalId">
+                Profissional
               </FormLabel>
-              <Input
-                ref={props.initialRef}
-                id="name"
-                name="name"
-                focusBorderColor={mainColor}
-                value={props.name}
+              <Select
+                id="professionalId"
+                name="professionalId"
+                textColor={mainColor}
+                value={props.professionalId}
                 disabled
-                borderColor={mainColor}
-                variant="filled"
-              />
-              <FormLabel textColor={mainColor} pt="4" htmlFor="email">
-                E-mail
+              >
+                <option value={props.professionalId}>
+                  {props.professional?.name}
+                </option>
+              </Select>
+
+              <FormLabel textColor={mainColor} pt="4" htmlFor="serviceId">
+                Serviço
               </FormLabel>
-              <Input
-                id="email"
-                name="email"
-                placeholder="E-mail..."
-                focusBorderColor={mainColor}
-                value={props.email}
-                type="email"
+              <Select
+                id="serviceId"
+                name="serviceId"
+                textColor={mainColor}
+                value={props.serviceId}
                 disabled
-                variant="filled"
-              />
-              <FormLabel textColor={mainColor} pt="4" htmlFor="func">
-                Função
+              >
+                <option value={props.serviceId}>{props.service?.name}</option>
+              </Select>
+
+              <FormLabel textColor={mainColor} pt="4" htmlFor="day">
+                Dia
               </FormLabel>
               <Input
-                id="func"
-                name="func"
-                placeholder="Função..."
+                id="day"
+                name="day"
                 focusBorderColor={mainColor}
-                value={props.function}
+                value={formatedDay.toLocaleDateString("pt-BR", {
+                  timeZone: "UTC",
+                })}
                 type="text"
                 variant="filled"
                 disabled
+                readOnly
               />
-              <FormLabel textColor={mainColor} pt="4" htmlFor="image">
-                URL da Imagem
-              </FormLabel>
-              <Input
-                id="image"
-                name="image"
-                placeholder="preencha com a url da imagem"
-                focusBorderColor={mainColor}
-                value={props.image}
-                type="url"
-                variant="filled"
-                disabled
-              />
-              <FormLabel textColor={mainColor} pt="4" htmlFor="bio">
-                Sobre
-              </FormLabel>
-              <Textarea
-                id="bio"
-                name="bio"
-                placeholder="Fale um pouco sobre o profissional..."
-                focusBorderColor={mainColor}
-                value={props.bio}
-                size="md"
-                disabled
-                variant="filled"
-              />
+              <VStack mt="2">
+                <HStack justifyContent="space-between" w="full">
+                  <FormLabel textColor={mainColor} htmlFor="interval">
+                    Intervalos
+                  </FormLabel>
+                </HStack>
+                <VStack
+                  borderRadius="md"
+                  border="1px"
+                  w="full"
+                  p="2"
+                  borderColor={intervalColor}
+                >
+                  {props.interval?.map((interval) => (
+                    <InputGroup
+                      key={interval._id}
+                      borderRadius="md"
+                      p="2"
+                      bg={intervalColor}
+                      id="interval"
+                      alignItems="center"
+                    >
+                      <FormLabel textColor={mainColor} htmlFor="start">
+                        Inicio
+                      </FormLabel>
+                      <Input
+                        placeholder="Hora inicial"
+                        size="md"
+                        type="text"
+                        id="start"
+                        name="start"
+                        mr="2"
+                        value={formatedDate(interval.start)}
+                        borderColor={intervalInputBorderColor}
+                        disabled
+                        readOnly
+                      />
+                      <FormLabel textColor={mainColor} htmlFor="end">
+                        Fim
+                      </FormLabel>
+                      <Input
+                        placeholder="Hora final"
+                        size="md"
+                        type="time"
+                        id="end"
+                        name="end"
+                        value={formatedDate(interval.end)}
+                        borderColor={intervalInputBorderColor}
+                        disabled
+                        readOnly
+                      />
+                    </InputGroup>
+                  ))}
+                </VStack>
+              </VStack>
             </form>
           </DrawerBody>
 
@@ -196,14 +244,14 @@ export function DeleteDrawer(props: ProfessionalProps) {
                 aria-label="delete service"
                 form="deleteForm"
                 type="submit"
-                onClick={onClose}
+                // onClick={onClose}
                 isLoading={loading}
                 icon={<TbTrash />}
               />
               <Button
                 type="submit"
                 form="deleteForm"
-                onClick={onClose}
+                // onClick={onClose}
                 isLoading={loading}
               >
                 Deletar

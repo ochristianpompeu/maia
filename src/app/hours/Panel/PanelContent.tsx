@@ -11,7 +11,7 @@ export function PanelContent({ orgId }: PanelContentProps) {
 
   if (hours) {
     return (
-      <HStack overflowX="auto" spacing="0">
+      <HStack overflowX="auto" spacing="0" alignItems="start">
         {hours
           ?.filter((hour) => hour?.orgId === orgId)
           .map((hour: HourProps) => (

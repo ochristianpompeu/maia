@@ -1,6 +1,6 @@
 import { connectMongoDB } from "@/lib/mongodb";
 import { Hour } from "@/models/hour";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: Request) {
   const {
@@ -47,4 +47,12 @@ export async function GET() {
   return NextResponse.json({
     hours,
   });
+}
+
+export async function DELETE(request: NextRequest) {
+  const hourId = request.nextUrl.searchParams.get("id");
+
+  await connectMongoDB();
+  await Hour.findByIdAndDelete(hourId);
+  return NextResponse.json({ message: "Horário removido." }, { status: 200 });
 }
